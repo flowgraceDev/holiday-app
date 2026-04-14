@@ -95,7 +95,7 @@ export default function Header() {
             </a>
 
             <a
-              href="tel:+919286389961"
+              href="tel:+8679343420"
               className="flex items-center gap-2 text-slate-200 hover:text-emerald-400 transition"
             >
               <FaPhoneAlt className="text-emerald-400" />
@@ -105,7 +105,7 @@ export default function Header() {
 
           <div className="flex items-center gap-2">
             <a
-              href="https://wa.me/919286389961"
+              href="https://wa.me/8679343420"
               target="_blank"
               className="w-9 h-9 flex items-center justify-center rounded-full bg-emerald-500 hover:bg-emerald-600 transition"
             >
