@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Holidays, Simplified",
+  title: "Holidays-Simplified",
   description: "Best Travel Agency in Delhi",
 };
 
