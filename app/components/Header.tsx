@@ -99,7 +99,7 @@ export default function Header() {
               className="flex items-center gap-2 text-slate-200 hover:text-emerald-400 transition"
             >
               <FaPhoneAlt className="text-emerald-400" />
-              +91 92863 89961
+              +91 8679343420
             </a>
           </div>
 
