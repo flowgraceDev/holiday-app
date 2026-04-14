@@ -68,7 +68,7 @@ export default function Footer() {
 
               <div className="flex items-start gap-3">
                 <MapPin size={16} className="mt-1" />
-                <span>31/A/11 Jagjeet Nagar, Shamshabad Road, Agra</span>
+                <span>The Ridge, Shimla, Himachal Pradesh, India</span>
               </div>
             </div>
           </div>
