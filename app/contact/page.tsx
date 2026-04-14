@@ -55,11 +55,11 @@ export default function ContactPage() {
 
           <div className="space-y-8">
             {[
-              { label: "Phone", value: "+91 92863 89961", icon: "📞" },
-              { label: "Email", value: "info@cultureindiatour.com", icon: "✉️" },
+              { label: "Phone", value: "+91 8679343420", icon: "📞" },
+              { label: "Email", value: "vinn4200@gmail.com", icon: "✉️" },
               {
                 label: "Address",
-                value: "31/A/11 Jagjeet Nagar, Shamshabad Road, Agra",
+                value: "The Ridge, Shimla, Himachal Pradesh, India",
                 icon: "📍",
               },
             ].map((item, i) => (
