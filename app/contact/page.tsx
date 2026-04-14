@@ -2,7 +2,7 @@ import Image from "next/image";
 import ContactForm from "@/app/components/ContactForm";
 
 export const metadata = {
-  title: "Contact Us - Shri Radhe Holidays",
+  title: "Contact Us - Holidays, Simplified",
   description: "Get in touch with us for your next यात्रा in India",
 };
 

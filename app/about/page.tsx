@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export const metadata = {
-  title: "About Us - Shri Radhe Holidays",
+  title: "About Us - Holidays, Simplified",
   description: "Learn more about our travel services in India",
 };
 
