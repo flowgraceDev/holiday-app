@@ -147,7 +147,7 @@ export default function ContactForm() {
           <div>
             <input
               name="subject"
-              placeholder="Subject"
+              placeholder="Subject (Required)"
               value={formValues.subject}
               onChange={(e) =>
                 setFormValues({ ...formValues, subject: e.target.value })
@@ -163,7 +163,7 @@ export default function ContactForm() {
             <textarea
               name="message"
               rows={4}
-              placeholder="Your Message"
+              placeholder="Your Message (Required)"
               value={formValues.message}
               onChange={(e) =>
                 setFormValues({ ...formValues, message: e.target.value })

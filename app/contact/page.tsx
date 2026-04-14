@@ -53,7 +53,7 @@ export default function ContactPage() {
             </p>
           </div>
 
-          <div className="space-y-8">
+          {/* <div className="space-y-8">
             {[
               { label: "Phone", value: "+91 8679343420", icon: "📞" },
               { label: "Email", value: "vinn4200@gmail.com", icon: "✉️" },
@@ -77,7 +77,7 @@ export default function ContactPage() {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
 
         <ContactForm />
@@ -85,7 +85,7 @@ export default function ContactPage() {
 
       <section className="w-full h-[420px]">
         <iframe
-          src="https://www.google.com/maps?q=Himachal&output=embed"
+          src="https://www.google.com/maps?q=delhi&output=embed"
           className="w-full h-full border-0"
           loading="lazy"
         />

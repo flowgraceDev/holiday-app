@@ -86,26 +86,26 @@ export default function Header() {
       <div className="bg-slate-950 text-white text-xs md:text-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-2">
           <div className="flex items-center gap-4">
-            <a
+            {/* <a
               href="mailto:info@travel.com"
               className="hidden md:flex items-center gap-2 text-slate-200 hover:text-amber-300 transition"
             >
               <FaEnvelope className="text-amber-300" />
               info@travel.com
-            </a>
+            </a> */}
 
-            <a
-              href="tel:+8679343420"
+            {/* <a
+              href="tel:"
               className="flex items-center gap-2 text-slate-200 hover:text-emerald-400 transition"
             >
               <FaPhoneAlt className="text-emerald-400" />
-              +91 8679343420
-            </a>
+              +91
+            </a> */}
           </div>
 
           <div className="flex items-center gap-2">
             <a
-              href="https://wa.me/8679343420"
+              // href="https://wa.me/"
               target="_blank"
               className="w-9 h-9 flex items-center justify-center rounded-full bg-emerald-500 hover:bg-emerald-600 transition"
             >
@@ -137,7 +137,7 @@ export default function Header() {
             href="/"
             className={`${cormorant.className} text-2xl md:text-3xl font-semibold tracking-wide text-slate-900 hover:text-slate-700 transition`}
           >
-            Shri Radhe Holidays
+            Discover. Plan. Celebrate.
           </Link>
 
           <div className="hidden md:flex items-center gap-10 text-sm font-medium text-slate-600">

@@ -49,9 +49,7 @@ export default function AboutPage() {
             </h2>
 
             <p className="text-slate-600 text-sm md:text-base leading-relaxed max-w-xl">
-              Shri Radhe Holidays is a trusted travel company based in Delhi,
-              focused on delivering well-planned North India tours with clarity,
-              reliability, and consistent service.
+              Delivering well-organized India tours designed for comfort, clarity, and a hassle-free travel experience.
             </p>
 
             <p className="text-slate-600 text-sm md:text-base leading-relaxed max-w-xl">
