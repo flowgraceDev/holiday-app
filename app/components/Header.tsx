@@ -11,7 +11,7 @@ import {
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { cormorant } from "../fonts";
-import { getToursByRegion, Region } from "../actions/tours";
+import { getToursByRegion, Region } from "../lib/supabase/actions/tours";
 
 const NAV_ITEMS = [
   { name: "Home", path: "/" },
@@ -170,6 +170,7 @@ export default function Header() {
               >
                 Tours 
               </button>
+              
 
               {desktopDropdown && (
                 <div className="absolute top-12 left-0 w-64 rounded-2xl border border-slate-200/70 bg-white/80 backdrop-blur-md shadow-[0_10px_40px_rgba(2,6,23,0.08)] overflow-hidden">

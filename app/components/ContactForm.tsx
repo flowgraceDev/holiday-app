@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition, useEffect } from "react";
-import { createContact } from "@/app/actions/contact";
+import { createContact } from "@/app/lib/supabase/actions/contact";
 import StatusModal from "@/app/components/StatusModal";
 
 type Errors = {
