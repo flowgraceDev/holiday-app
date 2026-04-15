@@ -10,25 +10,20 @@ import {
 } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
-import {
-  cinzel,
-  playfair,
-  cormorant,
-  dancing,
-  inter,
-  manrope,
-  poppins,
-} from "../fonts";
-import { getTours } from "../actions/tours";
+import { cormorant } from "../fonts";
+import { getToursByRegion, Region } from "../actions/tours";
+
 const NAV_ITEMS = [
   { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
-  { name: "Contact", path: "/contact" },
+  { name: "About Us", path: "/about" },
+  { name: "Contact Us", path: "/contact" },
 ];
+
+const REGIONS: Region[] = ["north", "south", "east", "west", "central"];
 
 export default function Header() {
   const pathname = usePathname();
-  const [tours, setTours] = useState<any[]>([]);
+  const [toursByRegion, setToursByRegion] = useState<Record<string, any[]>>({});
   const [desktopDropdown, setDesktopDropdown] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [mobileDropdown, setMobileDropdown] = useState(false);
@@ -38,8 +33,24 @@ export default function Header() {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const isActive = useCallback((path: string) => pathname === path, [pathname]);
+
   useEffect(() => {
-    getTours().then(setTours);
+    const fetchTours = async () => {
+      const results = await Promise.all(
+        REGIONS.map((region) => getToursByRegion(region)),
+      );
+
+      const grouped: Record<string, any[]> = {};
+
+      REGIONS.forEach((region, i) => {
+        const res = results[i];
+        grouped[region] = res.success ? res.data : [];
+      });
+
+      setToursByRegion(grouped);
+    };
+
+    fetchTours();
   }, []);
 
   useEffect(() => {
@@ -85,27 +96,10 @@ export default function Header() {
     >
       <div className="bg-slate-950 text-white text-xs md:text-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-2">
-          <div className="flex items-center gap-4">
-            {/* <a
-              href="mailto:info@travel.com"
-              className="hidden md:flex items-center gap-2 text-slate-200 hover:text-amber-300 transition"
-            >
-              <FaEnvelope className="text-amber-300" />
-              info@travel.com
-            </a> */}
-
-            {/* <a
-              href="tel:"
-              className="flex items-center gap-2 text-slate-200 hover:text-emerald-400 transition"
-            >
-              <FaPhoneAlt className="text-emerald-400" />
-              +91
-            </a> */}
-          </div>
+          <div className="flex items-center gap-4"></div>
 
           <div className="flex items-center gap-2">
             <a
-              // href="https://wa.me/"
               target="_blank"
               className="w-9 h-9 flex items-center justify-center rounded-full bg-emerald-500 hover:bg-emerald-600 transition"
             >
@@ -141,7 +135,7 @@ export default function Header() {
           </Link>
 
           <div className="hidden md:flex items-center gap-10 text-sm font-medium text-slate-600">
-            {NAV_ITEMS.map((item) => {
+            {NAV_ITEMS.slice(0, 2).map((item) => {
               const active = isActive(item.path);
 
               return (
@@ -174,24 +168,53 @@ export default function Header() {
                 onClick={() => setDesktopDropdown((p) => !p)}
                 className="text-slate-600 hover:text-slate-900 transition"
               >
-                Tours
+                Tours 
               </button>
 
               {desktopDropdown && (
-                <div className="absolute top-12 left-0 w-64 rounded-2xl border border-slate-200 bg-white shadow-xl overflow-hidden">
-                  {tours.map((tour) => (
-                    <Link
-                      key={tour.id}
-                      href={`/tours/${tour.slug}`}
-                      prefetch={false}
-                      className="block px-4 py-3 text-sm hover:bg-slate-50"
-                    >
-                      {tour.title}
-                    </Link>
-                  ))}
+                <div className="absolute top-12 left-0 w-64 rounded-2xl border border-slate-200/70 bg-white/80 backdrop-blur-md shadow-[0_10px_40px_rgba(2,6,23,0.08)] overflow-hidden">
+                  <div className="py-2">
+                    {REGIONS.map((region) => (
+                      <Link
+                        key={region}
+                        href={`/region/${region}`}
+                        className="group relative flex items-center justify-between px-5 py-3 text-sm text-slate-700 capitalize transition-all duration-200"
+                      >
+                        <span className="relative z-10 group-hover:text-slate-900 transition-colors">
+                          {region} India Tours
+                        </span>
+
+                        <span className="relative z-10 opacity-0 translate-x-[-6px] group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 text-slate-400">
+                          →
+                        </span>
+
+                        <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 rounded-lg bg-gradient-to-r from-slate-50 via-white to-slate-50" />
+
+                        <span className="absolute left-0 top-0 h-full w-[3px] bg-slate-900 scale-y-0 group-hover:scale-y-100 transition-transform duration-200 origin-top rounded-r-full" />
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
+
+            <Link href="/contact" className="relative group">
+              <span
+                className={`transition ${
+                  isActive("/contact")
+                    ? "text-slate-900"
+                    : "text-slate-600 group-hover:text-slate-900"
+                }`}
+              >
+                Contact Us
+              </span>
+
+              <span
+                className={`absolute left-0 -bottom-1 h-[2px] bg-slate-900 transition-all duration-300 ${
+                  isActive("/contact") ? "w-full" : "w-0 group-hover:w-full"
+                }`}
+              />
+            </Link>
           </div>
 
           <div className="hidden md:block">
@@ -223,7 +246,7 @@ export default function Header() {
 
           <div className="px-5 py-6 space-y-6 bg-white">
             <div className="flex flex-col gap-5">
-              {NAV_ITEMS.map((item) => {
+              {NAV_ITEMS.slice(0, 2).map((item) => {
                 const active = isActive(item.path);
 
                 return (
@@ -249,7 +272,7 @@ export default function Header() {
                   onClick={() => setMobileDropdown((p) => !p)}
                   className="flex justify-between w-full text-slate-700 font-medium"
                 >
-                  Tours
+                  Tours ↓
                   <span
                     className={`transition ${mobileDropdown ? "rotate-180" : ""}`}
                   >
@@ -258,21 +281,40 @@ export default function Header() {
                 </button>
 
                 {mobileDropdown && (
-                  <div className="mt-3 pl-4 border-l border-slate-300 space-y-2">
-                    {tours.map((tour) => (
-                      <Link
-                        key={tour.id}
-                        href={`/tours/${tour.slug}`}
-                        prefetch={false}
-                        onClick={() => setMobileMenu(false)}
-                        className="block text-sm text-slate-600"
-                      >
-                        {tour.title}
-                      </Link>
-                    ))}
+                  <div className="mt-4 rounded-2xl border border-slate-200/70 bg-white/80 backdrop-blur-md shadow-sm overflow-hidden">
+                    <div className="py-2">
+                      {REGIONS.map((region) => (
+                        <Link
+                          key={region}
+                          href={`/region/${region}`}
+                          onClick={() => setMobileMenu(false)}
+                          className="group relative flex items-center justify-between px-4 py-3 text-sm text-slate-700 capitalize active:bg-slate-100 transition"
+                        >
+                          <span className="relative z-10 group-active:text-slate-900">
+                            {region} India Tours
+                          </span>
+
+                          <span className="relative z-10 opacity-0 translate-x-[-6px] group-active:opacity-100 group-active:translate-x-0 transition-all duration-200 text-slate-400">
+                            →
+                          </span>
+
+                          <span className="absolute inset-0 opacity-0 group-active:opacity-100 transition duration-200 rounded-lg bg-gradient-to-r from-slate-50 via-white to-slate-50" />
+
+                          <span className="absolute left-0 top-0 h-full w-[3px] bg-slate-900 scale-y-0 group-active:scale-y-100 transition-transform duration-200 origin-top rounded-r-full" />
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
+
+              <Link
+                href="/contact"
+                onClick={() => setMobileMenu(false)}
+                className="text-base font-medium text-slate-700"
+              >
+                Contact Us
+              </Link>
             </div>
 
             <Link href="/contact">
