@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useMemo, useState } from 'react'
-import InquiryModal from './InquiryModal'
+import InquiryModal from './BookingModal'
 
 type ItineraryItem = {
   day: number
