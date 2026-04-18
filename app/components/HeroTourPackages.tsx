@@ -1,7 +1,7 @@
 // app/components/TourPackages.tsx
 import Link from "next/link";
 import Image from "next/image";
-import { getTours } from "../lib/supabase/actions/tours";
+import { getTours } from "../lib/supabase/actions/public/tours";
 
 export default async function TourPackages() {
   const tours = await getTours();

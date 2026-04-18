@@ -11,7 +11,7 @@ import {
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { cormorant } from "../fonts";
-import { getToursByRegion, Region } from "../lib/supabase/actions/tours";
+import { getToursByRegion, Region } from "../lib/supabase/actions/public/tours";
 
 const NAV_ITEMS = [
   { name: "Home", path: "/" },

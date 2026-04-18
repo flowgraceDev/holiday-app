@@ -4,15 +4,18 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
-const HEADER_HEIGHT = "pt-[120px]"
+
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+const HEADER_HEIGHT = "pt-[120px]";
 
 export const metadata: Metadata = {
   title: "Holidays-Simplified",
@@ -27,14 +30,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full bg-white`}
     >
       <body className="min-h-screen bg-white text-black m-0 p-0">
-        <div className="flex flex-col min-h-screen">
-          <Header/>
-         <main className={`flex-1 w-full block ${HEADER_HEIGHT}`}>
-  {children}
-</main>
+        <div className="flex flex-col min-h-screen bg-white">
+          <Header />
+          <main
+            className={`flex-1 w-full block ${HEADER_HEIGHT} px-4  bg-white`}
+          >
+            {children}
+          </main>
           <Footer />
         </div>
       </body>

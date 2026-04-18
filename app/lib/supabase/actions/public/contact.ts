@@ -1,8 +1,8 @@
 // app/actions/contact.ts
 'use server'
 
-import { supabaseServer } from '@/app/lib/supabase/server'
-import type { Database } from '@/app/lib/supabase/types'
+import { supabaseServer } from '@/app/lib/supabase/connection/server'
+import type { Database } from '@/app/lib/supabase/connection/types'
 
 type ContactInput = {
   full_name: string
@@ -24,7 +24,9 @@ function isValidPhone(phone: string) {
 }
 
 export async function createContact(data: ContactInput) {
+   const supabase = await supabaseServer()
   try {
+
     if (!data || typeof data !== 'object') {
       throw new Error('Invalid payload')
     }
@@ -64,7 +66,7 @@ export async function createContact(data: ContactInput) {
       status: 'new',
     }
 
-    const { error } = await supabaseServer
+    const { error } = await supabase
       .from('contacts_us')
       .insert(payload)
 

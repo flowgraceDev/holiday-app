@@ -1,7 +1,7 @@
 // app/components/TourPackages.tsx
 import Link from "next/link";
 import Image from "next/image";
-import { getToursByRegion, Region } from "../lib/supabase/actions/tours";
+import { getToursByRegion, Region } from "../lib/supabase/actions/public/tours";
 
 type Props = {
   region: Region;

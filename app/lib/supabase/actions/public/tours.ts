@@ -1,10 +1,11 @@
 // app/actions/tours.ts
 'use server'
 
-import { supabaseServer } from '@/app/lib/supabase/server'
+import { supabaseServer } from '@/app/lib/supabase/connection/server'
 
 export async function getTours() {
-  const { data, error } = await supabaseServer
+  const supabase = await supabaseServer()
+  const { data, error } = await supabase
     .from('tours')
     .select('*')
     .eq('is_active', true)
@@ -17,7 +18,9 @@ export async function getTours() {
 
 export async function getTourBySlug(slug: string) {
   console.log("calll ayi hai ",slug)
-  const { data, error } = await supabaseServer
+  const supabase = await supabaseServer()
+
+  const { data, error } = await supabase
     .from('tours')
     .select('*')
     .eq('slug', slug)
@@ -39,8 +42,8 @@ export async function getToursByRegion(region: Region): Promise<GetToursResponse
     if (!region) {
       return { success: false, error: 'Region is required' }
     }
-
-    const { data, error } = await supabaseServer
+const supabase = await supabaseServer()
+    const { data, error } = await supabase
       .from('tours')
       .select('*')
       .eq('region', region)

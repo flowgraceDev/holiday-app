@@ -1,7 +1,7 @@
 // app/actions/inquiry.ts
 'use server'
 
-import { supabaseAdmin } from '@/app/lib/supabase/admin'
+import { supabaseServer } from '@/app/lib/supabase/connection/server'
 
 type CreateInquiryInput = {
   full_name: string
@@ -22,6 +22,7 @@ function isValidPhone(phone: string) {
 }
 
 export async function createInquiry(data: CreateInquiryInput) {
+  const supabase = await supabaseServer()
   const full_name = data.full_name?.trim()
   const email = data.email?.trim().toLowerCase()
   const phone = data.phone?.trim()
@@ -67,7 +68,7 @@ export async function createInquiry(data: CreateInquiryInput) {
     throw new Error('Invalid tour id')
   }
 
-  const { error } = await supabaseAdmin.from('inquiries').insert([
+  const { error } = await supabase.from('inquiries').insert([
     {
       full_name,
       email,
@@ -78,7 +79,7 @@ export async function createInquiry(data: CreateInquiryInput) {
       number_of_people,
       status: 'new',
     },
-  ])
+  ] as any)
 
   if (error) {
     throw new Error(error.message || 'Failed to create inquiry')

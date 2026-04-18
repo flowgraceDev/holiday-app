@@ -1,4 +1,4 @@
-import { supabaseServer } from '@/app/lib/supabase/server'
+import { supabaseServer } from '@/app/lib/supabase/connection/server'
 
 export const uploadImageToSupabase = async (
   file: File,
