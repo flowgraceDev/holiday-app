@@ -5,17 +5,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { dancing } from "@/app/fonts";
 import { useRouter } from "next/navigation";
-
-const images = [
-  "/images/hero1.jpg",
-  "/images/hero2.jpg",
-  "/images/hero3.jpg",
-  "/images/hero4.jpg",
-  "/images/hero5.jpg",
-  "/images/hero6.jpg",
-  "/images/hero7.jpg",
-  "/images/hero8.jpg",
-];
+import { fetchHero } from "../lib/supabase/actions/public/hero";
 
 const content = [
   {
@@ -64,39 +54,46 @@ export default function Hero() {
   const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
 
+  const [images, setImages] = useState<string[]>([]);
   const [index, setIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    const load = async () => {
+      const data = await fetchHero();
+      const urls = (data || []).map((h: any) => h.image_url);
+      setImages(urls);
+    };
+    load();
+  }, []);
+
+  useEffect(() => {
+    if (!images.length) return;
+
     intervalRef.current = setInterval(() => {
       setIndex((p) => (p + 1) % images.length);
-    }, 2800);
+    }, 3800);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, []);
+  }, [images]);
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
+  const { scrollYProgress } = useScroll();
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.9, 0]);
 
-  const current = content[index];
+  const current = content[index % content.length];
+
+  if (!images.length) return null;
 
   return (
     <section
       ref={ref}
       className="relative w-full h-[80vh] md:h-[85vh] overflow-hidden bg-black"
     >
-      {/* IMAGE WRAPPER (FIXED: NO OVERZOOM, NO DOUBLE SCALING) */}
-      <motion.div
-        style={{ y }}
-        className="absolute inset-0 w-full h-full"
-      >
+      <motion.div style={{ y }} className="absolute inset-0 w-full h-full">
         <Image
           src={images[index]}
           alt="hero"
@@ -108,37 +105,35 @@ export default function Hero() {
         />
       </motion.div>
 
-      {/* DARK OVERLAY */}
       <div className="absolute inset-0 bg-black/10" />
 
-   <motion.div
-  style={{ opacity }}
-  className="absolute bottom-5 md:bottom-8 right-4 md:right-8 max-w-xs md:max-w-md z-10 text-right"
->
-  <div className="bg-black/30 backdrop-blur-2xl border border-white/10 rounded-xl p-4 md:p-5 space-y-2.5 shadow-xl">
-    
-    <h2
-      className={`text-2xl md:text-4xl leading-snug text-yellow-400 ${dancing.className}`}
-    >
-      {current.title}
-    </h2>
+      <motion.div
+        style={{ opacity }}
+        className="absolute bottom-5 md:bottom-8 right-4 md:right-8 max-w-xs md:max-w-md z-10 text-right"
+      >
+        <div className="bg-black/30 backdrop-blur-2xl border border-white/10 rounded-xl p-4 md:p-5 space-y-2.5 shadow-xl">
+          <h2
+            className={`text-2xl md:text-4xl leading-snug text-yellow-400 ${dancing.className}`}
+          >
+            {current.title}
+          </h2>
 
-    <h3 className="text-sm md:text-lg font-semibold text-white/90">
-      {current.subtitle}
-    </h3>
+          <h3 className="text-sm md:text-lg font-semibold text-white/90">
+            {current.subtitle}
+          </h3>
 
-    <p className="text-white/70 text-xs md:text-sm leading-relaxed">
-      {current.desc}
-    </p>
+          <p className="text-white/70 text-xs md:text-sm leading-relaxed">
+            {current.desc}
+          </p>
 
-    <button
-      onClick={() => router.push("/about")}
-      className="mt-2 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 transition px-4 py-2 md:px-5 md:py-2.5 rounded-lg font-semibold shadow-md active:scale-95 text-sm"
-    >
-      Explore More
-    </button>
-  </div>
-</motion.div>
+          <button
+            onClick={() => router.push("/about")}
+            className="mt-2 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 transition px-4 py-2 md:px-5 md:py-2.5 rounded-lg font-semibold shadow-md active:scale-95 text-sm"
+          >
+            Explore More
+          </button>
+        </div>
+      </motion.div>
     </section>
   );
 }

@@ -1,7 +1,20 @@
 // lib/supabase/client.ts
-import { createClient } from '@supabase/supabase-js'
+"use client";
+import { createBrowserClient } from "@supabase/ssr";
+import type { Database } from "./../connection/types";
 
-export const supabaseClient = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+
+export const createClient = () => {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    throw new Error("Missing SUPABASE URL");
+  }
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    throw new Error("Missing SUPABASE ANON KEY");
+  }
+
+  return createBrowserClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
+};

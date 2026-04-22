@@ -13,7 +13,7 @@ export async function getTours() {
 
   if (error) throw new Error(error.message)
 
-  return data
+     return data
 }
 
 export async function getTourBySlug(slug: string) {

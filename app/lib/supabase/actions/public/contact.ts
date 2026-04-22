@@ -1,7 +1,7 @@
 // app/actions/contact.ts
 'use server'
 
-import { supabaseServer } from '@/app/lib/supabase/connection/server'
+import { createClient } from '@/app/lib/supabase/connection/client'
 import type { Database } from '@/app/lib/supabase/connection/types'
 
 type ContactInput = {
@@ -24,7 +24,7 @@ function isValidPhone(phone: string) {
 }
 
 export async function createContact(data: ContactInput) {
-   const supabase = await supabaseServer()
+   const supabase = await createClient()
   try {
 
     if (!data || typeof data !== 'object') {

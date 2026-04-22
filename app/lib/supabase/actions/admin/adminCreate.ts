@@ -23,6 +23,7 @@ const upload = async (
 };
 
 // HERO CREATE
+// app/lib/supabase/actions/admin/adminCreate.ts
 export const createHero = async (
   payload: Omit<
     Database["public"]["Tables"]["hero_sections"]["Insert"],
@@ -34,7 +35,30 @@ export const createHero = async (
 
   const { error } = await supabaseAdmin
     .from("hero_sections")
-    .insert({ ...payload as any, image_url });
+    .insert({
+      ...payload,
+      image_url,
+      is_active: payload.is_active ?? true,
+      sort_order: payload.sort_order ?? 0,
+    });
+
+  if (error) throw error;
+};
+
+export const getHeroes = async () => {
+  const { data, error } = await supabaseAdmin
+    .from("hero_sections")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data;
+};
+
+export const deleteHero = async (id: number) => {
+  const { error } = await supabaseAdmin
+    .from("hero_sections")
+    .delete()
+    .eq("id", id);
 
   if (error) throw error;
 };

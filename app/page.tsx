@@ -8,7 +8,7 @@ export default function Home() {
   return (
      <div className="flex flex-col gap-0">
       <section className="relative">
-        <Hero />
+      <Hero />
       </section>
       <Features />
       <About />

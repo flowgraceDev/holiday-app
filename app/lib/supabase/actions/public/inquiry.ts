@@ -1,7 +1,7 @@
 // app/actions/inquiry.ts
 'use server'
 
-import { supabaseServer } from '@/app/lib/supabase/connection/server'
+import { createClient } from '@/app/lib/supabase/connection/client'
 
 type CreateInquiryInput = {
   full_name: string
@@ -22,7 +22,7 @@ function isValidPhone(phone: string) {
 }
 
 export async function createInquiry(data: CreateInquiryInput) {
-  const supabase = await supabaseServer()
+  const supabase = await createClient()
   const full_name = data.full_name?.trim()
   const email = data.email?.trim().toLowerCase()
   const phone = data.phone?.trim()
