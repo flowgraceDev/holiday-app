@@ -6,7 +6,7 @@ const BUCKET = "website-assets";
 
 const upload = async (
   file: File,
-  folder: "hero" | "about" | "destinations" | "contact"
+  folder: "hero" | "about" | "destinations" | "contact" | "tours"
 ) => {
   const ext = file.name.split(".").pop();
   const path = `${folder}/${Date.now()}-${Math.random()
@@ -110,6 +110,56 @@ export const createContact = async (
   const { error } = await supabaseAdmin
     .from("contact_section")
     .upsert({ ...payload as any, image_url });
+
+  if (error) throw error;
+};
+
+type TourInsert = Database["public"]["Tables"]["tours"]["Insert"] & {
+  region?: string;
+  gallery?: File[];
+};
+export const createTour = async (
+  payload: Omit<TourInsert, "featured_image" | "gallery"> & {
+    gallery?: File[];
+  },
+  featuredImage: File
+) => {
+  const featured_image = await upload(featuredImage, "tours");
+
+  let gallery: string[] = [];
+
+  if (payload.gallery?.length) {
+    gallery = await Promise.all(
+      payload.gallery.map((file) => upload(file, "tours"))
+    );
+  }
+
+  const { error } = await supabaseAdmin.from("tours").insert({
+    ...payload,
+    featured_image,
+    gallery,
+    featured: payload.featured ?? false,
+    is_active: payload.is_active ?? true,
+    cta_enabled: payload.cta_enabled ?? true,
+  });
+
+  if (error) throw error;
+};
+
+export const getTours = async () => {
+  const { data, error } = await supabaseAdmin
+    .from("tours")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data;
+};
+
+export const deleteTour = async (id: number) => {
+  const { error } = await supabaseAdmin
+    .from("tours")
+    .delete()
+    .eq("id", id);
 
   if (error) throw error;
 };
