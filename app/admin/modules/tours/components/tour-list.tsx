@@ -1,7 +1,10 @@
 // app/admin/modules/tours/components/tour-list.tsx
-import { getTours, deleteTour } from "@/app/lib/supabase/actions/admin/adminCreate";
+import { getTours } from "@/app/lib/supabase/actions/admin/adminCreate";
 import CreateTourModal from "./create-tour-modal";
 import Image from "next/image";
+import DeleteTourButton from "./delete-tour-button";
+
+export const dynamic = "force-dynamic";
 
 export default async function TourList() {
   const tours = await getTours();
@@ -19,27 +22,29 @@ export default async function TourList() {
         {tours.map((t) => (
           <div
             key={t.id}
-            className="group relative flex items-center gap-6 rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm hover:shadow-lg transition"
+            className="group relative flex items-center gap-6 rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm hover:shadow-md transition-transform duration-200 will-change-transform"
           >
-            <div className="relative h-32 w-56 overflow-hidden rounded-2xl border">
+            <div className="relative h-32 w-56 overflow-hidden rounded-2xl border shrink-0">
               <Image
                 src={t.featured_image}
                 alt={t.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 224px"
-                className="object-cover"
+                width={224}
+                height={128}
+                sizes="224px"
+                loading="lazy"
+                className="object-cover rounded-2xl"
               />
             </div>
 
-            <div className="flex-1 space-y-2">
-              <p className="text-base font-semibold text-neutral-900">
+            <div className="flex-1 space-y-2 min-w-0">
+              <p className="text-base font-semibold text-neutral-900 truncate">
                 {t.title}
               </p>
               <p className="text-sm text-neutral-500 line-clamp-2">
                 {t.short_description}
               </p>
 
-              <div className="flex items-center gap-4 pt-2 text-xs text-neutral-500">
+              <div className="flex items-center gap-4 pt-2 text-xs text-neutral-500 flex-wrap">
                 <span
                   className={`px-3 py-1 rounded-full ${
                     t.is_active
@@ -61,16 +66,7 @@ export default async function TourList() {
               </div>
             </div>
 
-            <form
-              action={async () => {
-                "use server";
-                await deleteTour(t.id);
-              }}
-            >
-              <button className="opacity-0 group-hover:opacity-100 transition text-sm text-red-600 hover:underline">
-                Delete
-              </button>
-            </form>
+            <DeleteTourButton id={t.id} />
           </div>
         ))}
       </div>

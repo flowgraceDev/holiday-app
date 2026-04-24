@@ -59,7 +59,7 @@ export const deleteHero = async (id: number) => {
     .from("hero_sections")
     .delete()
     .eq("id", id);
-
+console.log(error)
   if (error) throw error;
 };
 
@@ -160,6 +160,5 @@ export const deleteTour = async (id: number) => {
     .from("tours")
     .delete()
     .eq("id", id);
-
   if (error) throw error;
 };

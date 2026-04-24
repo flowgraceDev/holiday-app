@@ -1,5 +1,5 @@
 // app/actions/inquiry.ts
-'use server'
+'use client'
 
 import { createClient } from '@/app/lib/supabase/connection/client'
 

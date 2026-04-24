@@ -3,6 +3,8 @@
 
 import { revalidatePath } from "next/cache";
 import { createHero as createHeroService } from "@/app/lib/supabase/actions/admin/adminCreate";
+import { deleteHero as deleteHeroService } from "@/app/lib/supabase/actions/admin/adminCreate";
+
 
 export const createHeroAction = async (formData: FormData) => {
   const title = formData.get("title") as string;
@@ -17,5 +19,10 @@ export const createHeroAction = async (formData: FormData) => {
     file
   );
 
+  revalidatePath("/admin/dashboard/hero");
+};
+
+export const deleteHeroAction = async (id: number) => {
+  await deleteHeroService(id);
   revalidatePath("/admin/dashboard/hero");
 };

@@ -3,7 +3,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createTour as createTourService } from "@/app/lib/supabase/actions/admin/adminCreate";
-
+import { deleteTour as deleteTourService } from "@/app/lib/supabase/actions/admin/adminCreate";
 export const createTourAction = async (formData: FormData) => {
   const title = formData.get("title") as string;
   const slug = formData.get("slug") as string;
@@ -64,5 +64,10 @@ export const createTourAction = async (formData: FormData) => {
     featuredImage
   );
 
+  revalidatePath("/admin/dashboard/tours");
+};
+
+export const deleteTourAction = async (id: number) => {
+  await deleteTourService(id);
   revalidatePath("/admin/dashboard/tours");
 };
