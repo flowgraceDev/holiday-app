@@ -6,7 +6,7 @@ const BUCKET = "website-assets";
 
 const upload = async (
   file: File,
-  folder: "hero" | "about" | "destinations" | "contact" | "tours"
+  folder: "hero" | "about" | "destinations" | "contact" | "tours" 
 ) => {
   const ext = file.name.split(".").pop();
   const path = `${folder}/${Date.now()}-${Math.random()
@@ -63,56 +63,7 @@ console.log(error)
   if (error) throw error;
 };
 
-// DESTINATION CREATE
-export const createDestination = async (
-  payload: Omit<
-    Database["public"]["Tables"]["destinations"]["Insert"],
-    "image_url"
-  >,
-  file: File
-) => {
-  const image_url = await upload(file, "destinations");
 
-  const { error } = await supabaseAdmin
-    .from("destinations")
-    .insert({ ...payload as any, image_url });
-
-  if (error) throw error;
-};
-
-// ABOUT CREATE (UPSERT SINGLETON)
-export const createAbout = async (
-  payload: Omit<
-    Database["public"]["Tables"]["about_section"]["Insert"],
-    "image_url"
-  >,
-  file: File
-) => {
-  const image_url = await upload(file, "about");
-
-  const { error } = await supabaseAdmin
-    .from("about_section")
-    .upsert({ ...payload as any, image_url });
-
-  if (error) throw error;
-};
-
-// CONTACT CREATE (UPSERT SINGLETON)
-export const createContact = async (
-  payload: Omit<
-    Database["public"]["Tables"]["contact_section"]["Insert"],
-    "image_url"
-  >,
-  file: File
-) => {
-  const image_url = await upload(file, "contact");
-
-  const { error } = await supabaseAdmin
-    .from("contact_section")
-    .upsert({ ...payload as any, image_url });
-
-  if (error) throw error;
-};
 
 type TourInsert = Database["public"]["Tables"]["tours"]["Insert"] & {
   region?: string;
@@ -161,4 +112,304 @@ export const deleteTour = async (id: number) => {
     .delete()
     .eq("id", id);
   if (error) throw error;
+};
+
+
+// DESTINATION CREATE
+export const createDestination = async (
+  payload: Omit<
+    Database["public"]["Tables"]["destinations"]["Insert"],
+    "image_url"
+  >,
+  file: File
+) => {
+  const image_url = await upload(file, "destinations");
+
+  const { error } = await supabaseAdmin
+    .from("destinations")
+    .insert({ ...payload as any, image_url });
+
+  if (error) throw error;
+};
+
+export const getDestinations = async () => {
+  const { data, error } = await supabaseAdmin
+    .from("destinations")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return data;
+};
+
+export const deleteDestination = async (id: string) => {
+  const { error } = await supabaseAdmin
+    .from("destinations")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
+};
+
+//Lead Stuff
+
+export type LeadStatus =
+  | "new"
+  | "contacted"
+  | "qualified"
+  | "converted"
+  | "closed";
+
+export interface LeadFilters {
+  status?: string;
+  search?: string;
+  from?: string;
+  to?: string;
+}
+
+export const getLeads = async (filters?: {
+  status?: string;
+  search?: string;
+  from?: string;
+  to?: string;
+}) => {
+  let query = supabaseAdmin
+    .from("inquiries")
+    .select(`
+      *,
+      tour:tours(*)
+    `)
+    .order("created_at", { ascending: false });
+
+  if (filters?.status && filters.status !== "") {
+    query = query.eq("status", filters.status);
+  }
+
+  if (filters?.from) {
+    query = query.gte("created_at", filters.from);
+  }
+
+  if (filters?.to) {
+    query = query.lte("created_at", filters.to);
+  }
+
+  if (filters?.search && filters.search.trim() !== "") {
+    const term = filters.search.trim();
+    query = query.or(
+      `full_name.ilike.%${term}%,email.ilike.%${term}%,phone.ilike.%${term}%`
+    );
+  }
+
+  const { data, error } = await query;
+
+  if (error) throw error;
+
+  return data;
+};
+export const getLeadById = async (id: string) => {
+  const { data, error } = await supabaseAdmin
+    .from("inquiries")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const updateLeadStatus = async (id: string, status: string) => {
+  const { data, error } = await supabaseAdmin
+    .from("inquiries")
+    .update({ status })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const updateLeadNotes = async (id: string, notes: string) => {
+  const { data, error } = await supabaseAdmin
+    .from("inquiries")
+    .update({ notes })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const deleteLead = async (id: string) => {
+  const { error } = await supabaseAdmin
+    .from("inquiries")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
+  return true;
+};
+
+
+// messageStuff from contact us
+
+export const getContacts = async (filters?: {
+  status?: string;
+  search?: string;
+  from?: string;
+  to?: string;
+}) => {
+  let query = supabaseAdmin
+    .from("contacts_us")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (filters?.status && filters.status !== "") {
+    query = query.eq("status", filters.status);
+  }
+
+  if (filters?.from) {
+    query = query.gte("created_at", filters.from);
+  }
+
+  if (filters?.to) {
+    query = query.lte("created_at", filters.to);
+  }
+
+  if (filters?.search && filters.search.trim() !== "") {
+    const term = filters.search.trim();
+    query = query.or(
+      `full_name.ilike.%${term}%,email.ilike.%${term}%,phone.ilike.%${term}%,message.ilike.%${term}%`
+    );
+  }
+
+  const { data, error } = await query;
+
+  if (error) throw error;
+
+  return data;
+};
+
+export const getContactById = async (id: string) => {
+  const { data, error } = await supabaseAdmin
+    .from("contacts_us")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const updateContactStatus = async (id: string, status: string) => {
+  const { data, error } = await supabaseAdmin
+    .from("contacts_us")
+    .update({ status })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  return data;
+};
+
+// ABOUT CREATE (UPSERT SINGLETON)
+export const createAbout = async (
+  payload: {
+    hero: {
+      title: string;
+      subtitle: string;
+      description: string;
+    };
+    intro: {
+      title: string;
+      para1: string;
+      para2: string;
+    };
+    services: string[];
+    vision: string;
+    mission: string;
+    footer_text: string;
+  },
+  heroImage: File,
+  introImage: File
+) => {
+  const hero_image_url = await upload(heroImage, "about");
+  const intro_image_url = await upload(introImage, "about");
+
+  const { error } = await supabaseAdmin
+    .from("about_section")
+    .upsert({
+      hero: {
+        ...payload.hero,
+        image_url: hero_image_url,
+      },
+      intro: {
+        ...payload.intro,
+        image_url: intro_image_url,
+      },
+      services: payload.services,
+      vision: payload.vision,
+      mission: payload.mission,
+      footer_text: payload.footer_text,
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+};
+export const getAbout = async () => {
+  const { data, error } = await supabaseAdmin
+    .from("about_section")
+    .select("*")
+    .maybeSingle();
+
+  if (error) throw error;
+
+  return data;
+};
+
+export async function deleteAbout(id: string) {
+  const { error } = await supabaseAdmin
+    .from("about")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    throw new Error("Failed to delete about");
+  }
+
+}
+// CONTACT CREATE (UPSERT SINGLETON)
+export const createContact = async (
+  payload: Omit<
+    Database["public"]["Tables"]["contact_section"]["Insert"],
+    "image_url"
+  >,
+  file: File
+) => {
+  const image_url = await upload(file, "contact");
+
+  const { error } = await supabaseAdmin
+    .from("contact_section")
+    .upsert({ ...payload as any, image_url });
+
+  if (error) throw error;
+};
+
+export const getContact = async () => {
+
+   const { data, error } = await supabaseAdmin
+    .from("contact_section")
+    .select("*")
+    .limit(1);
+
+  if (error) throw new Error(error.message);
+
+  if (!data || data.length === 0) return null;
+
+  return data[0];
 };

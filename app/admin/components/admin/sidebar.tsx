@@ -38,7 +38,9 @@ export default function Sidebar() {
           );
         })}
       </nav>
-      <LogoutButton />
+       <div className=" pt-10">
+        <LogoutButton />
+      </div>
     </aside>
   );
 }

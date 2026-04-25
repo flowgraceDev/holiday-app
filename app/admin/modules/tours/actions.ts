@@ -69,5 +69,5 @@ export const createTourAction = async (formData: FormData) => {
 
 export const deleteTourAction = async (id: number) => {
   await deleteTourService(id);
-  revalidatePath("/admin/dashboard/tours");
+  revalidatePath("/admin/dashboard/destinations");
 };
