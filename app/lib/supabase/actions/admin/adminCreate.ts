@@ -384,6 +384,8 @@ export async function deleteAbout(id: string) {
 
 }
 // CONTACT CREATE (UPSERT SINGLETON)
+
+
 export const createContact = async (
   payload: Omit<
     Database["public"]["Tables"]["contact_section"]["Insert"],

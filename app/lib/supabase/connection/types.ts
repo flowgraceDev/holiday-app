@@ -196,29 +196,49 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["about_section"]["Insert"]>;
       };
 
-      contact_section: {
+    contact_section: {
         Row: {
           id: string;
-          heading: string;
+          title: string | null;
+          subtitle: string | null;
           description: string | null;
+          highlight: string | null;
+          section_title: string | null;
+          section_highlight: string | null;
+          section_description: string | null;
+          map_url: string | null;
           image_url: string | null;
-          email: string | null;
-          phone: string | null;
-          address: string | null;
-          map_embed_url: string | null;
-          updated_at: string | null;
+          created_at: string;
+          updated_at: string;
         };
         Insert: {
-          heading: string;
+          id?: string;
+          title?: string | null;
+          subtitle?: string | null;
           description?: string | null;
+          highlight?: string | null;
+          section_title?: string | null;
+          section_highlight?: string | null;
+          section_description?: string | null;
+          map_url?: string | null;
           image_url?: string | null;
-          email?: string | null;
-          phone?: string | null;
-          address?: string | null;
-          map_embed_url?: string | null;
-          updated_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["contact_section"]["Insert"]>;
+        Update: {
+          id?: string;
+          title?: string | null;
+          subtitle?: string | null;
+          description?: string | null;
+          highlight?: string | null;
+          section_title?: string | null;
+          section_highlight?: string | null;
+          section_description?: string | null;
+          map_url?: string | null;
+          image_url?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
       };
     };
   };
