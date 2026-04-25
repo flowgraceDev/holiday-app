@@ -1,6 +1,5 @@
 // app/admin/modules/contactUs/components/create-contact-modal.tsx
 "use client";
-
 import { useState, useRef } from "react";
 import { createContactAction } from "../actions";
 
