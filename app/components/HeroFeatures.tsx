@@ -32,18 +32,19 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="relative py-20 bg-gradient-to-b from-white to-slate-50">
-      <div className="max-w-7xl mx-auto px-6">
-        
-        {/* HEADER */}
-        <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-semibold text-slate-900">
+    <section className="relative py-5 bg-gradient-to-b from-white to-slate-50">
+  <div className="max-w-7xl mx-auto px-6">
+    
+    <div className="text-center mb-10">
+      <p className="text-yellow-600 font-semibold tracking-widest uppercase text-sm flex items-center justify-center gap-2">
+            <span className="w-8 h-[2px] bg-yellow-500" />
             Why Travel With Us
-          </h2>
-          <p className="mt-3 text-slate-500 text-sm md:text-base max-w-2xl mx-auto">
-            Premium travel experiences crafted with trust, comfort and excellence.
+            <span className="w-8 h-[2px] bg-yellow-500" />
           </p>
-        </div>
+      <p className="mt-3 text-slate-500 text-sm md:text-base max-w-2xl mx-auto">
+        Premium travel experiences crafted with trust, comfort and excellence.
+      </p>
+    </div>
 
         {/* GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

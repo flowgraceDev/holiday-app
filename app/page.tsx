@@ -1,19 +1,26 @@
+// app/page.tsx
 import Hero from "@/app/components/Hero";
-import Features from "@/app/components/HeroFeatures";
-import About from "@/app/components/HeroAbout";
-import Destinations from "@/app/components/HeroDestinations";
 import TourPackages from "@/app/components/HeroTourPackages";
-// import Testimonials from "@/app/components/Testimonials";
-export default function Home() {
+import Services from "@/app/components/Services";
+import HeroDestinations from "@/app/components/HeroDestinations";
+import HomeClient from "./HomeClient";
+import { fetchHero } from "@/app/lib/supabase/actions/public/hero";
+
+export const revalidate = 120;
+
+export default async function Home() {
+  const data = await fetchHero();
+  const images = (data || []).map((h: { image_url: string }) => h.image_url);
+
   return (
-     <div className="flex flex-col gap-0">
+    <div className="flex flex-col">
       <section className="relative">
-      <Hero />
+        <Hero initialImages={images} />
+        <TourPackages />
       </section>
-      <Features />
-      <About />
-      <Destinations />
-      <TourPackages />
+      <Services />
+      <HeroDestinations />
+      <HomeClient />
     </div>
   );
 }
