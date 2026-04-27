@@ -61,16 +61,18 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
   return (
     <section className="relative py-5 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative">
-        <div className="mb-16 text-center">
-          <p className="text-yellow-600 font-semibold tracking-widest uppercase text-sm flex items-center justify-center gap-2">
+        <div className="mb-12 text-center px-4 md:px-0">
+          <p className="text-yellow-600 font-semibold tracking-widest uppercase text-sm flex items-center justify-center gap-3 mb-4">
             <span className="w-8 h-[2px] bg-yellow-500" />
             Plan Your Trip
             <span className="w-8 h-[2px] bg-yellow-500" />
           </p>
-          <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
+
+          <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-4">
             Curated Travel Experiences
           </h2>
-          <p className="mt-3 text-slate-600 text-sm md:text-base max-w-xl mx-auto">
+
+          <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
             Discover India's most iconic destinations crafted for unforgettable
             journeys.
           </p>
@@ -95,13 +97,13 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
           ref={scrollRef}
           onMouseEnter={stopAutoScroll}
           onMouseLeave={startAutoScroll}
-          className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 no-scrollbar"
+          className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 no-scrollbar"
         >
           {duplicated.map((tour, index) => (
             <Link
               key={`${tour.id}-${index}`}
               href={`/tours/${tour.slug}`}
-              className="group min-w-[85%] sm:min-w-[48%] lg:min-w-[32%] snap-start"
+              className="group min-w-[85%] sm:min-w-[48%] lg:min-w-[25%] snap-start"
               prefetch={false}
             >
               <div className="rounded-3xl overflow-hidden border bg-white shadow-sm hover:shadow-xl transition">

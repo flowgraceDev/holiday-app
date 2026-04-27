@@ -21,13 +21,12 @@ const NAV_ITEMS = [
 const REGIONS: Region[] = ["north", "south", "east", "west", "central"];
 
 const SERVICES = [
-  { name: "Tour Packages", path: "/contact" },
-  { name: "Car Rental", path: "/contact" },
-  { name: "Flight Tickets", path: "/contact" },
-  { name: "Train Tickets", path: "/contact" },
-  { name: "Tracking Tour India & Nepal", path: "/contact" },
+  { name: "Tour Packages", path: "/services/tour-packages" },
+  { name: "Car Rental", path: "/services/car-rental" },
+  { name: "Flight Tickets", path: "/services/flight-tickets" },
+  { name: "Train Tickets", path: "/services/train-tickets" },
+  { name: "Tracking Tour India & Nepal", path: "/services/tracking-tour-india-and-nepal" },
 ];
-
 type UIState = {
   desktopTours: boolean;
   desktopServices: boolean;

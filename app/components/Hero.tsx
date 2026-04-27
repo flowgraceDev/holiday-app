@@ -66,7 +66,7 @@ export default function Hero({ initialImages }: { initialImages: string[] }) {
   return (
     <section
       ref={ref}
-      className="relative w-full h-[80vh] md:h-[70vh] overflow-hidden bg-black rounded-3xl"
+      className="relative w-full h-[80vh] md:h-[60vh] overflow-hidden bg-black rounded-3xl"
     >
       <motion.div style={{ y }} className="absolute inset-0">
         <Image

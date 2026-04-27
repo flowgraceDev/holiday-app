@@ -6,7 +6,7 @@ const BUCKET = "website-assets";
 
 const upload = async (
   file: File,
-  folder: "hero" | "about" | "destinations" | "contact" | "tours" 
+  folder: "hero" | "about" | "destinations" | "contact" | "tours" | "services"
 ) => {
   const ext = file.name.split(".").pop();
   const path = `${folder}/${Date.now()}-${Math.random()
@@ -415,3 +415,77 @@ export const getContact = async () => {
 
   return data[0];
 };
+
+// Services apis
+
+export async function getServices() {
+  const { data, error } = await supabaseAdmin
+    .from("services")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function toggleServiceStatus(id: string, is_active: boolean) {
+  const { data, error } = await supabaseAdmin
+    .from("services")
+    .update({ is_active })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function deleteService(id: string) {
+  const { error } = await supabaseAdmin
+    .from("services")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+  return true;
+}
+
+export async function createService(payload: any, file: File) {
+  const image_url = await upload(file, "services");
+
+  const { data, error } = await supabaseAdmin
+    .from("services")
+    .insert({
+      ...payload,
+      image: image_url,
+    })
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function updateService(id: string, payload: any, file?: File) {
+  let image = payload.image;
+
+  if (file) {
+    image = await upload(file, "services");
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from("services")
+    .update({
+      ...payload,
+      image,
+    })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+
+

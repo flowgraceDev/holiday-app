@@ -6,6 +6,7 @@ import LeadsPage from "../../modules/Leads/components/leads-list";
 import MessageList from "../../modules/messages/components/message-list";
 import AboutList from "../../modules/aboutUs/components/about-list";
 import ContactList from "../../modules/contactUs/components/contactUsList";
+import ServicesPage from "../../modules/services/components/page";
 
 type Props = {
   params: Promise<{ section: string }>;
@@ -28,5 +29,6 @@ export default async function SectionPage({ params, searchParams }: Props) {
   if (section === "leads") return <LeadsPage searchParams={searchParams} />;
   if (section === "messages")
     return <MessageList searchParams={searchParams} />;
+   if (section === "services") return <ServicesPage />;
   return <div className="p-6">Not implemented</div>;
 }
