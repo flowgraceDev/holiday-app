@@ -2,7 +2,8 @@
 import { getTours } from "@/app/lib/supabase/actions/admin/adminCreate";
 import CreateTourModal from "./create-tour-modal";
 import Image from "next/image";
-import DeleteTourButton from "./delete-tour-button";
+import TourStatusToggle from "./tour-status-toggle";
+import EditTourModal from "./edit-tour-modal";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,7 @@ export default async function TourList() {
         {tours.map((t) => (
           <div
             key={t.id}
-            className="group relative flex items-center gap-6 rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm hover:shadow-md transition-transform duration-200 will-change-transform"
+            className="group relative flex items-center gap-6 rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm hover:shadow-md transition"
           >
             <div className="relative h-32 w-56 overflow-hidden rounded-2xl border shrink-0">
               <Image
@@ -30,8 +31,6 @@ export default async function TourList() {
                 alt={t.title}
                 width={224}
                 height={128}
-                sizes="224px"
-                loading="lazy"
                 className="object-cover rounded-2xl"
               />
             </div>
@@ -66,7 +65,10 @@ export default async function TourList() {
               </div>
             </div>
 
-            <DeleteTourButton id={t.id} />
+            <div className="flex items-center gap-2">
+              <EditTourModal tour={t} />
+              <TourStatusToggle id={t.id} isActive={t.is_active} />
+            </div>
           </div>
         ))}
       </div>

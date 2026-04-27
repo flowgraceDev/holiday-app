@@ -102,6 +102,7 @@ export const getTours = async () => {
     .from("tours")
     .select("*")
     .order("created_at", { ascending: false });
+
   if (error) throw error;
   return data;
 };
@@ -109,11 +110,60 @@ export const getTours = async () => {
 export const deleteTour = async (id: number) => {
   const { error } = await supabaseAdmin
     .from("tours")
-    .delete()
+    .update({ is_active: false })
     .eq("id", id);
+
   if (error) throw error;
 };
 
+export const updateTourStatusService = async (
+  id: number,
+  isActive: boolean
+) => {
+  const { error } = await supabaseAdmin
+    .from("tours")
+    .update({ is_active: isActive })
+    .eq("id", id);
+
+  if (error) throw error;
+};
+
+
+type UpdateTourPayload = {
+  id: number;
+  title: string;
+  slug: string;
+  short_description: string;
+  description: string;
+  duration: string;
+  location: string;
+  starting_city: string;
+  price: number;
+  discount_price: number;
+  max_people: number;
+  itinerary: unknown;
+  inclusions: unknown;
+  exclusions: unknown;
+  highlights: unknown;
+  seo_title: string;
+  seo_description: string;
+  cta_text: string;
+  cta_enabled: boolean;
+  featured: boolean;
+  is_active: boolean;
+  region: string;
+};
+
+export const updateTour = async (payload: UpdateTourPayload) => {
+  const { id, ...data } = payload;
+
+  const { error } = await supabaseAdmin
+    .from("tours")
+    .update(data)
+    .eq("id", id);
+
+  if (error) throw error;
+};
 
 // DESTINATION CREATE
 export const createDestination = async (

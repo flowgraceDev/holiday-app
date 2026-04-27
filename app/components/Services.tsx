@@ -81,11 +81,7 @@ export default function Services() {
           <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
             Travel Solutions
           </h2>
-
-          <p className="mt-2 text-sm md:text-base text-slate-600 max-w-xl mx-auto">
-            Plan. Travel. Experience.
-          </p>
-          <p className="text-xs md:text-sm text-slate-500">
+          <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
             Crafted journeys for seamless travel across India & beyond.
           </p>
         </div>

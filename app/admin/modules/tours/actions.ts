@@ -4,6 +4,8 @@
 import { revalidatePath } from "next/cache";
 import { createTour as createTourService } from "@/app/lib/supabase/actions/admin/adminCreate";
 import { deleteTour as deleteTourService } from "@/app/lib/supabase/actions/admin/adminCreate";
+import { updateTourStatusService } from "@/app/lib/supabase/actions/admin/adminCreate";
+import { updateTour as updateTourService } from "@/app/lib/supabase/actions/admin/adminCreate";
 export const createTourAction = async (formData: FormData) => {
   const title = formData.get("title") as string;
   const slug = formData.get("slug") as string;
@@ -61,7 +63,7 @@ export const createTourAction = async (formData: FormData) => {
       region,
       gallery: galleryFiles,
     },
-    featuredImage
+    featuredImage,
   );
 
   revalidatePath("/admin/dashboard/tours");
@@ -70,4 +72,39 @@ export const createTourAction = async (formData: FormData) => {
 export const deleteTourAction = async (id: number) => {
   await deleteTourService(id);
   revalidatePath("/admin/dashboard/destinations");
+};
+
+export const updateTourAction = async (id: number, isActive: boolean) => {
+  await updateTourStatusService(id, isActive);
+  revalidatePath("/admin/dashboard/destinations");
+};
+
+export const updateTourFullAction = async (id: number, formData: FormData) => {
+  const payload = {
+    id,
+    title: formData.get("title") as string,
+    slug: formData.get("slug") as string,
+    short_description: formData.get("short_description") as string,
+    description: formData.get("description") as string,
+    duration: formData.get("duration") as string,
+    location: formData.get("location") as string,
+    starting_city: formData.get("starting_city") as string,
+    price: Number(formData.get("price")),
+    discount_price: Number(formData.get("discount_price") || 0),
+    max_people: Number(formData.get("max_people") || 0),
+    itinerary: JSON.parse(formData.get("itinerary") as string),
+    inclusions: JSON.parse(formData.get("inclusions") as string),
+    exclusions: JSON.parse(formData.get("exclusions") as string),
+    highlights: JSON.parse(formData.get("highlights") as string),
+    seo_title: formData.get("seo_title") as string,
+    seo_description: formData.get("seo_description") as string,
+    cta_text: formData.get("cta_text") as string,
+    cta_enabled: formData.get("cta_enabled") === "on",
+    featured: formData.get("featured") === "on",
+    is_active: formData.get("is_active") === "on",
+    region: formData.get("region") as string,
+  };
+
+  await updateTourService(payload);
+  revalidatePath("/admin/dashboard/tours");
 };
