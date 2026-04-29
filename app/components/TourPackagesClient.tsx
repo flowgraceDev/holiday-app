@@ -15,6 +15,14 @@ type Tour = {
   price: number;
 };
 
+function formatTitle(title: string) {
+  if (!title) return "";
+
+  const words = title.trim().split(" ");
+  const short = words.slice(0, 3).join(" ");
+
+  return words.length > 3 ? short + "..." : short;
+}
 export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -24,7 +32,7 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
   const scroll = useCallback((dir: "left" | "right") => {
     const el = scrollRef.current;
     if (!el) return;
-    const cardWidth = el.firstElementChild?.clientWidth || 300;
+    const cardWidth = el.firstElementChild?.clientWidth || 280;
     el.scrollBy({
       left: dir === "left" ? -cardWidth : cardWidth,
       behavior: "smooth",
@@ -37,7 +45,7 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
       const el = scrollRef.current;
       if (!el) return;
 
-      const cardWidth = el.firstElementChild?.clientWidth || 300;
+      const cardWidth = el.firstElementChild?.clientWidth || 280;
       el.scrollBy({ left: cardWidth, behavior: "smooth" });
 
       if (el.scrollLeft >= el.scrollWidth / 2) {
@@ -59,37 +67,36 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
   }, [startAutoScroll]);
 
   return (
-    <section className="relative py-5 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 relative">
-        <div className="mb-12 text-center px-4 md:px-0">
-          <p className="text-yellow-600 font-semibold tracking-widest uppercase text-sm flex items-center justify-center gap-3 mb-4">
-            <span className="w-8 h-[2px] bg-yellow-500" />
+    <section className="relative py-2 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden -mt-6">
+      <div className="max-w-7xl mx-auto px-4 relative">
+        <div className="mb-4 text-center px-1 md:px-0">
+          <p className="text-yellow-600 font-semibold tracking-widest uppercase text-[10px] flex items-center justify-center gap-2 mb-1">
+            <span className="w-5 h-[2px] bg-yellow-500" />
             Plan Your Trip
-            <span className="w-8 h-[2px] bg-yellow-500" />
+            <span className="w-5 h-[2px] bg-yellow-500" />
           </p>
 
-          <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-4">
-            Curated Travel Experiences
+          <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-1">
+            Curated Travel
           </h2>
 
-          <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
-            Discover India's most iconic destinations crafted for unforgettable
-            journeys.
+          <p className="text-slate-600 text-[11px] md:text-xs max-w-sm mx-auto leading-tight">
+            Discover top destinations crafted for seamless journeys.
           </p>
         </div>
 
-        <div className="hidden md:flex absolute right-6 top-24 gap-3 z-10">
+        <div className="hidden md:flex absolute right-4 top-20 gap-2 z-10">
           <button
             onClick={() => scroll("left")}
-            className="w-11 h-11 rounded-full bg-white border shadow flex items-center justify-center"
+            className="w-9 h-9 rounded-full bg-white border shadow flex items-center justify-center"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
           <button
             onClick={() => scroll("right")}
-            className="w-11 h-11 rounded-full bg-white border shadow flex items-center justify-center"
+            className="w-9 h-9 rounded-full bg-white border shadow flex items-center justify-center"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
@@ -97,17 +104,17 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
           ref={scrollRef}
           onMouseEnter={stopAutoScroll}
           onMouseLeave={startAutoScroll}
-          className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 no-scrollbar"
+          className="flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-3 no-scrollbar"
         >
           {duplicated.map((tour, index) => (
             <Link
               key={`${tour.id}-${index}`}
               href={`/tours/${tour.slug}`}
-              className="group min-w-[85%] sm:min-w-[48%] lg:min-w-[25%] snap-start"
+              className="group min-w-[80%] sm:min-w-[45%] lg:min-w-[23%] snap-start"
               prefetch={false}
             >
-              <div className="rounded-3xl overflow-hidden border bg-white shadow-sm hover:shadow-xl transition">
-                <div className="relative h-64 overflow-hidden">
+              <div className="rounded-2xl overflow-hidden border bg-white shadow-sm hover:shadow-lg transition">
+                <div className="relative h-56 overflow-hidden">
                   <Image
                     src={tour.featured_image}
                     alt={tour.title}
@@ -115,25 +122,24 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
                     sizes="(max-width:768px) 80vw, (max-width:1200px) 40vw, 30vw"
                     quality={30}
                     loading="lazy"
-                    className="object-cover group-hover:scale-105 transition duration-500 will-change-transform"
+                    className="object-cover group-hover:scale-105 transition duration-500"
                   />
                 </div>
 
-                <div className="p-5 flex items-center justify-between">
+                <div className="p-4 flex items-center justify-between">
                   <div>
-                    <h3 className="text-slate-900 font-semibold line-clamp-2">
-                      {tour.title}
+                    <h3 className="text-slate-900 text-sm font-semibold line-clamp-2">
+                      {formatTitle(tour.title)}
                     </h3>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <p className="text-xs text-slate-500 mt-0.5">
                       {tour.duration}
                     </p>
                   </div>
 
                   <div className="text-right">
-                    <p className="text-slate-900 font-semibold">
+                    <p className="text-slate-900 text-sm font-semibold">
                       ₹{tour.price}
                     </p>
-                    <span className="text-xs text-slate-500">per person</span>
                   </div>
                 </div>
               </div>

@@ -7,30 +7,26 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { dancing } from "@/app/fonts";
 import { useRouter } from "next/navigation";
 
-type HeroImage = {
-  image_url: string;
-};
-
 const content = [
   {
-    title: "Travel India With Confidence",
-    subtitle: "Clear Plans. No Surprises.",
-    desc: "Well-structured itineraries designed for smooth and predictable travel experiences.",
+    title: "Travel India",
+    subtitle: "No Surprises",
+    desc: "Clear, smooth itineraries.",
   },
   {
-    title: "Comfort Comes First",
-    subtitle: "Travel Without Stress",
-    desc: "From bookings to transport, everything is handled with precision and care.",
+    title: "Travel Comfortably",
+    subtitle: "Zero Stress",
+    desc: "Everything handled for you.",
   },
   {
-    title: "Explore At Your Own Pace",
-    subtitle: "Flexible Travel Options",
-    desc: "Plans that adapt to your schedule without compromising quality.",
+    title: "Go Your Way",
+    subtitle: "Stay Flexible",
+    desc: "Plans that fit your time.",
   },
   {
-    title: "Real Experiences, Not Just Tours",
-    subtitle: "See Beyond The Surface",
-    desc: "Discover authentic destinations with practical and thoughtful planning.",
+    title: "Real Experiences",
+    subtitle: "Beyond Tours",
+    desc: "Authentic, well-planned trips.",
   },
 ];
 
@@ -38,7 +34,7 @@ export default function Hero({ initialImages }: { initialImages: string[] }) {
   const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const [images, setImages] = useState<string[]>(initialImages);
+  const [images] = useState<string[]>(initialImages);
   const [index, setIndex] = useState(0);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -66,7 +62,7 @@ export default function Hero({ initialImages }: { initialImages: string[] }) {
   return (
     <section
       ref={ref}
-      className="relative w-full h-[80vh] md:h-[60vh] overflow-hidden bg-black rounded-3xl"
+      className="relative w-full h-[80vh] md:h-[40vh] overflow-hidden bg-black rounded"
     >
       <motion.div style={{ y }} className="absolute inset-0">
         <Image
@@ -86,31 +82,51 @@ export default function Hero({ initialImages }: { initialImages: string[] }) {
 
       <motion.div
         style={{ opacity }}
-        className="absolute bottom-6 right-6 max-w-sm z-10 text-right"
+        className="absolute bottom-6 right-6 max-w-xs z-10 text-right"
       >
-        <div className="bg-black/30 backdrop-blur-2xl border border-white/10 rounded-xl p-5 space-y-2.5 shadow-xl">
+        <div className="bg-black/30 backdrop-blur-2xl border border-white/10 rounded-xl p-4 space-y-2 shadow-xl">
           <h2
-            className={`text-3xl md:text-4xl leading-snug text-yellow-400 ${dancing.className}`}
+            className={`text-2xl md:text-3xl leading-snug text-yellow-400 ${dancing.className}`}
           >
             {current.title}
           </h2>
 
-          <h3 className="text-base font-semibold text-white/90">
+          <h3 className="text-sm font-semibold text-white/90">
             {current.subtitle}
           </h3>
 
-          <p className="text-white/70 text-sm leading-relaxed">
+          <p className="text-white/70 text-xs leading-snug">
             {current.desc}
           </p>
 
           <button
             onClick={() => router.push("/about")}
-            className="mt-2 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 transition px-5 py-2.5 rounded-lg font-semibold shadow-md active:scale-95 text-sm"
+            className="mt-2 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 transition px-4 py-2 rounded-lg font-semibold shadow-md active:scale-95 text-xs"
           >
-            Explore More
+            Explore
           </button>
         </div>
       </motion.div>
+
+      <div className="absolute bottom-6 left-6 z-10 flex gap-2">
+        {images.map((img, i) => (
+          <button
+            key={i}
+            onClick={() => setIndex(i)}
+            className={`relative w-14 h-10 md:w-16 md:h-11 rounded overflow-hidden border ${
+              index === i ? "border-yellow-500" : "border-white/20"
+            }`}
+          >
+            <Image
+              src={img}
+              alt="thumb"
+              fill
+              sizes="80px"
+              className="object-cover"
+            />
+          </button>
+        ))}
+      </div>
     </section>
   );
 }
