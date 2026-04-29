@@ -1,132 +1,75 @@
 // app/components/Hero.tsx
 "use client";
 
-import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useState } from "react";
 import { dancing } from "@/app/fonts";
 import { useRouter } from "next/navigation";
 
 const content = [
-  {
-    title: "Travel India",
-    subtitle: "No Surprises",
-    desc: "Clear, smooth itineraries.",
-  },
-  {
-    title: "Travel Comfortably",
-    subtitle: "Zero Stress",
-    desc: "Everything handled for you.",
-  },
-  {
-    title: "Go Your Way",
-    subtitle: "Stay Flexible",
-    desc: "Plans that fit your time.",
-  },
-  {
-    title: "Real Experiences",
-    subtitle: "Beyond Tours",
-    desc: "Authentic, well-planned trips.",
-  },
+  { title: "Travel India", subtitle: "No Surprises", desc: "Clear, smooth itineraries." },
+  { title: "Travel Comfortably", subtitle: "Zero Stress", desc: "Everything handled for you." },
+  { title: "Go Your Way", subtitle: "Stay Flexible", desc: "Plans that fit your time." },
+  { title: "Real Experiences", subtitle: "Beyond Tours", desc: "Authentic, well-planned trips." },
 ];
 
 export default function Hero({ initialImages }: { initialImages: string[] }) {
   const router = useRouter();
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  const [images] = useState<string[]>(initialImages);
   const [index, setIndex] = useState(0);
 
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
   useEffect(() => {
-    if (!images.length) return;
+    const id = setInterval(() => {
+      setIndex((prev) => (prev + 1) % initialImages.length);
+    }, 4000);
+    return () => clearInterval(id);
+  }, [initialImages.length]);
 
-    intervalRef.current = setInterval(() => {
-      setIndex((p) => (p + 1) % images.length);
-    }, 3800);
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [images]);
-
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.9, 0]);
-
-  const current = content[index % content.length];
-
-  if (!images.length) return null;
+  const current = content[index];
 
   return (
-    <section
-      ref={ref}
-      className="relative w-full h-[80vh] md:h-[40vh] overflow-hidden bg-black rounded"
-    >
-      <motion.div style={{ y }} className="absolute inset-0">
+    <section className="relative w-full h-[65vh] overflow-hidden">
+      {initialImages.map((src, i) => (
         <Image
-          src={images[index]}
-          alt="hero"
+          key={src}
+          src={src}
+          alt=""
           fill
-          priority
-          sizes="100vw"
+          priority={i === 0}
           quality={30}
-          placeholder="blur"
-          blurDataURL={`${images[index]}?w=20&q=10`}
-          className="object-cover"
+          sizes="100vw"
+          className={`object-cover transition-opacity duration-700 ease-out ${
+            i === index ? "opacity-100" : "opacity-0"
+          }`}
         />
-      </motion.div>
+      ))}
 
-      <div className="absolute inset-0 bg-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
-      <motion.div
-        style={{ opacity }}
-        className="absolute bottom-6 right-6 max-w-xs z-10 text-right"
-      >
-        <div className="bg-black/30 backdrop-blur-2xl border border-white/10 rounded-xl p-4 space-y-2 shadow-xl">
-          <h2
-            className={`text-2xl md:text-3xl leading-snug text-yellow-400 ${dancing.className}`}
-          >
+      <div className="absolute bottom-8 right-6 md:right-10 w-full max-w-sm z-10 text-right">
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 shadow-2xl">
+          <h2 className={`text-2xl md:text-3xl text-yellow-400 ${dancing.className}`}>
             {current.title}
           </h2>
 
-          <h3 className="text-sm font-semibold text-white/90">
+          <h3 className="mt-1 text-sm text-white/90">
             {current.subtitle}
           </h3>
 
-          <p className="text-white/70 text-xs leading-snug">
+          <p className="mt-1 text-white/70 text-xs">
             {current.desc}
           </p>
 
           <button
             onClick={() => router.push("/about")}
-            className="mt-2 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 transition px-4 py-2 rounded-lg font-semibold shadow-md active:scale-95 text-xs"
+            className="mt-4 px-5 py-2 text-xs font-semibold rounded-full 
+            bg-gradient-to-r from-yellow-500 to-yellow-600 
+            hover:from-yellow-600 hover:to-yellow-700 
+            transition-all shadow-lg active:scale-95"
           >
-            Explore
+            Start Your Journey
           </button>
         </div>
-      </motion.div>
-
-      <div className="absolute bottom-6 left-6 z-10 flex gap-2">
-        {images.map((img, i) => (
-          <button
-            key={i}
-            onClick={() => setIndex(i)}
-            className={`relative w-14 h-10 md:w-16 md:h-11 rounded overflow-hidden border ${
-              index === i ? "border-yellow-500" : "border-white/20"
-            }`}
-          >
-            <Image
-              src={img}
-              alt="thumb"
-              fill
-              sizes="80px"
-              className="object-cover"
-            />
-          </button>
-        ))}
       </div>
     </section>
   );
-}
+} 

@@ -12,7 +12,7 @@ export default async function AboutPage() {
 
   return (
     <div className="bg-white">
-      <section className="relative h-[70vh] w-full overflow-hidden">
+      <section className="relative h-[65vh] w-full overflow-hidden">
         <Image
           src={about?.hero.image_url}
           alt="about"

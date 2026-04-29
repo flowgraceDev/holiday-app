@@ -3,30 +3,27 @@
 import Link from "next/link";
 import { FaWhatsapp, FaFacebookF, FaInstagram } from "react-icons/fa";
 import { usePathname } from "next/navigation";
-import {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { cormorant } from "../fonts";
-import { getToursByRegion, Region } from "../lib/supabase/actions/public/tours";
 
 const NAV_ITEMS = [
   { name: "Home", path: "/" },
   { name: "About Us", path: "/about" },
 ];
 
-const REGIONS: Region[] = ["north", "south", "east", "west", "central"];
+const REGIONS = ["north", "south", "east", "west", "central"] as const;
 
 const SERVICES = [
   { name: "Tour Packages", path: "/services/tour-packages" },
   { name: "Car Rental", path: "/services/car-rental" },
   { name: "Flight Tickets", path: "/services/flight-tickets" },
   { name: "Train Tickets", path: "/services/train-tickets" },
-  { name: "Tracking Tour India & Nepal", path: "/services/tracking-tour-india-and-nepal" },
+  {
+    name: "Tracking Tour India & Nepal",
+    path: "/services/tracking-tour-india-and-nepal",
+  },
 ];
+
 type UIState = {
   desktopTours: boolean;
   desktopServices: boolean;
@@ -37,6 +34,7 @@ type UIState = {
 
 export default function Header() {
   const pathname = usePathname();
+
   const [ui, setUI] = useState<UIState>({
     desktopTours: false,
     desktopServices: false,
@@ -44,14 +42,18 @@ export default function Header() {
     mobileTours: false,
     mobileServices: false,
   });
+
   const [visible, setVisible] = useState(true);
 
   const lastScrollY = useRef(0);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const isActive = useCallback(
-    (path: string) => pathname === path,
-    [pathname]
+  const isActive = useCallback((path: string) => pathname === path, [pathname]);
+
+  const toggle = useCallback(
+    (key: keyof UIState) =>
+      setUI((prev) => ({ ...prev, [key]: !prev[key] })),
+    []
   );
 
   const toggleTours = useCallback(() => {
@@ -70,12 +72,6 @@ export default function Header() {
     }));
   }, []);
 
-  const toggle = useCallback(
-    (key: keyof UIState) =>
-      setUI((prev) => ({ ...prev, [key]: !prev[key] })),
-    []
-  );
-
   const closeAll = useCallback(() => {
     setUI({
       desktopTours: false,
@@ -86,6 +82,7 @@ export default function Header() {
     });
   }, []);
 
+  // hide header on scroll down
   useEffect(() => {
     let ticking = false;
 
@@ -105,10 +102,12 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // close menu on route change
   useEffect(() => {
     closeAll();
   }, [pathname, closeAll]);
 
+  // click outside desktop dropdown
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -124,25 +123,29 @@ export default function Header() {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // body scroll lock (mobile menu)
   useEffect(() => {
     document.body.style.overflow = ui.mobileMenu ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [ui.mobileMenu]);
 
-  useEffect(() => {
-    const fetchTours = async () => {
-      await Promise.all(REGIONS.map((r) => getToursByRegion(r)));
-    };
-    fetchTours();
-  }, []);
+  // ❌ REMOVED: API prefetch that was causing overload
+  // It was calling ALL regions on every page load without usage
 
   const navLinks = useMemo(
     () =>
       NAV_ITEMS.map((item) => (
-        <Link key={item.path} href={item.path} className="relative group">
+        <Link
+          key={item.path}
+          href={item.path}
+          onClick={closeAll}
+          className="relative group"
+        >
           <span
             className={`${
               isActive(item.path)
@@ -154,7 +157,7 @@ export default function Header() {
           </span>
         </Link>
       )),
-    [isActive]
+    [isActive, closeAll]
   );
 
   return (
@@ -163,35 +166,30 @@ export default function Header() {
         visible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="bg-slate-950 text-white text-xs md:text-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-end px-4 py-2">
-          <div className="flex items-center gap-2">
-            <a className="w-9 h-9 flex items-center justify-center rounded-full bg-emerald-500 hover:bg-emerald-600 transition">
-              <FaWhatsapp />
-            </a>
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-blue-600 transition"
-            >
-              <FaFacebookF />
-            </a>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-pink-500 transition"
-            >
-              <FaInstagram />
-            </a>
-          </div>
-        </div>
+      {/* TOP BAR */}
+     <div className="bg-slate-950 text-white text-xs">
+    <div className="max-w-7xl mx-auto flex justify-end px-4 py-1">
+      <div className="flex items-center gap-2">
+        <a className="w-8 h-8 flex items-center justify-center rounded-full bg-emerald-500">
+          <FaWhatsapp />
+        </a>
+        <a className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10">
+          <FaFacebookF />
+        </a>
+        <a className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10">
+          <FaInstagram />
+        </a>
       </div>
+    </div>
+  </div>
 
+      {/* NAVBAR */}
       <div className="backdrop-blur-xl bg-white/95 border-b border-slate-200 shadow-sm">
         <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-4">
           <Link
             href="/"
-            className={`${cormorant.className} text-2xl md:text-3xl font-semibold tracking-wide text-slate-900`}
+            onClick={closeAll}
+            className={`${cormorant.className} text-2xl md:text-3xl font-semibold text-slate-900`}
           >
             Discover. Plan. Celebrate.
           </Link>
@@ -202,11 +200,9 @@ export default function Header() {
           >
             {navLinks}
 
+            {/* SERVICES */}
             <div className="relative">
-              <button
-                onClick={toggleServices}
-                className="hover:text-slate-900"
-              >
+              <button onClick={toggleServices} className="hover:text-slate-900">
                 Our Services
               </button>
 
@@ -226,11 +222,9 @@ export default function Header() {
               )}
             </div>
 
+            {/* TOURS */}
             <div className="relative">
-              <button
-                onClick={toggleTours}
-                className="hover:text-slate-900"
-              >
+              <button onClick={toggleTours} className="hover:text-slate-900">
                 Tours
               </button>
 
@@ -250,9 +244,12 @@ export default function Header() {
               )}
             </div>
 
-            <Link href="/contact">Contact Us</Link>
+            <Link href="/contact" onClick={closeAll}>
+              Contact Us
+            </Link>
           </div>
 
+          {/* MOBILE BUTTON */}
           <button
             onClick={() => toggle("mobileMenu")}
             className="md:hidden text-2xl"
@@ -262,6 +259,7 @@ export default function Header() {
         </nav>
       </div>
 
+      {/* MOBILE MENU */}
       {ui.mobileMenu && (
         <div className="fixed inset-0 z-[60] bg-white">
           <div className="flex justify-between p-4 border-b">
@@ -272,10 +270,12 @@ export default function Header() {
           <div className="p-5 space-y-5">
             {navLinks}
 
+            {/* SERVICES MOBILE */}
             <div>
               <button onClick={() => toggle("mobileServices")}>
                 Our Services
               </button>
+
               {ui.mobileServices &&
                 SERVICES.map((s) => (
                   <Link
@@ -289,8 +289,10 @@ export default function Header() {
                 ))}
             </div>
 
+            {/* TOURS MOBILE */}
             <div>
               <button onClick={() => toggle("mobileTours")}>Tours</button>
+
               {ui.mobileTours &&
                 REGIONS.map((r) => (
                   <Link
@@ -303,7 +305,8 @@ export default function Header() {
                   </Link>
                 ))}
             </div>
-            <Link href="/contact">
+
+            <Link href="/contact" onClick={closeAll}>
               <button className="w-full py-3 rounded-2xl bg-slate-900 text-white font-medium">
                 Book Now
               </button>

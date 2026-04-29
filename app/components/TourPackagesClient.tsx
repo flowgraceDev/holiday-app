@@ -1,4 +1,3 @@
-// app/components/TourPackagesClient.tsx
 "use client";
 
 import Link from "next/link";
@@ -17,12 +16,11 @@ type Tour = {
 
 function formatTitle(title: string) {
   if (!title) return "";
-
   const words = title.trim().split(" ");
   const short = words.slice(0, 3).join(" ");
-
   return words.length > 3 ? short + "..." : short;
 }
+
 export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -32,7 +30,7 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
   const scroll = useCallback((dir: "left" | "right") => {
     const el = scrollRef.current;
     if (!el) return;
-    const cardWidth = el.firstElementChild?.clientWidth || 280;
+    const cardWidth = el.firstElementChild?.clientWidth || 260;
     el.scrollBy({
       left: dir === "left" ? -cardWidth : cardWidth,
       behavior: "smooth",
@@ -45,7 +43,7 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
       const el = scrollRef.current;
       if (!el) return;
 
-      const cardWidth = el.firstElementChild?.clientWidth || 280;
+      const cardWidth = el.firstElementChild?.clientWidth || 260;
       el.scrollBy({ left: cardWidth, behavior: "smooth" });
 
       if (el.scrollLeft >= el.scrollWidth / 2) {
@@ -67,24 +65,25 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
   }, [startAutoScroll]);
 
   return (
-    <section className="relative py-2 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden -mt-6">
+    <section className="relative py-4 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden -mt-6">
       <div className="max-w-7xl mx-auto px-4 relative">
-        <div className="mb-4 text-center px-1 md:px-0">
-          <p className="text-yellow-600 font-semibold tracking-widest uppercase text-[10px] flex items-center justify-center gap-2 mb-1">
-            <span className="w-5 h-[2px] bg-yellow-500" />
+
+        {/* HEADER */}
+        <div className="mb-5 text-center">
+          <p className="text-yellow-600 font-semibold tracking-widest uppercase text-[10px] mb-1">
             Plan Your Trip
-            <span className="w-5 h-[2px] bg-yellow-500" />
           </p>
 
-          <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-1">
+          <h2 className="text-lg md:text-xl font-semibold text-slate-900">
             Curated Travel
           </h2>
 
-          <p className="text-slate-600 text-[11px] md:text-xs max-w-sm mx-auto leading-tight">
+          <p className="text-slate-600 text-xs max-w-sm mx-auto">
             Discover top destinations crafted for seamless journeys.
           </p>
         </div>
 
+        {/* ARROWS */}
         <div className="hidden md:flex absolute right-4 top-20 gap-2 z-10">
           <button
             onClick={() => scroll("left")}
@@ -100,6 +99,7 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
           </button>
         </div>
 
+        {/* CARDS */}
         <div
           ref={scrollRef}
           onMouseEnter={stopAutoScroll}
@@ -110,38 +110,42 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
             <Link
               key={`${tour.id}-${index}`}
               href={`/tours/${tour.slug}`}
-              className="group min-w-[80%] sm:min-w-[45%] lg:min-w-[23%] snap-start"
+              className="group min-w-[75%] sm:min-w-[40%] lg:min-w-[20%] snap-start"
               prefetch={false}
             >
-              <div className="rounded-2xl overflow-hidden border bg-white shadow-sm hover:shadow-lg transition">
-                <div className="relative h-56 overflow-hidden">
+              <div className="rounded-2xl overflow-hidden border bg-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                
+                {/* IMAGE */}
+                <div className="relative h-44 overflow-hidden">
                   <Image
                     src={tour.featured_image}
                     alt={tour.title}
                     fill
-                    sizes="(max-width:768px) 80vw, (max-width:1200px) 40vw, 30vw"
+                    sizes="(max-width:768px) 75vw, (max-width:1200px) 40vw, 25vw"
                     quality={30}
                     loading="lazy"
                     className="object-cover group-hover:scale-105 transition duration-500"
                   />
                 </div>
 
-                <div className="p-4 flex items-center justify-between">
+                {/* CONTENT */}
+                <div className="p-3 flex items-center justify-between">
                   <div>
-                    <h3 className="text-slate-900 text-sm font-semibold line-clamp-2">
+                    <h3 className="text-slate-900 text-xs font-semibold line-clamp-2">
                       {formatTitle(tour.title)}
                     </h3>
-                    <p className="text-xs text-slate-500 mt-0.5">
+                    <p className="text-[10px] text-slate-500 mt-0.5">
                       {tour.duration}
                     </p>
                   </div>
 
                   <div className="text-right">
-                    <p className="text-slate-900 text-sm font-semibold">
+                    <p className="text-slate-900 text-xs font-semibold">
                       ₹{tour.price}
                     </p>
                   </div>
                 </div>
+
               </div>
             </Link>
           ))}

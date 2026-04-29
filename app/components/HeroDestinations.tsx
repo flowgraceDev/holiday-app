@@ -1,11 +1,11 @@
 // app/components/destinations.tsx
 import Image from "next/image";
-import { getDestinations } from "@/app/lib/supabase/actions/admin/adminCreate";
+import { getDestinations } from "@/app/lib/supabase/actions/public/services";
 
 export const revalidate = 300;
 
-export default async function Destinations() {
-  const destinations = await getDestinations();
+export default  function Destinations() {
+  const destinations:any = getDestinations();
 
   if (!destinations?.length) return null;
 
@@ -62,7 +62,7 @@ export default async function Destinations() {
           </div>
 
           <div className="grid grid-cols-2 gap-5">
-            {rest.map((d) => (
+            {rest.map((d:any) => (
               <div
                 key={d.id}
                 className="relative h-[170px] rounded-xl overflow-hidden group"

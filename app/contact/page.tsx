@@ -15,7 +15,7 @@ export default async function ContactPage() {
 
   return (
     <div className="bg-white text-gray-900">
-      <section className="relative h-[70vh] flex items-center justify-center px-6 overflow-hidden">
+      <section className="relative h-[65vh] flex items-center justify-center px-6 overflow-hidden">
         <Image
           src={contact?.image_url || "/images/chitkul.jpg"}
           alt="contact"
