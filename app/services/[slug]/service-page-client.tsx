@@ -71,32 +71,137 @@ function Content({ service }: { service: Service }) {
 
 function InquiryForm({ service }: { service: Service }) {
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+
+  function getServiceType(slug: string) {
+    const text = slug.toLowerCase();
+    if (text.includes("car")) return "car";
+    if (text.includes("flight")) return "flight";
+    if (text.includes("train")) return "train";
+    if (text.includes("tour")) return "tour";
+    if (text.includes("track") || text.includes("trek")) return "trek";
+    return "default";
+  }
+
+  const type = getServiceType(service.slug);
+
+  function getDynamicFields(type: string) {
+    switch (type) {
+      case "flight":
+        return [
+          { name: "from", placeholder: "From (City)" },
+          { name: "to", placeholder: "To (City)" },
+          { name: "date", placeholder: "Travel Date", type: "date" },
+          { name: "passengers", placeholder: "Passengers" },
+        ];
+      case "train":
+        return [
+          { name: "from", placeholder: "From Station" },
+          { name: "to", placeholder: "To Station" },
+          { name: "date", placeholder: "Travel Date", type: "date" },
+          { name: "class", placeholder: "Class (Sleeper/3AC etc)" },
+        ];
+      case "car":
+        return [
+          { name: "pickup", placeholder: "Pickup Location" },
+          { name: "drop", placeholder: "Drop Location" },
+          { name: "date", placeholder: "Pickup Date", type: "date" },
+          { name: "carType", placeholder: "Car Type (SUV, Sedan)" },
+        ];
+      case "tour":
+        return [
+          { name: "destination", placeholder: "Destination" },
+          { name: "days", placeholder: "No. of Days" },
+          { name: "people", placeholder: "Number of People" },
+          { name: "budget", placeholder: "Budget (₹)" },
+        ];
+      case "trek":
+        return [
+          { name: "trekName", placeholder: "Trek Name" },
+          { name: "date", placeholder: "Start Date", type: "date" },
+          { name: "people", placeholder: "Participants" },
+          { name: "experience", placeholder: "Experience Level" },
+        ];
+      default:
+        return [];
+    }
+  }
+
+  const dynamicFields = getDynamicFields(type);
+
+  const messagePlaceholderMap: any = {
+    flight: "E.g. Delhi to Mumbai, 2 passengers, morning flight preferred",
+    train: "E.g. Delhi to Varanasi, sleeper class, flexible dates",
+    car: "E.g. Pickup from Delhi airport, drop to Manali, SUV needed",
+    tour: "E.g. Trip for 4 people, 5 days, mid-range budget",
+    trek: "E.g. Kedarkantha trek, beginner, 3 people",
+  };
+
+  const [form, setForm] = useState<any>(() => {
+    const base: any = {
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    };
+    dynamicFields.forEach((f: any) => {
+      base[f.name] = "";
+    });
+    return base;
   });
 
+  const isValidEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const resetForm = () => {
+    const cleared: any = {
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    };
+    dynamicFields.forEach((f: any) => {
+      cleared[f.name] = "";
+    });
+    setForm(cleared);
+  };
+
   const submit = async () => {
-    if (!form.name || !form.phone) return;
+    if (loading) return;
+
+    if (!form.name || !form.phone || !form.email) {
+      setStatus("error");
+      return;
+    }
+
+    if (!isValidEmail(form.email)) {
+      setStatus("error");
+      return;
+    }
 
     setLoading(true);
+    setStatus("idle");
+
     try {
-      await createInquiry({
+      const payload = {
         service_id: service.id,
         service_slug: service.slug,
-        ...form,
-      });
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        message: form.message,
+        extra: dynamicFields.reduce((acc: any, field: any) => {
+          acc[field.name] = form[field.name] || "";
+          return acc;
+        }, {}),
+      };
 
-      setForm({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-      });
+      await createInquiry(payload);
 
-      alert("Inquiry submitted successfully");
+      resetForm();
+      setStatus("success");
+    } catch (err) {
+      setStatus("error");
     } finally {
       setLoading(false);
     }
@@ -117,40 +222,77 @@ function InquiryForm({ service }: { service: Service }) {
         <div className="bg-white border border-slate-200 rounded-2xl shadow-md p-6 space-y-5">
           <div className="grid md:grid-cols-2 gap-4">
             <input
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-900 placeholder:text-slate-400 outline-none focus:bg-white focus:border-black/20 focus:ring-2 focus:ring-black/5 transition"
+              autoComplete="name"
+              className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 placeholder:text-slate-500 outline-none focus:border-black focus:ring-2 focus:ring-black/10 transition"
               placeholder="Full Name *"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
 
             <input
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-900 placeholder:text-slate-400 outline-none focus:bg-white focus:border-black/20 focus:ring-2 focus:ring-black/5 transition"
+              type="tel"
+              autoComplete="tel"
+              className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 placeholder:text-slate-500 outline-none focus:border-black focus:ring-2 focus:ring-black/10 transition"
               placeholder="Phone *"
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
             />
           </div>
 
+          {dynamicFields.map((field: any) => (
+            <input
+              key={field.name}
+              type={field.type || "text"}
+              placeholder={field.placeholder}
+              value={form[field.name] || ""}
+              onChange={(e) =>
+                setForm({ ...form, [field.name]: e.target.value })
+              }
+              className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 placeholder:text-slate-500 outline-none focus:border-black focus:ring-2 focus:ring-black/10 transition"
+            />
+          ))}
+
           <input
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-900 placeholder:text-slate-400 outline-none focus:bg-white focus:border-black/20 focus:ring-2 focus:ring-black/5 transition"
-            placeholder="Email (optional)"
+            type="email"
+            autoComplete="email"
+            className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 placeholder:text-slate-500 outline-none focus:border-black focus:ring-2 focus:ring-black/10 transition"
+            placeholder="Email (required)"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
 
           <textarea
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-900 placeholder:text-slate-400 outline-none focus:bg-white focus:border-black/20 focus:ring-2 focus:ring-black/5 transition min-h-[130px]"
-            placeholder="Describe your requirement..."
+            className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 placeholder:text-slate-500 outline-none focus:border-black focus:ring-2 focus:ring-black/10 transition min-h-[130px]"
+            placeholder={
+              messagePlaceholderMap[type] || "Describe your requirement..."
+            }
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
           />
+
           <button
             onClick={submit}
-            disabled={loading}
-            className="w-full bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition"
+            disabled={
+              loading || !form.name || !form.phone || !form.email
+            }
+            className="w-full bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Submitting..." : "Submit Inquiry"}
           </button>
+
+          {status === "success" && (
+            <div className="bg-green-50 border border-green-200 text-green-700 text-sm p-4 rounded-xl">
+              🎉 Your request has been received!
+              <br />
+              Our team will contact you within <strong>24 hours</strong>.
+            </div>
+          )}
+
+          {status === "error" && (
+            <div className="bg-red-50 border border-red-200 text-red-700 text-sm p-3 rounded-xl">
+              ❌ Please fill all required fields correctly.
+            </div>
+          )}
         </div>
       </div>
     </div>
