@@ -49,7 +49,7 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
   const current = content[index % content.length];
 
   return (
-    <section className="relative w-full h-[50vh] overflow-hidden">
+    <section className="relative w-full  h-[60vh] md:h-[70vh] overflow-hidden">
       {items.map((item, i) => (
         <div key={item.image} className="absolute inset-0">
           <Image
@@ -62,8 +62,6 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
             className={`object-cover object-center will-change-transform transform-gpu transition-all duration-700 ease-out ${
               i === index ? "opacity-100 scale-100" : "opacity-0 scale-105"
             }`}
-            placeholder="blur"
-            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWxsPSIjMTExIj48L3N2Zz4="
           />
 
           <div
@@ -72,11 +70,10 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
             }`}
           >
             <h2
-              className={`absolute bottom-6 left-6 md:bottom-1 md:left-10 
-  text-white text-3xl sm:text-5xl md:text-3xl lg:text-3xl 
-  font-light leading-tight tracking-wide 
-  drop-shadow-[0_6px_30px_rgba(0,0,0,0.9)] 
-  ${dancing.className}`}
+              className={`absolute bottom-6 left-6 md:bottom-1 md:left-10
+              text-yellow-400 text-3xl sm:text-5xl md:text-3xl lg:text-3xl
+              font-light leading-tight tracking-wide
+              ${dancing.className}`}
             >
               {item.title}
             </h2>
@@ -84,17 +81,15 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
         </div>
       ))}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-
       <div className="absolute bottom-8 right-6 md:right-10 w-full max-w-sm z-10 text-right">
-        <div className="bg-white/10 border border-white/20 rounded-2xl p-5 shadow-2xl ">
+        <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl p-5 shadow-2xl">
           <h2
             className={`text-2xl md:text-3xl text-yellow-400 ${dancing.className}`}
           >
             {current.title}
           </h2>
-          <h3 className="mt-1 text-sm text-white/90">{current.subtitle}</h3>
-          <p className="mt-1 text-white/70 text-xs">{current.desc}</p>
+          <h3 className="mt-1 text-sm text-white">{current.subtitle}</h3>
+          <p className="mt-1 text-white/80 text-xs">{current.desc}</p>
           <button
             onClick={() => router.push("/about")}
             className="mt-4 px-5 py-2 text-xs font-semibold rounded-full 
