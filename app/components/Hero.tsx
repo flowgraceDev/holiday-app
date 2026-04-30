@@ -82,7 +82,7 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
       ))}
 
       <div className="absolute bottom-8 right-6 md:right-10 w-full max-w-sm z-10 text-right">
-        <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl p-5 shadow-2xl">
+        <div className="bg-white/20  border border-white/30 rounded-2xl p-5 shadow-2xl">
           <h2
             className={`text-2xl md:text-3xl text-yellow-400 ${dancing.className}`}
           >
