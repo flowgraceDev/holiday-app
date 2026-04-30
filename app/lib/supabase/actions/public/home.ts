@@ -8,7 +8,7 @@ export async function getHomePageData() {
   ]);
 
   return {
-    heroImages: hero ?? [],
+    heroItems: hero ?? [],
     tours: tours ?? [],
   };
 }

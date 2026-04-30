@@ -102,10 +102,12 @@ export default function Services() {
                     src={s.image}
                     alt={s.title}
                     fill
-                    sizes="(max-width:768px) 50vw, 20vw"
-                    className="object-cover group-hover:scale-105 transition duration-300"
+                    quality={80}
+                    sizes="(max-width: 768px) 50vw, 20vw"
+                    className="object-cover object-center will-change-transform transform-gpu group-hover:scale-105 transition-transform duration-500 ease-out"
+                    placeholder="blur"
+                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWxsPSIjMTExIj48L3N2Zz4="
                   />
-
                   <div className="absolute inset-0 bg-black/40" />
 
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-white">

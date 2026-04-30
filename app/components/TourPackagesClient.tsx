@@ -67,38 +67,34 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
   return (
     <section className="relative py-4 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden -mt-6">
       <div className="max-w-7xl mx-auto px-4 relative">
-
         {/* HEADER */}
         <div className="mb-5 text-center">
-          <p className="text-yellow-600 font-semibold tracking-widest uppercase text-[10px] mb-1">
-            Plan Your Trip
+          <p className="text-yellow-600 font-semibold tracking-widest uppercase text-sm flex items-center justify-center gap-2">
+            <span className="w-8 h-[2px] bg-yellow-500" />
+       Discover top destinations crafted for seamless journeys.
+            <span className="w-8 h-[2px] bg-yellow-500" />
           </p>
 
-          <h2 className="text-lg md:text-xl font-semibold text-slate-900">
-            Curated Travel
-          </h2>
-
-          <p className="text-slate-600 text-xs max-w-sm mx-auto">
-            Discover top destinations crafted for seamless journeys.
-          </p>
+          {/* <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+           
+          </p> */}
         </div>
 
         {/* ARROWS */}
         <div className="hidden md:flex absolute right-4 top-20 gap-2 z-10">
           <button
             onClick={() => scroll("left")}
-            className="w-9 h-9 rounded-full bg-white border shadow flex items-center justify-center"
+            className="w-10 h-10 rounded-full bg-black/70 hover:bg-black text-white backdrop-blur-md border border-white/20 shadow-lg flex items-center justify-center transition-all"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-5 h-5" />
           </button>
           <button
             onClick={() => scroll("right")}
-            className="w-9 h-9 rounded-full bg-white border shadow flex items-center justify-center"
+            className="w-10 h-10 rounded-full bg-black/70 hover:bg-black text-white backdrop-blur-md border border-white/20 shadow-lg flex items-center justify-center transition-all"
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
-
         {/* CARDS */}
         <div
           ref={scrollRef}
@@ -114,7 +110,6 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
               prefetch={false}
             >
               <div className="rounded-2xl overflow-hidden border bg-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                
                 {/* IMAGE */}
                 <div className="relative h-44 overflow-hidden">
                   <Image
@@ -145,7 +140,6 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
                     </p>
                   </div>
                 </div>
-
               </div>
             </Link>
           ))}
