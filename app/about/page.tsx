@@ -12,7 +12,7 @@ export default async function AboutPage() {
 
   return (
     <div className="bg-white">
-      <section className="relative h-[50vh] w-full overflow-hidden">
+      <section className="relative h-[60vh] md:h-[70vh] w-full overflow-hidden">
         <Image
           src={about?.hero.image_url}
           alt="about"
@@ -40,7 +40,17 @@ export default async function AboutPage() {
 
       <section className="max-w-7xl mx-auto px-6 py-24 space-y-28">
         <div className="grid md:grid-cols-2 gap-16 items-center">
-          <div className="space-y-6">
+          <div className="relative h-[350px] md:h-[450px] w-full rounded-3xl overflow-hidden shadow-2xl group order-1 md:order-2">
+            <Image
+              src={about?.intro.image_url}
+              alt="about"
+              fill
+              className="object-cover transition duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/10" />
+          </div>
+
+          <div className="space-y-6 order-2 md:order-1">
             <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 leading-tight">
               {about?.intro.title}
             </h2>
@@ -52,16 +62,6 @@ export default async function AboutPage() {
             <p className="text-neutral-600 leading-relaxed">
               {about?.intro.para2}
             </p>
-          </div>
-
-          <div className="relative h-[450px] w-full rounded-3xl overflow-hidden shadow-2xl group">
-            <Image
-              src={about?.intro.image_url}
-              alt="about"
-              fill
-              className="object-cover transition duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-black/10" />
           </div>
         </div>
 
@@ -103,6 +103,7 @@ export default async function AboutPage() {
           <div className="relative p-10 rounded-3xl overflow-hidden bg-yellow-400 text-black shadow-2xl">
             <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-transparent" />
             <h3 className="text-2xl font-bold mb-4 relative">Our Mission</h3>
+            <p className="text-2xl font-bold mb-4 relative">Our Mission</p>
             <p className="text-black/80 relative">{about?.mission}</p>
           </div>
         </div>

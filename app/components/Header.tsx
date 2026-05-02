@@ -191,7 +191,7 @@ export default function Header() {
             onClick={closeAll}
             className={`${cormorant.className} text-2xl md:text-3xl font-semibold text-slate-900`}
           >
-            Discover. Plan. Celebrate.
+            TDIPL
           </Link>
 
           <div
