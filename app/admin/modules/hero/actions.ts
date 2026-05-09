@@ -4,6 +4,8 @@
 import { revalidatePath } from "next/cache";
 import { createHero as createHeroService } from "@/app/lib/supabase/actions/admin/adminCreate";
 import { deleteHero as deleteHeroService } from "@/app/lib/supabase/actions/admin/adminCreate";
+import { updateHero  as updateHeroService } from "@/app/lib/supabase/actions/admin/adminCreate";
+
 
 
 export const createHeroAction = async (formData: FormData) => {
@@ -21,7 +23,29 @@ export const createHeroAction = async (formData: FormData) => {
 
   revalidatePath("/admin/dashboard/hero");
 };
+// app/admin/modules/hero/actions.ts
 
+type UpdateHeroPayload = {
+  id: number;
+  title: string;
+  subtitle: string;
+  is_active: boolean;
+};
+
+export const updateHeroAction = async ({
+  id,
+  title,
+  subtitle,
+  is_active,
+}: UpdateHeroPayload) => {
+  await updateHeroService(id, {
+    title,
+    subtitle,
+    is_active,
+  });
+
+  revalidatePath("/admin/dashboard/hero");
+};
 export const deleteHeroAction = async (id: number) => {
   await deleteHeroService(id);
   revalidatePath("/admin/dashboard/hero");

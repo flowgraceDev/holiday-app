@@ -70,13 +70,15 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
             }`}
           >
             <h2
-              className={`absolute bottom-6 left-6 md:bottom-1 md:left-10
-              text-yellow-400 text-3xl sm:text-5xl md:text-3xl lg:text-3xl
-              font-light leading-tight tracking-wide
-              ${dancing.className}`}
-            >
-              {item.title}
-            </h2>
+  className={`absolute bottom-6 left-6 md:bottom-1 md:left-10
+  text-white
+  text-3xl sm:text-5xl md:text-3xl lg:text-3xl
+  font-light leading-tight tracking-wide
+  [text-shadow:0_2px_8px_rgba(0,0,0,0.9),0_0_24px_rgba(0,0,0,0.45)]
+  ${dancing.className}`}
+>
+  {item.title}
+</h2>
           </div>
         </div>
       ))}

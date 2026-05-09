@@ -3,6 +3,7 @@ import { getHeroes } from "@/app/lib/supabase/actions/admin/adminCreate";
 import CreateHeroModal from "./create-hero-modal";
 import Image from "next/image";
 import DeleteHeroButton from "./delete-hero-button";
+import EditHeroModal from "./edit-hero-modal";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +57,7 @@ export default async function HeroList() {
                 </span>
               </div>
             </div>
-
+             <EditHeroModal hero={h} />
             <DeleteHeroButton id={h.id} />
           </div>
         ))}

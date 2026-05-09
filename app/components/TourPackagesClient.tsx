@@ -17,7 +17,7 @@ type Tour = {
 function formatTitle(title: string) {
   if (!title) return "";
   const words = title.trim().split(" ");
-  const short = words.slice(0, 3).join(" ");
+  const short = words.slice(0, 5).join(" ");
   return words.length > 3 ? short + "..." : short;
 }
 
@@ -129,15 +129,12 @@ export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
                     <h3 className="text-slate-900 text-xs font-semibold line-clamp-2">
                       {formatTitle(tour.title)}
                     </h3>
-                    <p className="text-[10px] text-slate-500 mt-0.5">
-                      {tour.duration}
-                    </p>
                   </div>
 
                   <div className="text-right">
-                    <p className="text-slate-900 text-xs font-semibold">
+                    {/* <p className="text-slate-900 text-xs font-semibold">
                       ₹{tour.price}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               </div>

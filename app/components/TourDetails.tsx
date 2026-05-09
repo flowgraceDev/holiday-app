@@ -231,10 +231,10 @@ export default function TripDetails({ trip }: Props) {
 
           <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-lg">
             <p className="text-xs text-slate-400 uppercase tracking-widest">
-              Starting From
+             {trip.title}
             </p>
 
-            <div className="flex items-end gap-3 mt-2">
+            {/* <div className="flex items-end gap-3 mt-2">
               <span className="text-4xl font-bold text-slate-900">
                 ₹{trip.discount_price}
               </span>
@@ -246,7 +246,7 @@ export default function TripDetails({ trip }: Props) {
               <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full">
                 Save ₹{trip.price - trip.discount_price}
               </span>
-            </div>
+            </div> */}
 
             <div className="mt-5 space-y-2 text-sm text-slate-600">
               <p>✔ Instant confirmation</p>

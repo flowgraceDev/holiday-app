@@ -62,7 +62,24 @@ export const deleteHero = async (id: number) => {
 console.log(error)
   if (error) throw error;
 };
+export const updateHero = async (
+  id: number,
+  payload: Partial<
+    Omit<
+      Database["public"]["Tables"]["hero_sections"]["Update"],
+      "id" | "created_at"
+    >
+  >
+) => {
+  const { error } = await supabaseAdmin
+    .from("hero_sections")
+    .update({
+      ...payload,
+    })
+    .eq("id", id);
 
+  if (error) throw error;
+};
 
 
 type TourInsert = Database["public"]["Tables"]["tours"]["Insert"] & {

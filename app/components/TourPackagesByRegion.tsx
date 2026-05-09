@@ -66,19 +66,19 @@ console.log("res",res)
                     {tour.title}
                   </h3>
 
-                  <div className="flex items-center gap-2 text-sm">
+                  {/* <div className="flex items-center gap-2 text-sm">
                     <span className="text-yellow-500">★★★★★</span>
                     <span className="text-slate-500">(25 Reviews)</span>
-                  </div>
+                  </div> */}
 
                   <div className="flex items-center justify-between pt-2">
-                    <p className="font-semibold text-slate-900">
+                    {/* <p className="font-semibold text-slate-900">
                       ₹{tour.price}
                       <span className="text-slate-500 text-sm font-normal"> / person</span>
-                    </p>
+                    </p> */}
 
                     <button className="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition">
-                      Book
+                      Book Here
                     </button>
                   </div>
 
