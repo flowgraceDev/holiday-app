@@ -25,7 +25,7 @@ export default async function LeadsPage({ searchParams }: PageProps) {
   });
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-semibold">Leads</h1>
+      <h1 className="text-2xl font-semibold">Inquiries</h1>
       <LeadsFilters />
       <LeadsTable leads={leads || []} />
     </div>

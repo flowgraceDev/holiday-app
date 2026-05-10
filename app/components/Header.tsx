@@ -51,9 +51,8 @@ export default function Header() {
   const isActive = useCallback((path: string) => pathname === path, [pathname]);
 
   const toggle = useCallback(
-    (key: keyof UIState) =>
-      setUI((prev) => ({ ...prev, [key]: !prev[key] })),
-    []
+    (key: keyof UIState) => setUI((prev) => ({ ...prev, [key]: !prev[key] })),
+    [],
   );
 
   const toggleTours = useCallback(() => {
@@ -82,7 +81,6 @@ export default function Header() {
     });
   }, []);
 
-  // hide header on scroll down
   useEffect(() => {
     let ticking = false;
 
@@ -94,20 +92,20 @@ export default function Header() {
           lastScrollY.current = currentY;
           ticking = false;
         });
+
         ticking = true;
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // close menu on route change
   useEffect(() => {
     closeAll();
   }, [pathname, closeAll]);
 
-  // click outside desktop dropdown
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -123,19 +121,17 @@ export default function Header() {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // body scroll lock (mobile menu)
   useEffect(() => {
     document.body.style.overflow = ui.mobileMenu ? "hidden" : "";
+
     return () => {
       document.body.style.overflow = "";
     };
   }, [ui.mobileMenu]);
-
-  // ❌ REMOVED: API prefetch that was causing overload
-  // It was calling ALL regions on every page load without usage
 
   const navLinks = useMemo(
     () =>
@@ -144,20 +140,16 @@ export default function Header() {
           key={item.path}
           href={item.path}
           onClick={closeAll}
-          className="relative group"
+          className={`relative text-[17px] font-medium transition-colors duration-170 ${
+            isActive(item.path)
+              ? "text-slate-900"
+              : "text-slate-700 hover:text-slate-900"
+          }`}
         >
-          <span
-            className={`${
-              isActive(item.path)
-                ? "text-slate-900"
-                : "group-hover:text-slate-900"
-            }`}
-          >
-            {item.name}
-          </span>
+          {item.name}
         </Link>
       )),
-    [isActive, closeAll]
+    [isActive, closeAll],
   );
 
   return (
@@ -167,53 +159,56 @@ export default function Header() {
       }`}
     >
       {/* TOP BAR */}
-     <div className="bg-slate-950 text-white text-xs">
-    <div className="max-w-7xl mx-auto flex justify-end px-4 py-1">
-      <div className="flex items-center gap-2">
-        <a className="w-8 h-8 flex items-center justify-center rounded-full bg-emerald-500">
-          <FaWhatsapp />
-        </a>
-        <a className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10">
-          <FaFacebookF />
-        </a>
-        <a className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10">
-          <FaInstagram />
-        </a>
+      <div className="bg-slate-950 text-white text-xs">
+        <div className="max-w-7xl mx-auto flex justify-end px-4 py-2">
+          <div className="flex items-center gap-2">
+            <a className="w-8 h-8 flex items-center justify-center rounded-full bg-emerald-500 text-white">
+              <FaWhatsapp />
+            </a>
+
+            <a className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-800 text-white">
+              <FaFacebookF />
+            </a>
+
+            <a className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-800 text-white">
+              <FaInstagram />
+            </a>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
       {/* NAVBAR */}
-      <div className="backdrop-blur-xl bg-white/95 border-b border-slate-200 shadow-sm">
-        <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-4">
+      {/* NAVBAR */}
+      <div className="bg-white border-b border-slate-170 shadow-sm h-16 md:h-auto">
+        <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 h-full md:py-4">
           <Link
             href="/"
             onClick={closeAll}
-            className={`${cormorant.className} text-2xl md:text-3xl font-semibold text-slate-900`}
+            className={`${cormorant.className} text-3xl md:text-3xl font-semibold text-slate-900 leading-none`}
           >
             TDIPL
           </Link>
 
-          <div
-            ref={dropdownRef}
-            className="hidden md:flex items-center gap-10 text-sm font-medium text-slate-600"
-          >
+          <div ref={dropdownRef} className="hidden md:flex items-center gap-10">
             {navLinks}
 
             {/* SERVICES */}
             <div className="relative">
-              <button onClick={toggleServices} className="hover:text-slate-900">
+              <button
+                onClick={toggleServices}
+                className="text-[17px] font-medium text-slate-700 hover:text-slate-900 transition-colors"
+              >
                 Our Services
               </button>
 
               {ui.desktopServices && (
-                <div className="absolute top-12 left-0 w-64 rounded-2xl border bg-white shadow overflow-hidden">
+                <div className="absolute top-12 left-0 w-64 rounded-2xl border border-slate-170 bg-white shadow-xl overflow-hidden">
                   {SERVICES.map((s) => (
                     <Link
                       key={s.name}
                       href={s.path}
                       onClick={closeAll}
-                      className="block px-5 py-3 hover:bg-slate-50"
+                      className="block px-5 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors"
                     >
                       {s.name}
                     </Link>
@@ -224,18 +219,21 @@ export default function Header() {
 
             {/* TOURS */}
             <div className="relative">
-              <button onClick={toggleTours} className="hover:text-slate-900">
+              <button
+                onClick={toggleTours}
+                className="text-[17px] font-medium text-slate-700 hover:text-slate-900 transition-colors"
+              >
                 Tours Packages
               </button>
 
               {ui.desktopTours && (
-                <div className="absolute top-12 left-0 w-64 rounded-2xl border bg-white shadow overflow-hidden">
+                <div className="absolute top-12 left-0 w-64 rounded-2xl border border-slate-170 bg-white shadow-xl overflow-hidden">
                   {REGIONS.map((region) => (
                     <Link
                       key={region}
                       href={`/region/${region}`}
                       onClick={closeAll}
-                      className="block px-5 py-3 capitalize hover:bg-slate-50"
+                      className="block px-5 py-3 capitalize text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors"
                     >
                       {region} India Tours
                     </Link>
@@ -244,7 +242,11 @@ export default function Header() {
               )}
             </div>
 
-            <Link href="/contact" onClick={closeAll}>
+            <Link
+              href="/contact"
+              onClick={closeAll}
+              className="text-[17px] font-medium text-slate-700 hover:text-slate-900 transition-colors"
+            >
               Contact Us
             </Link>
           </div>
@@ -252,7 +254,7 @@ export default function Header() {
           {/* MOBILE BUTTON */}
           <button
             onClick={() => toggle("mobileMenu")}
-            className="md:hidden text-2xl"
+            className="md:hidden flex items-center justify-center w-12 h-12 rounded-xl border border-slate-300 bg-white text-slate-900 text-3xl shrink-0"
           >
             ☰
           </button>
@@ -261,56 +263,93 @@ export default function Header() {
 
       {/* MOBILE MENU */}
       {ui.mobileMenu && (
-        <div className="fixed inset-0 z-[60] bg-white">
-          <div className="flex justify-between p-4 border-b">
-            <span>Menu</span>
-            <button onClick={() => toggle("mobileMenu")}>×</button>
+        <div className="fixed inset-0 z-[60] bg-white md:hidden">
+          <div className="flex items-center justify-between h-16 px-5 border-b border-slate-170">
+            <span className="text-xl font-semibold text-slate-900">Menu</span>
+
+            <button
+              onClick={() => toggle("mobileMenu")}
+              className="flex items-center justify-center w-12 h-12 rounded-xl border border-slate-300 text-slate-900 text-3xl"
+            >
+              ×
+            </button>
           </div>
 
-          <div className="p-5 space-y-5">
-            {navLinks}
+          <div className="h-[calc(100vh-64px)] overflow-y-auto px-5 py-6 bg-white">
+            <div className="flex flex-col gap-6">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  onClick={closeAll}
+                  className={`text-lg font-semibold ${
+                    isActive(item.path) ? "text-slate-900" : "text-slate-700"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
 
-            {/* SERVICES MOBILE */}
-            <div>
-              <button onClick={() => toggle("mobileServices")}>
-                Our Services
-              </button>
+              {/* SERVICES MOBILE */}
+              <div className="border-t border-slate-170 pt-5">
+                <button
+                  onClick={() => toggle("mobileServices")}
+                  className="w-full flex items-center justify-between text-lg font-semibold text-slate-900"
+                >
+                  <span>Our Services</span>
+                  <span className="text-2xl">
+                    {ui.mobileServices ? "−" : "+"}
+                  </span>
+                </button>
 
-              {ui.mobileServices &&
-                SERVICES.map((s) => (
-                  <Link
-                    key={s.name}
-                    href={s.path}
-                    onClick={closeAll}
-                    className="block pl-4"
-                  >
-                    {s.name}
-                  </Link>
-                ))}
+                {ui.mobileServices && (
+                  <div className="mt-4 flex flex-col rounded-2xl border border-slate-170 overflow-hidden bg-slate-50">
+                    {SERVICES.map((s) => (
+                      <Link
+                        key={s.name}
+                        href={s.path}
+                        onClick={closeAll}
+                        className="px-5 py-4 text-base text-slate-700 border-b border-slate-170 last:border-b-0"
+                      >
+                        {s.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* TOURS MOBILE */}
+              <div className="border-t border-slate-170 pt-5">
+                <button
+                  onClick={() => toggle("mobileTours")}
+                  className="w-full flex items-center justify-between text-lg font-semibold text-slate-900"
+                >
+                  <span>Tours Packages</span>
+                  <span className="text-2xl">{ui.mobileTours ? "−" : "+"}</span>
+                </button>
+
+                {ui.mobileTours && (
+                  <div className="mt-4 flex flex-col rounded-2xl border border-slate-170 overflow-hidden bg-slate-50">
+                    {REGIONS.map((r) => (
+                      <Link
+                        key={r}
+                        href={`/region/${r}`}
+                        onClick={closeAll}
+                        className="px-5 py-4 text-base capitalize text-slate-700 border-b border-slate-170 last:border-b-0"
+                      >
+                        {r} India Tours
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <Link href="/contact" onClick={closeAll}>
+                <button className="w-full py-4 rounded-2xl bg-slate-900 text-white font-semibold text-base">
+                  Book Now
+                </button>
+              </Link>
             </div>
-
-            {/* TOURS MOBILE */}
-            <div>
-              <button onClick={() => toggle("mobileTours")}>Tours</button>
-
-              {ui.mobileTours &&
-                REGIONS.map((r) => (
-                  <Link
-                    key={r}
-                    href={`/region/${r}`}
-                    onClick={closeAll}
-                    className="block pl-4"
-                  >
-                    {r}
-                  </Link>
-                ))}
-            </div>
-
-            <Link href="/contact" onClick={closeAll}>
-              <button className="w-full py-3 rounded-2xl bg-slate-900 text-white font-medium">
-                Book Now
-              </button>
-            </Link>
           </div>
         </div>
       )}

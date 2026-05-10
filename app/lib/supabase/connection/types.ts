@@ -97,6 +97,8 @@ export interface Database {
           email: string;
           phone: string | null;
           subject: string | null;
+          arrival_date: string | null;
+          departure_date: string | null;
           message: string;
           status: string | null;
           created_at: string | null;
@@ -107,6 +109,8 @@ export interface Database {
           message: string;
           phone?: string | null;
           subject?: string | null;
+          arrival_date?: string | null;
+          departure_date?: string | null;
           status?: string | null;
           created_at?: string | null;
         };
@@ -137,7 +141,9 @@ export interface Database {
           created_at?: string | null;
           updated_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["hero_sections"]["Insert"]>;
+        Update: Partial<
+          Database["public"]["Tables"]["hero_sections"]["Insert"]
+        >;
       };
 
       destinations: {
@@ -189,10 +195,12 @@ export interface Database {
           vision?: string | null;
           updated_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["about_section"]["Insert"]>;
+        Update: Partial<
+          Database["public"]["Tables"]["about_section"]["Insert"]
+        >;
       };
 
-    contact_section: {
+      contact_section: {
         Row: {
           id: string;
           title: string | null;
