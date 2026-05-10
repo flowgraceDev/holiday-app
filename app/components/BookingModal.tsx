@@ -171,7 +171,7 @@ export default function InquiryModal({
 
                 <span className="h-1 w-1 rounded-full bg-slate-300" />
 
-                <span>🚗 {trip.starting_city}</span>
+                <span>Starting City 🚗 {trip.starting_city}</span>
               </div>
             </div>
 
@@ -183,7 +183,7 @@ export default function InquiryModal({
             </button>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          {/* <div className="grid grid-cols-2 gap-3">
             <div className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-3">
               <p className="text-[10px] uppercase tracking-wider text-emerald-600">
                 Starting City
@@ -193,7 +193,7 @@ export default function InquiryModal({
                 {trip.starting_city}
               </p>
             </div>
-          </div>
+          </div> */}
 
           <div className="space-y-4 px-1">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
