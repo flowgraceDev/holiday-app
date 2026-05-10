@@ -1,7 +1,12 @@
 // app/actions/inquiry.ts
-'use client'
+'use server'
 
-import { createClient } from '@/app/lib/supabase/connection/client'
+import { supabaseServer } from '@/app/lib/supabase/connection/server'
+import { Database } from '@/app/lib/supabase/connection/types'
+import { sendTripInquiryEmail } from '@/app/lib/send-trip-inquiry-email'
+
+type InquiryInsert =
+  Database['public']['Tables']['inquiries']['Insert']
 
 type CreateInquiryInput = {
   full_name: string
@@ -26,8 +31,8 @@ function isValidDate(date: string) {
   return !isNaN(new Date(date).getTime())
 }
 
-export async function createInquiry(data: CreateInquiryInput) {
-  const supabase = await createClient()
+export async function createInquiry(data: any) {
+  const supabase = await supabaseServer()
 
   const full_name = data.full_name?.trim()
   const email = data.email?.trim().toLowerCase()
@@ -84,23 +89,54 @@ export async function createInquiry(data: CreateInquiryInput) {
     throw new Error('Invalid tour id')
   }
 
- const { error } = await supabase.from('inquiries').insert([
-  {
-    full_name,
-    email,
-    phone,
-    tour_id,
-    message,
-    arrival_date,
-    departure_date,
-    number_of_people,
-    status: 'new',
-  },
-] as never)
+  const inquiryPayload = {
+  full_name,
+  email,
+  phone,
+  tour_id,
+  message,
+  arrival_date,
+  departure_date,
+  number_of_people,
+  status: 'new',
+}
+
+const { error } = await supabase
+  .from('inquiries')
+  .insert(inquiryPayload as any)
 
   if (error) {
     throw new Error(error.message || 'Failed to create inquiry')
   }
 
-  return { success: true }
+  if (tour_id) {
+    const { data: trip } = await supabase
+      .from('tours')
+      .select(`
+        id,
+        title,
+        location,
+        starting_city,
+        duration
+      `)
+      .eq('id', tour_id)
+      .single()
+
+    if (trip) {
+      await sendTripInquiryEmail({
+        full_name,
+        email,
+        phone,
+        message,
+        arrival_date,
+        departure_date,
+        number_of_people,
+        trip,
+      })
+    }
+  }
+
+  return {
+    success: true,
+  }
 }
