@@ -225,7 +225,7 @@ export default function Header() {
             {/* TOURS */}
             <div className="relative">
               <button onClick={toggleTours} className="hover:text-slate-900">
-                Tours
+                Tours Packages
               </button>
 
               {ui.desktopTours && (
