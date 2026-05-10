@@ -80,12 +80,6 @@ export default function CreateTourModal() {
               </div>
 
               <div className="grid grid-cols-3 gap-5">
-                <Input name="price" type="number" placeholder="Price" />
-                <Input
-                  name="discount_price"
-                  type="number"
-                  placeholder="Discount Price"
-                />
                 <Input
                   name="max_people"
                   type="number"

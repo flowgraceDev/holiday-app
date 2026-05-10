@@ -20,8 +20,6 @@ export interface Database {
           duration: string | null;
           location: string | null;
           starting_city: string | null;
-          price: number;
-          discount_price: number | null;
           max_people: number | null;
           featured_image: string | null;
           gallery: string[] | null;
@@ -41,13 +39,11 @@ export interface Database {
         Insert: {
           title: string;
           slug: string;
-          price: number;
           short_description?: string | null;
           description?: string | null;
           duration?: string | null;
           location?: string | null;
           starting_city?: string | null;
-          discount_price?: number | null;
           max_people?: number | null;
           featured_image?: string | null;
           gallery?: string[] | null;

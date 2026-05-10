@@ -24,7 +24,6 @@ export default async function MessageList({ searchParams }: PageProps) {
     from: params?.from || "",
     to: params?.to || "",
   });
-console.log(contacts)
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-semibold">Contact Messages</h1>

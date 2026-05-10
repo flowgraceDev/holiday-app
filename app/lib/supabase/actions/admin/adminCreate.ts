@@ -155,8 +155,8 @@ type UpdateTourPayload = {
   duration: string;
   location: string;
   starting_city: string;
-  price: number;
-  discount_price: number;
+  // price: number;
+  // discount_price: number;
   max_people: number;
   itinerary: unknown;
   inclusions: unknown;

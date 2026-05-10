@@ -17,18 +17,12 @@ type PageProps = {
 
 export default async function LeadsPage({ searchParams }: PageProps) {
   const params = await searchParams;
-
-  console.log("SEARCH PARAMS:", params);
-
   const leads = await getLeads({
     status: params?.status || "",
     search: params?.search || "",
     from: params?.from || "",
     to: params?.to || "",
   });
-
-  console.log("LEADS:", leads);
-
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-semibold">Leads</h1>

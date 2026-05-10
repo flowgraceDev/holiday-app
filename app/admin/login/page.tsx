@@ -19,9 +19,6 @@ async function onLogin() {
       password,
     });
 
-    console.log("ERROR:", error);
-    console.log("DATA:", data);
-
     if (error) {
       alert(error.message);
       return;
@@ -36,7 +33,6 @@ async function onLogin() {
 
     router.push("/admin/dashboard");
   } catch (err) {
-    console.error(err);
   }
 }
 

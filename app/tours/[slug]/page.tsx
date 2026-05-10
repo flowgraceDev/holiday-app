@@ -9,12 +9,7 @@ export default async function Page({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-
-  console.log("PARAM SLUG:", slug)
-
   const trip = await getTourBySlug(slug).catch(() => null)
-
   if (!trip) return notFound()
-
   return <TripDetails trip={trip} />
 }

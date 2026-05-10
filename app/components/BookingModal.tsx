@@ -39,7 +39,8 @@ export default function InquiryModal({
     full_name: "",
     email: "",
     phone: "",
-    travel_date: "",
+    arrival_date: "",
+    departure_date: "",
     number_of_people: "",
     message: "",
   });
@@ -75,19 +76,18 @@ export default function InquiryModal({
 
   const handleSubmit = () => {
     if (!isFormValid || pending) return;
-
     const payload = {
       full_name: form.full_name.trim(),
       email: form.email.trim().toLowerCase(),
       phone: form.phone.trim(),
       message: form.message?.trim() || undefined,
-      travel_date: form.travel_date || undefined,
+      arrival_date: form.arrival_date || undefined,
+      departure_date: form.departure_date || undefined,
       number_of_people: form.number_of_people
         ? Number(form.number_of_people)
         : undefined,
       tour_id: trip.id || undefined,
     };
-
     startTransition(async () => {
       try {
         await createInquiry(payload);
@@ -98,9 +98,10 @@ export default function InquiryModal({
           full_name: "",
           email: "",
           phone: "",
-          message: "",
-          travel_date: "",
+          arrival_date: "",
+          departure_date: "",
           number_of_people: "",
+          message: "",
         });
       } catch {
         setStatus("error");
@@ -132,9 +133,7 @@ export default function InquiryModal({
 
             <h2 className="text-xl font-semibold">{trip.title}</h2>
 
-            <p className="text-sm opacity-90">
-              {trip.short_description}
-            </p>
+            <p className="text-sm opacity-90">{trip.short_description}</p>
           </div>
 
           <div className="absolute top-3 left-3 flex gap-2">
@@ -144,12 +143,7 @@ export default function InquiryModal({
                 onClick={() => setActiveImage(img)}
                 className="relative h-12 w-12 overflow-hidden rounded-lg border border-white/30"
               >
-                <Image
-                  src={img}
-                  alt=""
-                  fill
-                  className="object-cover"
-                />
+                <Image src={img} alt="" fill className="object-cover" />
               </button>
             ))}
           </div>
@@ -201,68 +195,120 @@ export default function InquiryModal({
             </div>
           </div>
 
-          <div className="space-y-2 px-1">
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-              <input
-                placeholder="Full Name"
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
-                value={form.full_name}
-                onChange={(e) =>
-                  setForm({ ...form, full_name: e.target.value })
-                }
-              />
+          <div className="space-y-4 px-1">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-slate-700">
+                  Full Name
+                </label>
 
-              <input
-                placeholder="Email"
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
-                value={form.email}
-                onChange={(e) =>
-                  setForm({ ...form, email: e.target.value })
-                }
-              />
+                <input
+                  type="text"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
+                  value={form.full_name}
+                  onChange={(e) =>
+                    setForm({ ...form, full_name: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-slate-700">
+                  Email Address
+                </label>
+
+                <input
+                  type="email"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                />
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-              <input
-                placeholder="Phone Number"
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
-                value={form.phone}
-                onChange={(e) =>
-                  setForm({ ...form, phone: e.target.value })
-                }
-              />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-slate-700">
+                  Phone Number
+                </label>
 
-              <input
-                type="date"
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
-                value={form.travel_date}
-                onChange={(e) =>
-                  setForm({ ...form, travel_date: e.target.value })
-                }
-              />
+                <input
+                  type="tel"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-slate-700">
+                  Number Of People
+                </label>
+
+                <input
+                  type="number"
+                  min={1}
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
+                  value={form.number_of_people}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      number_of_people: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </div>
 
-            <input
-              type="number"
-              placeholder="Number Of People"
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
-              value={form.number_of_people}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  number_of_people: e.target.value,
-                })
-              }
-            />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-slate-700">
+                  Arrival Date
+                </label>
 
-            <textarea
-              placeholder="Tell us your preferences (optional)"
-              className="h-20 w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
-              value={form.message}
-              onChange={(e) =>
-                setForm({ ...form, message: e.target.value })
-              }
-            />
+                <input
+                  type="date"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
+                  value={form.arrival_date}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      arrival_date: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-slate-700">
+                  Departure Date
+                </label>
+
+                <input
+                  type="date"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
+                  value={form.departure_date}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      departure_date: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-slate-700">
+                Message
+              </label>
+
+              <textarea
+                className="h-24 w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-emerald-400 focus:ring-1 focus:ring-emerald-100"
+                value={form.message}
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
+              />
+            </div>
           </div>
 
           <button
@@ -274,15 +320,12 @@ export default function InquiryModal({
           </button>
 
           <p className="text-center text-[11px] leading-relaxed text-slate-400">
-            Our travel expert will contact you within 24 hours to
-            customize your journey
+            Our travel expert will contact you within 24 hours to customize your
+            journey
           </p>
         </div>
 
-        <InquiryStatusModal
-          status={status}
-          onClose={() => setStatus(null)}
-        />
+        <InquiryStatusModal status={status} onClose={() => setStatus(null)} />
       </div>
     </div>
   );

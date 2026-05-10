@@ -16,7 +16,6 @@ export const getLeads = async (filters?: {
   from?: string;
   to?: string;
 }) => {
-  console.log("filters in action",filters)
   return await fetchLeads(filters);
 };
 

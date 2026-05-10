@@ -17,17 +17,13 @@ export async function getTours() {
 }
 
 export async function getTourBySlug(slug: string) {
-  console.log("calll ayi hai ",slug)
   const supabase = await supabaseServer()
-
   const { data, error } = await supabase
     .from('tours')
     .select('*')
     .eq('slug', slug)
     .single()
-console.log("tripData",data)
   if (error) throw new Error(error.message)
-
   return data
 }
 

@@ -115,20 +115,6 @@ export default function EditTourModal({ tour }: { tour: any }) {
               </div>
 
               <div className="grid grid-cols-3 gap-5">
-                <Field label="Price">
-                  <Input
-                    name="price"
-                    type="number"
-                    defaultValue={tour.price}
-                  />
-                </Field>
-                <Field label="Discount Price">
-                  <Input
-                    name="discount_price"
-                    type="number"
-                    defaultValue={tour.discount_price}
-                  />
-                </Field>
                 <Field label="Max People">
                   <Input
                     name="max_people"
