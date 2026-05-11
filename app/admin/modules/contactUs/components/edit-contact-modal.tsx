@@ -37,7 +37,11 @@ export default function EditContactModal() {
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
+
   const [data, setData] = useState<ContactData | null>(null);
+
+  const [images, setImages] = useState<string[]>([]);
+
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -45,9 +49,16 @@ export default function EditContactModal() {
 
     (async () => {
       const res = await getContactAction();
-      setData(res as ContactData);
+      const contact = res as ContactData;
+
+      setData(contact);
+      setImages(contact?.image_url || []);
     })();
   }, [open]);
+
+  const removeImage = (url: string) => {
+    setImages((prev) => prev.filter((img) => img !== url));
+  };
 
   return (
     <>
@@ -74,6 +85,11 @@ export default function EditContactModal() {
 
                   setStatus("loading");
 
+                  formData.set(
+                    "existing_images",
+                    JSON.stringify(images)
+                  );
+
                   await updateContactAction(data.id, formData);
 
                   setStatus("success");
@@ -95,36 +111,47 @@ export default function EditContactModal() {
                 </h3>
 
                 <div className="grid grid-cols-2 gap-5">
-                  <Input
-                    name="title"
-                    defaultValue={data?.title}
-                    placeholder="Title"
-                    required
-                  />
-                  <Input
-                    name="subtitle"
-                    defaultValue={data?.subtitle}
-                    placeholder="Subtitle"
-                  />
+                  <Input name="title" defaultValue={data?.title} required />
+                  <Input name="subtitle" defaultValue={data?.subtitle} />
                 </div>
 
                 <Textarea
                   name="description"
                   defaultValue={data?.description}
-                  placeholder="Description"
                 />
 
                 <Input
                   name="highlight"
                   defaultValue={data?.highlight}
-                  placeholder="Highlight Text"
                 />
 
-                {/* MULTIPLE IMAGES */}
-                <div className="space-y-2">
+                {/* IMAGES (SAME FLOW AS ABOUT US) */}
+                <div className="space-y-3">
                   <label className="text-sm font-medium">
-                    Hero Images (Multiple)
+                    Hero Images
                   </label>
+
+                  <div className="grid grid-cols-3 gap-3">
+                    {images.map((img) => (
+                      <div
+                        key={img}
+                        className="relative border rounded-lg overflow-hidden"
+                      >
+                        <img
+                          src={img}
+                          className="h-24 w-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(img)}
+                          className="absolute top-1 right-1 bg-black text-white text-xs px-2 py-1 rounded"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
                   <input
                     name="images"
                     type="file"
@@ -132,19 +159,6 @@ export default function EditContactModal() {
                     className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-black file:text-white"
                   />
                 </div>
-
-                {/* PREVIEW EXISTING */}
-                {data?.image_url?.length ? (
-                  <div className="flex flex-wrap gap-3">
-                    {data.image_url.map((img, idx) => (
-                      <img
-                        key={idx}
-                        src={img}
-                        className="h-20 w-28 object-cover rounded-lg border"
-                      />
-                    ))}
-                  </div>
-                ) : null}
               </div>
 
               {/* SECTION */}
@@ -156,17 +170,14 @@ export default function EditContactModal() {
                 <Input
                   name="section_title"
                   defaultValue={data?.section_title}
-                  placeholder="Section Title"
                 />
                 <Input
                   name="section_highlight"
                   defaultValue={data?.section_highlight}
-                  placeholder="Section Highlight"
                 />
                 <Textarea
                   name="section_description"
                   defaultValue={data?.section_description}
-                  placeholder="Section Description"
                 />
               </div>
 
@@ -176,7 +187,6 @@ export default function EditContactModal() {
                 <Input
                   name="map_url"
                   defaultValue={data?.map_url}
-                  placeholder="Google Map Embed URL"
                 />
               </div>
 

@@ -10,7 +10,7 @@ const links = [
   { href: "/admin/dashboard/tours", label: "Tours" },
   { href: "/admin/dashboard/destinations", label: "Destinations" },
   { href: "/admin/dashboard/about", label: "About Us" },
-  { href: "/admin/dashboard/contact", label: "Contact" },
+  { href: "/admin/dashboard/contact", label: "Contact Us" },
   { href: "/admin/dashboard/leads", label: "Inquiries" },
   { href: "/admin/dashboard/messages", label: "Messages" },
   { href: "/admin/dashboard/services", label: "Services" },

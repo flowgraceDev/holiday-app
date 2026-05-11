@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { updateAbout } from "../actions";
 
 const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
@@ -17,13 +17,47 @@ const Textarea = (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
   />
 );
 
-export default function UpdateAboutModal({ about }: { about: any }) {
+type About = any;
+
+export default function UpdateAboutModal({ about }: { about: About }) {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
 
-  const formRef = useRef<HTMLFormElement>(null);
+  const parsedHero = useMemo(() => {
+    try {
+      return typeof about?.hero === "string"
+        ? JSON.parse(about.hero)
+        : about?.hero;
+    } catch {
+      return about?.hero || {};
+    }
+  }, [about]);
+
+  const parsedIntro = useMemo(() => {
+    try {
+      return typeof about?.intro === "string"
+        ? JSON.parse(about.intro)
+        : about?.intro;
+    } catch {
+      return about?.intro || {};
+    }
+  }, [about]);
+
+  const [heroImages, setHeroImages] = useState<string[]>(
+    parsedHero?.images || []
+  );
+
+  const [introImage, setIntroImage] = useState<string | null>(
+    parsedIntro?.image_url || null
+  );
+
+  const removeHeroImage = (url: string) => {
+    setHeroImages((prev) => prev.filter((i) => i !== url));
+  };
+
+  const removeIntroImage = () => setIntroImage(null);
 
   return (
     <>
@@ -43,11 +77,19 @@ export default function UpdateAboutModal({ about }: { about: any }) {
             </div>
 
             <form
-              ref={formRef}
               action={async (formData) => {
                 try {
                   setStatus("loading");
+
+                  formData.set(
+                    "hero_images_existing",
+                    JSON.stringify(heroImages)
+                  );
+
+                  formData.set("intro_image_existing", introImage || "");
+
                   await updateAbout(formData);
+
                   setStatus("success");
 
                   setTimeout(() => {
@@ -71,36 +113,50 @@ export default function UpdateAboutModal({ about }: { about: any }) {
                 <div className="grid grid-cols-2 gap-5">
                   <Input
                     name="hero_title"
-                    placeholder="Hero Title"
-                    defaultValue={about?.hero?.title}
+                    defaultValue={parsedHero?.title}
                   />
                   <Input
                     name="hero_subtitle"
-                    placeholder="Hero Subtitle"
-                    defaultValue={about?.hero?.subtitle}
+                    defaultValue={parsedHero?.subtitle}
                   />
                 </div>
 
                 <Textarea
                   name="hero_description"
-                  placeholder="Hero Description"
-                  defaultValue={about?.hero?.description}
+                  defaultValue={parsedHero?.description}
                 />
 
                 <div>
                   <label className="text-sm font-medium">Hero Images</label>
+
+                  <div className="grid grid-cols-3 gap-3 mt-3">
+                    {heroImages.map((img) => (
+                      <div
+                        key={img}
+                        className="relative border rounded-lg overflow-hidden"
+                      >
+                        <img
+                          src={img}
+                          className="w-full h-28 object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeHeroImage(img)}
+                          className="absolute top-1 right-1 bg-black text-white text-xs px-2 py-1 rounded"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
 
                   <input
                     name="hero_images"
                     type="file"
                     multiple
                     accept="image/*"
-                    className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-black file:text-white"
+                    className="w-full mt-3 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-black file:text-white"
                   />
-
-                  <p className="text-xs text-neutral-500">
-                    Upload new images (old ones will remain if empty)
-                  </p>
                 </div>
               </div>
 
@@ -112,30 +168,49 @@ export default function UpdateAboutModal({ about }: { about: any }) {
 
                 <Input
                   name="intro_title"
-                  placeholder="Intro Title"
-                  defaultValue={about?.intro?.title}
+                  defaultValue={parsedIntro?.title}
                 />
 
                 <Textarea
                   name="intro_para1"
-                  placeholder="Paragraph 1"
-                  defaultValue={about?.intro?.para1}
+                  defaultValue={parsedIntro?.para1}
                 />
 
                 <Textarea
                   name="intro_para2"
-                  placeholder="Paragraph 2"
-                  defaultValue={about?.intro?.para2}
+                  defaultValue={parsedIntro?.para2}
                 />
 
                 <div>
                   <label className="text-sm font-medium">Intro Image</label>
 
+                  <div className="mt-3">
+                    {introImage ? (
+                      <div className="relative w-48 border rounded-lg overflow-hidden">
+                        <img
+                          src={introImage}
+                          className="w-full h-32 object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={removeIntroImage}
+                          className="absolute top-1 right-1 bg-black text-white text-xs px-2 py-1 rounded"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ) : (
+                      <p className="text-xs text-neutral-500">
+                        No image uploaded
+                      </p>
+                    )}
+                  </div>
+
                   <input
                     name="intro_image"
                     type="file"
                     accept="image/*"
-                    className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-black file:text-white"
+                    className="w-full mt-3 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-black file:text-white"
                   />
                 </div>
               </div>
@@ -143,28 +218,22 @@ export default function UpdateAboutModal({ about }: { about: any }) {
               {/* SERVICES */}
               <Textarea
                 name="services"
-                placeholder="Services (comma separated)"
                 defaultValue={about?.services?.join(", ")}
               />
 
-              {/* VISION / MISSION */}
               <div className="grid grid-cols-2 gap-5">
                 <Textarea
                   name="vision"
-                  placeholder="Vision"
                   defaultValue={about?.vision}
                 />
                 <Textarea
                   name="mission"
-                  placeholder="Mission"
                   defaultValue={about?.mission}
                 />
               </div>
 
-              {/* FOOTER */}
               <Textarea
                 name="footer_text"
-                placeholder="Footer Text"
                 defaultValue={about?.footer_text}
               />
 

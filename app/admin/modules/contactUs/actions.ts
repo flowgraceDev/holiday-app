@@ -53,11 +53,21 @@ export const updateContactAction = async (id: string, formData: FormData) => {
 
   const section_title = formData.get("section_title") as string;
   const section_highlight = formData.get("section_highlight") as string;
-  const section_description = formData.get("section_description") as string;
+  const section_description = formData.get(
+    "section_description"
+  ) as string;
 
   const map_url = formData.get("map_url") as string;
 
   const images = extractFiles(formData, "images");
+
+  const existing_images_raw = formData.get(
+    "existing_images"
+  ) as string;
+
+  const existing_images: string[] = existing_images_raw
+    ? JSON.parse(existing_images_raw)
+    : [];
 
   await updateContactService(
     id,
@@ -70,13 +80,13 @@ export const updateContactAction = async (id: string, formData: FormData) => {
       section_highlight,
       section_description,
       map_url,
+      existing_images,
     },
-    images.length ? images : undefined
+    images
   );
 
   revalidatePath("/admin/dashboard/contact");
 };
-
 export const getContactAction = async () => {
   return await getContactService();
 };

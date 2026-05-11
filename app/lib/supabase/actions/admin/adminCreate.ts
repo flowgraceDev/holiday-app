@@ -492,66 +492,89 @@ export async function deleteAbout(id: string) {
 
 }
 
-export const updateAbout = async (
-  id: string,
-  payload: {
-    hero: {
-      title: string;
-      subtitle: string;
-      description: string;
-      images?: string[];
-    };
-    intro: {
-      title: string;
-      para1: string;
-      para2: string;
-    };
-    services: string[];
-    vision: string;
-    mission: string;
-    footer_text: string;
-  },
-  heroImages: File[],
-  introImage: File
-) => {
-  const hero_image_urls: string[] = [];
+type Params = {
+  id: string;
+  hero_title: string;
+  hero_subtitle: string;
+  hero_description: string;
 
-  for (const image of heroImages ?? []) {
-    if (!(image instanceof File)) continue;
-    if (image.size === 0) continue;
+  hero_images: File[];
+  hero_images_existing: string[];
 
-    const uploadedUrl = await upload(image, "about");
-    if (uploadedUrl) hero_image_urls.push(uploadedUrl);
+  intro_title: string;
+  intro_para1: string;
+  intro_para2: string;
+
+  intro_image: File;
+  intro_image_existing: string;
+
+  services: string[];
+  vision: string;
+  mission: string;
+  footer_text: string;
+};
+
+export const updateAbout= async (params: Params) => {
+  const {
+    id,
+    hero_title,
+    hero_subtitle,
+    hero_description,
+    hero_images,
+    hero_images_existing,
+    intro_title,
+    intro_para1,
+    intro_para2,
+    intro_image,
+    intro_image_existing,
+    services,
+    vision,
+    mission,
+    footer_text,
+  } = params;
+
+  const uploadedHeroImages: string[] = [];
+
+  for (const file of hero_images || []) {
+    if (!(file instanceof File)) continue;
+    if (file.size === 0) continue;
+
+    const url = await upload(file, "about");
+    if (url) uploadedHeroImages.push(url);
   }
 
-  const intro_image_url =
-    introImage instanceof File && introImage.size > 0
-      ? await upload(introImage, "about")
-      : "";
+  const finalHeroImages: string[] =
+    uploadedHeroImages.length > 0
+      ? [...hero_images_existing, ...uploadedHeroImages]
+      : hero_images_existing;
+
+  const finalIntroImage: string =
+    intro_image instanceof File && intro_image.size > 0
+      ? (await upload(intro_image, "about")) || ""
+      : intro_image_existing || "";
 
   const { error } = await supabaseAdmin
     .from("about_section")
     .update({
       hero: {
-        ...payload.hero,
-        images: hero_image_urls?.length
-          ? hero_image_urls
-          : payload.hero.images || [],
+        title: hero_title,
+        subtitle: hero_subtitle,
+        description: hero_description,
+        images: finalHeroImages,
       },
-
       intro: {
-        ...payload.intro,
-        image_url: intro_image_url || undefined,
+        title: intro_title,
+        para1: intro_para1,
+        para2: intro_para2,
+        image_url: finalIntroImage,
       },
-
-      services: payload.services,
-      vision: payload.vision,
-      mission: payload.mission,
-      footer_text: payload.footer_text,
+      services,
+      vision,
+      mission,
+      footer_text,
       updated_at: new Date().toISOString(),
     })
     .eq("id", id)
-    .select()
     .single();
 
   if (error) throw error;
@@ -596,29 +619,48 @@ export const getContact = async () => {
   return data[0];
 };
 
-export const updateContact = async (
+export const updateContact= async (
   id: string,
-  payload: Partial<
-    Database["public"]["Tables"]["contact_section"]["Update"]
-  >,
+  payload: {
+    title: string;
+    subtitle: string;
+    description: string;
+    highlight: string;
+    section_title: string;
+    section_highlight: string;
+    section_description: string;
+    map_url: string;
+    existing_images?: string[];
+  },
   files?: File[]
 ) => {
-  let image_urls: string[] | undefined;
+  const uploadedImages: string[] = [];
 
-  if (files?.length) {
-    image_urls = [];
+  for (const file of files || []) {
+    if (!(file instanceof File)) continue;
+    if (file.size === 0) continue;
 
-    for (const file of files) {
-      const url = await upload(file, "contact");
-      image_urls.push(url);
-    }
+    const url = await upload(file, "contact");
+    if (url) uploadedImages.push(url);
   }
+
+  const finalImages: string[] =
+    uploadedImages.length > 0
+      ? [...(payload.existing_images || []), ...uploadedImages]
+      : payload.existing_images || [];
 
   const { error } = await supabaseAdmin
     .from("contact_section")
     .update({
-      ...payload,
-      ...(image_urls ? { image_url: image_urls } : {}),
+      title: payload.title,
+      subtitle: payload.subtitle,
+      description: payload.description,
+      highlight: payload.highlight,
+      section_title: payload.section_title,
+      section_highlight: payload.section_highlight,
+      section_description: payload.section_description,
+      map_url: payload.map_url,
+      image_url: finalImages,
     })
     .eq("id", id);
 

@@ -84,11 +84,22 @@ export const updateAbout = async (formData: FormData) => {
       .getAll("hero_images")
       .filter((f: any) => f instanceof File && f.size > 0) as File[];
 
+    const hero_images_existing_raw = formData.get(
+      "hero_images_existing"
+    ) as string;
+
+    const hero_images_existing: string[] = hero_images_existing_raw
+      ? JSON.parse(hero_images_existing_raw)
+      : [];
+
     const intro_title = formData.get("intro_title") as string;
     const intro_para1 = formData.get("intro_para1") as string;
     const intro_para2 = formData.get("intro_para2") as string;
 
     const intro_image = formData.get("intro_image") as File;
+    const intro_image_existing = formData.get(
+      "intro_image_existing"
+    ) as string;
 
     const servicesRaw = formData.get("services") as string;
 
@@ -99,27 +110,23 @@ export const updateAbout = async (formData: FormData) => {
     const services =
       servicesRaw?.split(",").map((s) => s.trim()).filter(Boolean) || [];
 
-    await updateAboutService(
+    await updateAboutService({
       id,
-      {
-        hero: {
-          title: hero_title,
-          subtitle: hero_subtitle,
-          description: hero_description,
-        },
-        intro: {
-          title: intro_title,
-          para1: intro_para1,
-          para2: intro_para2,
-        },
-        services,
-        vision,
-        mission,
-        footer_text,
-      },
+      hero_title,
+      hero_subtitle,
+      hero_description,
       hero_images,
-      intro_image
-    );
+      hero_images_existing,
+      intro_title,
+      intro_para1,
+      intro_para2,
+      intro_image,
+      intro_image_existing,
+      services,
+      vision,
+      mission,
+      footer_text,
+    });
 
     revalidatePath("/admin/dashboard/about");
 
