@@ -219,6 +219,32 @@ export const deleteDestination = async (id: string) => {
   if (error) throw error;
 };
 
+export const updateDestination = async (
+  id: string,
+  payload: Partial<
+    Omit<
+      Database["public"]["Tables"]["destinations"]["Update"],
+      "image_url"
+    >
+  >,
+  file?: File
+) => {
+  let image_url: string | undefined;
+
+  if (file) {
+    image_url = await upload(file, "destinations");
+  }
+
+  const { error } = await supabaseAdmin
+    .from("destinations")
+    .update({
+      ...payload,
+      ...(image_url ? { image_url } : {}),
+    })
+    .eq("id", id);
+
+  if (error) throw error;
+};
 //Lead Stuff
 
 export type LeadStatus =

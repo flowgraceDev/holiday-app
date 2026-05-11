@@ -6,7 +6,9 @@ import {
   createDestination,
   getDestinations,
   deleteDestination,
+  updateDestination
 } from "@/app/lib/supabase/actions/admin/adminCreate";
+import { Database } from "@/app/lib/supabase/connection/types";
 
 export const createDestinationAction = async (formData: FormData) => {
   const file = formData.get("image") as File;
@@ -32,6 +34,20 @@ export const getDestinationsAction = async () => {
 
 export const deleteDestinationAction = async (id: string) => {
   await deleteDestination(id);
+
+  revalidatePath("/admin/dashboard/destinations");
+};
+export const updateDestinationAction = async (
+  id: string,
+  payload: Partial<
+    Omit<
+      Database["public"]["Tables"]["destinations"]["Update"],
+      "image_url"
+    >
+  >,
+  file?: File
+) => {
+  await updateDestination(id, payload, file);
 
   revalidatePath("/admin/dashboard/destinations");
 };
