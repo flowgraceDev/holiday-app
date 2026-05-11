@@ -427,23 +427,38 @@ export const createAbout = async (
     mission: string;
     footer_text: string;
   },
-  heroImage: File,
+  heroImages: File[],
   introImage: File
 ) => {
-  const hero_image_url = await upload(heroImage, "about");
-  const intro_image_url = await upload(introImage, "about");
+  const hero_image_urls: string[] = [];
+
+  for (const image of heroImages ?? []) {
+    if (!(image instanceof File)) continue;
+    if (image.size === 0) continue;
+
+    const uploadedUrl = await upload(image, "about");
+
+    if (uploadedUrl) hero_image_urls.push(uploadedUrl);
+  }
+
+  const intro_image_url =
+    introImage instanceof File && introImage.size > 0
+      ? await upload(introImage, "about")
+      : "";
 
   const { error } = await supabaseAdmin
     .from("about_section")
     .upsert({
       hero: {
         ...payload.hero,
-        image_url: hero_image_url,
+        images: hero_image_urls,
       },
+
       intro: {
         ...payload.intro,
         image_url: intro_image_url,
       },
+
       services: payload.services,
       vision: payload.vision,
       mission: payload.mission,
@@ -467,7 +482,7 @@ export const getAbout = async () => {
 
 export async function deleteAbout(id: string) {
   const { error } = await supabaseAdmin
-    .from("about")
+    .from("about_section")
     .delete()
     .eq("id", id);
 
@@ -476,6 +491,71 @@ export async function deleteAbout(id: string) {
   }
 
 }
+
+export const updateAbout = async (
+  id: string,
+  payload: {
+    hero: {
+      title: string;
+      subtitle: string;
+      description: string;
+      images?: string[];
+    };
+    intro: {
+      title: string;
+      para1: string;
+      para2: string;
+    };
+    services: string[];
+    vision: string;
+    mission: string;
+    footer_text: string;
+  },
+  heroImages: File[],
+  introImage: File
+) => {
+  const hero_image_urls: string[] = [];
+
+  for (const image of heroImages ?? []) {
+    if (!(image instanceof File)) continue;
+    if (image.size === 0) continue;
+
+    const uploadedUrl = await upload(image, "about");
+    if (uploadedUrl) hero_image_urls.push(uploadedUrl);
+  }
+
+  const intro_image_url =
+    introImage instanceof File && introImage.size > 0
+      ? await upload(introImage, "about")
+      : "";
+
+  const { error } = await supabaseAdmin
+    .from("about_section")
+    .update({
+      hero: {
+        ...payload.hero,
+        images: hero_image_urls?.length
+          ? hero_image_urls
+          : payload.hero.images || [],
+      },
+
+      intro: {
+        ...payload.intro,
+        image_url: intro_image_url || undefined,
+      },
+
+      services: payload.services,
+      vision: payload.vision,
+      mission: payload.mission,
+      footer_text: payload.footer_text,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+};
 // CONTACT CREATE (UPSERT SINGLETON)
 
 
