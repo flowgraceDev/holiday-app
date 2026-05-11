@@ -564,20 +564,27 @@ export const createContact = async (
     Database["public"]["Tables"]["contact_section"]["Insert"],
     "image_url"
   >,
-  file: File
+  files: File[]
 ) => {
-  const image_url = await upload(file, "contact");
+  const image_urls: string[] = [];
+
+  for (const file of files) {
+    const url = await upload(file, "contact");
+    image_urls.push(url);
+  }
 
   const { error } = await supabaseAdmin
     .from("contact_section")
-    .upsert({ ...payload as any, image_url });
+    .upsert({
+      ...(payload as any),
+      image_url: image_urls,
+    });
 
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 };
 
 export const getContact = async () => {
-
-   const { data, error } = await supabaseAdmin
+  const { data, error } = await supabaseAdmin
     .from("contact_section")
     .select("*")
     .limit(1);
@@ -587,6 +594,44 @@ export const getContact = async () => {
   if (!data || data.length === 0) return null;
 
   return data[0];
+};
+
+export const updateContact = async (
+  id: string,
+  payload: Partial<
+    Database["public"]["Tables"]["contact_section"]["Update"]
+  >,
+  files?: File[]
+) => {
+  let image_urls: string[] | undefined;
+
+  if (files?.length) {
+    image_urls = [];
+
+    for (const file of files) {
+      const url = await upload(file, "contact");
+      image_urls.push(url);
+    }
+  }
+
+  const { error } = await supabaseAdmin
+    .from("contact_section")
+    .update({
+      ...payload,
+      ...(image_urls ? { image_url: image_urls } : {}),
+    })
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+};
+
+export const deleteContact = async (id: string) => {
+  const { error } = await supabaseAdmin
+    .from("contact_section")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
 };
 
 // Services apis

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { createContactAction } from "../actions";
+import { useEffect, useRef, useState } from "react";
+import { updateContactAction, getContactAction } from "../actions";
 
 const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input
@@ -19,12 +19,35 @@ const Textarea = (
   />
 );
 
-export default function CreateContactModal() {
+type ContactData = {
+  id: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  highlight?: string;
+  section_title?: string;
+  section_highlight?: string;
+  section_description?: string;
+  map_url?: string;
+  image_url?: string[];
+};
+
+export default function EditContactModal() {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
+  const [data, setData] = useState<ContactData | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    (async () => {
+      const res = await getContactAction();
+      setData(res as ContactData);
+    })();
+  }, [open]);
 
   return (
     <>
@@ -32,16 +55,14 @@ export default function CreateContactModal() {
         onClick={() => setOpen(true)}
         className="bg-neutral-900 hover:bg-neutral-800 text-white px-5 py-2.5 rounded-xl text-sm font-medium"
       >
-        Create Contact
+        Edit Contact
       </button>
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl border max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b flex justify-between items-center">
-              <h2 className="text-lg font-semibold">
-                Contact Section Editor
-              </h2>
+              <h2 className="text-lg font-semibold">Edit Contact Section</h2>
               <button onClick={() => setOpen(false)}>✕</button>
             </div>
 
@@ -49,9 +70,11 @@ export default function CreateContactModal() {
               ref={formRef}
               action={async (formData) => {
                 try {
+                  if (!data?.id) return;
+
                   setStatus("loading");
 
-                  await createContactAction(formData);
+                  await updateContactAction(data.id, formData);
 
                   setStatus("success");
 
@@ -72,17 +95,28 @@ export default function CreateContactModal() {
                 </h3>
 
                 <div className="grid grid-cols-2 gap-5">
-                  <Input name="title" placeholder="Title" required />
-                  <Input name="subtitle" placeholder="Subtitle" />
+                  <Input
+                    name="title"
+                    defaultValue={data?.title}
+                    placeholder="Title"
+                    required
+                  />
+                  <Input
+                    name="subtitle"
+                    defaultValue={data?.subtitle}
+                    placeholder="Subtitle"
+                  />
                 </div>
 
                 <Textarea
                   name="description"
+                  defaultValue={data?.description}
                   placeholder="Description"
                 />
 
                 <Input
                   name="highlight"
+                  defaultValue={data?.highlight}
                   placeholder="Highlight Text"
                 />
 
@@ -98,6 +132,19 @@ export default function CreateContactModal() {
                     className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-black file:text-white"
                   />
                 </div>
+
+                {/* PREVIEW EXISTING */}
+                {data?.image_url?.length ? (
+                  <div className="flex flex-wrap gap-3">
+                    {data.image_url.map((img, idx) => (
+                      <img
+                        key={idx}
+                        src={img}
+                        className="h-20 w-28 object-cover rounded-lg border"
+                      />
+                    ))}
+                  </div>
+                ) : null}
               </div>
 
               {/* SECTION */}
@@ -108,14 +155,17 @@ export default function CreateContactModal() {
 
                 <Input
                   name="section_title"
+                  defaultValue={data?.section_title}
                   placeholder="Section Title"
                 />
                 <Input
                   name="section_highlight"
+                  defaultValue={data?.section_highlight}
                   placeholder="Section Highlight"
                 />
                 <Textarea
                   name="section_description"
+                  defaultValue={data?.section_description}
                   placeholder="Section Description"
                 />
               </div>
@@ -125,13 +175,14 @@ export default function CreateContactModal() {
                 <h3 className="font-semibold text-neutral-800">Map</h3>
                 <Input
                   name="map_url"
+                  defaultValue={data?.map_url}
                   placeholder="Google Map Embed URL"
                 />
               </div>
 
               {status === "success" && (
                 <p className="text-green-600 text-sm">
-                  Saved successfully
+                  Updated successfully
                 </p>
               )}
               {status === "error" && (
@@ -140,7 +191,7 @@ export default function CreateContactModal() {
                 </p>
               )}
               {status === "loading" && (
-                <p className="text-neutral-500 text-sm">Saving...</p>
+                <p className="text-neutral-500 text-sm">Updating...</p>
               )}
 
               <div className="flex justify-end gap-3">
@@ -156,7 +207,7 @@ export default function CreateContactModal() {
                   disabled={status === "loading"}
                   className="px-5 py-2.5 bg-black text-white rounded-lg disabled:opacity-50"
                 >
-                  Save
+                  Update
                 </button>
               </div>
             </form>

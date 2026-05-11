@@ -1,7 +1,7 @@
 // app/contact/page.tsx
 
-import Image from "next/image";
 import ContactForm from "@/app/components/ContactForm";
+import HeroSlider from "./HeroSlider";
 import { getContact } from "@/app/lib/supabase/actions/admin/adminCreate";
 
 export const metadata = {
@@ -14,40 +14,23 @@ export const dynamic = "force-dynamic";
 export default async function ContactPage() {
   const contact = await getContact();
 
+  // ✅ FIX: image_url is already an array from DB
+  const heroImages =
+    Array.isArray(contact?.image_url) && contact.image_url.length > 0
+      ? contact.image_url
+      : contact?.image_url
+      ? [contact.image_url]
+      : ["/images/chitkul.jpg"];
+
   return (
     <div className="bg-white text-slate-900 overflow-hidden">
-      <section className="relative h-[60vh] md:h-[70vh] flex items-center justify-center px-6 overflow-hidden">
-        <Image
-          src={contact?.image_url || "/images/chitkul.jpg"}
-          alt="contact"
-          fill
-          priority
-          className="object-cover"
-        />
-
-        <div className="absolute inset-0 bg-black/60" />
-
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80" />
-
-        <div className="relative z-10 max-w-5xl mx-auto text-center">
-          <p className="uppercase tracking-[0.4em] text-white/60 text-xs md:text-sm mb-6">
-            {contact?.subtitle || "Contact Us"}
-          </p>
-
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-semibold text-white leading-[1.05]">
-            {contact?.title || "No Stress. No Surprises."}
-
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-300 to-yellow-500 mt-4">
-              {contact?.highlight || "Just Well-Planned Travel"}
-            </span>
-          </h1>
-
-          <p className="text-white/75 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto mt-8">
-            {contact?.description ||
-              "Tell us your vision. We’ll turn it into a journey worth remembering."}
-          </p>
-        </div>
-      </section>
+      {/* ✅ ONLY PASS WHAT SLIDER NEEDS */}
+      <HeroSlider
+        images={heroImages}
+        title={contact?.title}
+        subtitle={contact?.subtitle}
+        description={contact?.description}
+      />
 
       <section className="relative py-24 md:py-32">
         <div className="absolute inset-0 bg-gradient-to-b from-slate-50 to-white pointer-events-none" />
@@ -68,27 +51,20 @@ export default async function ContactPage() {
               </h2>
 
               <p className="text-slate-600 text-base leading-8 max-w-xl mt-8">
-                {contact?.section_description ||
-                  "Whether it's a family trip, honeymoon or solo adventure — we design smooth, personalized travel experiences with thoughtful planning, local expertise and memorable experiences."}
+                {contact?.section_description}
               </p>
 
               <div className="grid grid-cols-2 gap-5 mt-12">
                 <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                  <h3 className="text-3xl font-semibold text-slate-900">
-                    24/7
-                  </h3>
-
-                  <p className="text-sm text-slate-500 mt-2 leading-relaxed">
+                  <h3 className="text-3xl font-semibold text-slate-900">24/7</h3>
+                  <p className="text-sm text-slate-500 mt-2">
                     Dedicated support throughout your journey.
                   </p>
                 </div>
 
                 <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                  <h3 className="text-3xl font-semibold text-slate-900">
-                    100%
-                  </h3>
-
-                  <p className="text-sm text-slate-500 mt-2 leading-relaxed">
+                  <h3 className="text-3xl font-semibold text-slate-900">100%</h3>
+                  <p className="text-sm text-slate-500 mt-2">
                     Personalized and flexible travel experiences.
                   </p>
                 </div>
@@ -97,7 +73,6 @@ export default async function ContactPage() {
 
             <div className="relative">
               <div className="absolute -inset-3 bg-gradient-to-r from-orange-400/20 via-pink-400/20 to-yellow-400/20 rounded-[2.5rem] blur-2xl" />
-
               <div className="relative">
                 <ContactForm />
               </div>
@@ -110,10 +85,7 @@ export default async function ContactPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent z-10 pointer-events-none" />
 
         <iframe
-          src={
-            contact?.map_url ||
-            "https://www.google.com/maps?q=delhi&output=embed"
-          }
+          src={contact?.map_url || "https://www.google.com/maps?q=delhi&output=embed"}
           className="w-full h-full border-0"
           loading="lazy"
         />

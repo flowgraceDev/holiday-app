@@ -1,8 +1,8 @@
 // app/actions/contact.ts
-'use client'
-import { createClient } from '@/app/lib/supabase/connection/client'
+'use server'
+import { supabaseServer } from '@/app/lib/supabase/connection/server'
 import type { Database } from '@/app/lib/supabase/connection/types'
-
+import { sendContactEmail } from "@/app/lib/contactUsEmailer";
 type ContactInput = {
   full_name: string
   email: string
@@ -29,7 +29,7 @@ function isValidDate(date: string) {
 }
 
 export async function createContact(data: ContactInput) {
-  const supabase = await createClient()
+  const supabase = await supabaseServer()
 
   try {
     if (!data || typeof data !== 'object') {
@@ -98,7 +98,16 @@ export async function createContact(data: ContactInput) {
 
       throw new Error(error.message || 'Database error')
     }
-
+ // ✅ SEND EMAIL AFTER SUCCESS
+    await sendContactEmail({
+      full_name,
+      email,
+      phone,
+      subject,
+      arrival_date,
+      departure_date,
+      message,
+    });
     return { success: true }
   } catch (err) {
     return {
