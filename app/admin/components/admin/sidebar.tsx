@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 import LogoutButton from "../../logout-button";
 
 const links = [
-  { href: "/admin/dashboard/hero", label: "Hero" },
-  { href: "/admin/dashboard/tours", label: "Tours" },
+  { href: "/admin/dashboard/hero", label: "Hero Images" },
+  { href: "/admin/dashboard/tours", label: "Tour Packages" },
   { href: "/admin/dashboard/destinations", label: "Destinations" },
   { href: "/admin/dashboard/about", label: "About Us" },
   { href: "/admin/dashboard/contact", label: "Contact Us" },

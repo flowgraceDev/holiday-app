@@ -20,11 +20,24 @@ const Textarea = ({
   />
 );
 
+const Select = ({
+  children,
+  ...props
+}: React.SelectHTMLAttributes<HTMLSelectElement>) => (
+  <select
+    {...props}
+    className="w-full px-3 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm bg-white"
+  >
+    {children}
+  </select>
+);
+
 export default function CreateTourModal() {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<
     "idle" | "success" | "error" | "loading"
   >("idle");
+
   const formRef = useRef<HTMLFormElement>(null);
 
   return (
@@ -52,6 +65,7 @@ export default function CreateTourModal() {
                   await createTourAction(formData);
                   setStatus("success");
                   formRef.current?.reset();
+
                   setTimeout(() => {
                     setOpen(false);
                     setStatus("idle");
@@ -71,6 +85,7 @@ export default function CreateTourModal() {
                 name="short_description"
                 placeholder="Short Description"
               />
+
               <Textarea name="description" placeholder="Description" />
 
               <div className="grid grid-cols-3 gap-5">
@@ -98,9 +113,24 @@ export default function CreateTourModal() {
               </div>
 
               <div className="grid grid-cols-3 gap-5">
-                <Input name="region" placeholder="Region" />
+                <Select name="region" defaultValue="">
+                  <option value="" disabled>
+                    Select Region
+                  </option>
+                  <option value="north">North</option>
+                  <option value="south">South</option>
+                  <option value="east">East</option>
+                  <option value="west">West</option>
+                  <option value="central">Central</option>
+                  <option value="indo-nepal">Indo-Nepal</option>
+                </Select>
+
                 <Input name="seo_title" placeholder="SEO Title" />
-                <Input name="seo_description" placeholder="SEO Description" />
+
+                <Input
+                  name="seo_description"
+                  placeholder="SEO Description"
+                />
               </div>
 
               <Input name="cta_text" placeholder="CTA Text" />
@@ -110,10 +140,12 @@ export default function CreateTourModal() {
                   <input type="checkbox" name="featured" />
                   Featured
                 </label>
+
                 <label className="flex items-center gap-2 border px-3 py-2 rounded-lg">
                   <input type="checkbox" name="is_active" defaultChecked />
                   Active
                 </label>
+
                 <label className="flex items-center gap-2 border px-3 py-2 rounded-lg">
                   <input type="checkbox" name="cta_enabled" defaultChecked />
                   CTA Enabled
@@ -125,6 +157,7 @@ export default function CreateTourModal() {
                   <label className="text-sm font-medium text-neutral-700">
                     Featured Image
                   </label>
+
                   <input
                     name="featured_image"
                     type="file"
@@ -137,6 +170,7 @@ export default function CreateTourModal() {
                   <label className="text-sm font-medium text-neutral-700">
                     Gallery
                   </label>
+
                   <input
                     name="gallery"
                     type="file"
@@ -149,9 +183,11 @@ export default function CreateTourModal() {
               {status === "success" && (
                 <p className="text-green-600 text-sm">Created</p>
               )}
+
               {status === "error" && (
                 <p className="text-red-600 text-sm">Error</p>
               )}
+
               {status === "loading" && (
                 <p className="text-neutral-500 text-sm">Creating...</p>
               )}
@@ -164,6 +200,7 @@ export default function CreateTourModal() {
                 >
                   Cancel
                 </button>
+
                 <button
                   disabled={status === "loading"}
                   className="px-5 py-2.5 bg-black text-white rounded-lg disabled:opacity-50"

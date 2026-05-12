@@ -1,10 +1,12 @@
 // app/admin/modules/tours/components/tour-list.tsx
-import { getTours } from "@/app/lib/supabase/actions/admin/adminCreate";
+import {
+  deleteTour,
+  getTours,
+} from "@/app/lib/supabase/actions/admin/adminCreate";
 import CreateTourModal from "./create-tour-modal";
 import Image from "next/image";
 import TourStatusToggle from "./tour-status-toggle";
 import EditTourModal from "./edit-tour-modal";
-
 export const dynamic = "force-dynamic";
 
 export default async function TourList() {
@@ -13,9 +15,7 @@ export default async function TourList() {
   return (
     <div className="p-10 space-y-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-neutral-800">
-          Tours
-        </h1>
+        <h1 className="text-2xl font-semibold text-neutral-800">Tours</h1>
         <CreateTourModal />
       </div>
 
@@ -59,8 +59,12 @@ export default async function TourList() {
                     Featured
                   </span>
                 )}
-
-                <span>₹ {t.price}</span>
+                {t.region && (
+                  <span className="px-3 py-1 rounded-full bg-neutral-100 text-neutral-700 capitalize">
+                    {t.region}
+                  </span>
+                )}
+                {/* <span>₹ {t.price}</span> */}
                 <span>{t.duration}</span>
               </div>
             </div>

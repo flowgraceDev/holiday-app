@@ -73,7 +73,7 @@ export default function HeroSlider({
 
       {/* YOUR RIGHT SIDE CARD (AS REQUESTED) */}
       <div className="absolute bottom-8 right-6 md:right-10 w-full max-w-sm z-10 text-right">
-        <div className="bg-white/20 border border-white/30 rounded-2xl p-5 shadow-2xl backdrop-blur-md">
+        <div className="bg-white/20 border border-white/30 rounded-2xl p-5 shadow-2xl backdrop-blur-[2px]">
           <h2
             className={`text-2xl md:text-3xl text-yellow-400 ${
               dancing?.className || ""

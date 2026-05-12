@@ -6,16 +6,14 @@ const BUCKET = "website-assets";
 
 const upload = async (
   file: File,
-  folder: "hero" | "about" | "destinations" | "contact" | "tours" | "services"
+  folder: "hero" | "about" | "destinations" | "contact" | "tours" | "services",
 ) => {
   const ext = file.name.split(".").pop();
   const path = `${folder}/${Date.now()}-${Math.random()
     .toString(36)
     .slice(2)}.${ext}`;
 
-  const { error } = await supabaseAdmin.storage
-    .from(BUCKET)
-    .upload(path, file);
+  const { error } = await supabaseAdmin.storage.from(BUCKET).upload(path, file);
 
   if (error) throw error;
 
@@ -29,18 +27,16 @@ export const createHero = async (
     Database["public"]["Tables"]["hero_sections"]["Insert"],
     "image_url"
   >,
-  file: File
+  file: File,
 ) => {
   const image_url = await upload(file, "hero");
 
-  const { error } = await supabaseAdmin
-    .from("hero_sections")
-    .insert({
-      ...payload,
-      image_url,
-      is_active: payload.is_active ?? true,
-      sort_order: payload.sort_order ?? 0,
-    });
+  const { error } = await supabaseAdmin.from("hero_sections").insert({
+    ...payload,
+    image_url,
+    is_active: payload.is_active ?? true,
+    sort_order: payload.sort_order ?? 0,
+  });
 
   if (error) throw error;
 };
@@ -59,7 +55,7 @@ export const deleteHero = async (id: number) => {
     .from("hero_sections")
     .delete()
     .eq("id", id);
-console.log(error)
+  console.log(error);
   if (error) throw error;
 };
 export const updateHero = async (
@@ -69,7 +65,7 @@ export const updateHero = async (
       Database["public"]["Tables"]["hero_sections"]["Update"],
       "id" | "created_at"
     >
-  >
+  >,
 ) => {
   const { error } = await supabaseAdmin
     .from("hero_sections")
@@ -81,7 +77,6 @@ export const updateHero = async (
   if (error) throw error;
 };
 
-
 type TourInsert = Database["public"]["Tables"]["tours"]["Insert"] & {
   region?: string;
   gallery?: File[];
@@ -90,7 +85,7 @@ export const createTour = async (
   payload: Omit<TourInsert, "featured_image" | "gallery"> & {
     gallery?: File[];
   },
-  featuredImage: File
+  featuredImage: File,
 ) => {
   const featured_image = await upload(featuredImage, "tours");
 
@@ -98,7 +93,7 @@ export const createTour = async (
 
   if (payload.gallery?.length) {
     gallery = await Promise.all(
-      payload.gallery.map((file) => upload(file, "tours"))
+      payload.gallery.map((file) => upload(file, "tours")),
     );
   }
 
@@ -135,7 +130,7 @@ export const deleteTour = async (id: number) => {
 
 export const updateTourStatusService = async (
   id: number,
-  isActive: boolean
+  isActive: boolean,
 ) => {
   const { error } = await supabaseAdmin
     .from("tours")
@@ -145,9 +140,9 @@ export const updateTourStatusService = async (
   if (error) throw error;
 };
 
-
 type UpdateTourPayload = {
   id: number;
+
   title: string;
   slug: string;
   short_description: string;
@@ -155,31 +150,94 @@ type UpdateTourPayload = {
   duration: string;
   location: string;
   starting_city: string;
-  // price: number;
-  // discount_price: number;
   max_people: number;
+
   itinerary: unknown;
   inclusions: unknown;
   exclusions: unknown;
   highlights: unknown;
+
   seo_title: string;
   seo_description: string;
+
   cta_text: string;
   cta_enabled: boolean;
+
   featured: boolean;
   is_active: boolean;
+
   region: string;
+
+  existing_featured_image: string;
+  existing_gallery: string[];
+
+  featured_image_file: File | null;
+  gallery_files: File[];
 };
 
-export const updateTour = async (payload: UpdateTourPayload) => {
-  const { id, ...data } = payload;
+// SERVICE
+
+export const updateTour = async (
+  payload: UpdateTourPayload
+) => {
+  const {
+    id,
+
+    existing_featured_image,
+    existing_gallery,
+
+    featured_image_file,
+    gallery_files,
+
+    ...data
+  } = payload;
+
+  let featured_image =
+    existing_featured_image || "";
+
+  if (
+    featured_image_file instanceof File &&
+    featured_image_file.size > 0
+  ) {
+    featured_image = await upload(
+      featured_image_file,
+      "tours"
+    );
+  }
+
+  const uploadedGallery: string[] = [];
+
+  for (const file of gallery_files) {
+    if (
+      file instanceof File &&
+      file.size > 0
+    ) {
+      const uploadedUrl = await upload(
+        file,
+        "tours"
+      );
+
+      uploadedGallery.push(uploadedUrl);
+    }
+  }
+
+  const gallery = [
+    ...existing_gallery,
+    ...uploadedGallery,
+  ];
 
   const { error } = await supabaseAdmin
     .from("tours")
-    .update(data)
+    .update({
+      ...data,
+      featured_image,
+      gallery,
+    })
     .eq("id", id);
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 };
 
 // DESTINATION CREATE
@@ -188,13 +246,13 @@ export const createDestination = async (
     Database["public"]["Tables"]["destinations"]["Insert"],
     "image_url"
   >,
-  file: File
+  file: File,
 ) => {
   const image_url = await upload(file, "destinations");
 
   const { error } = await supabaseAdmin
     .from("destinations")
-    .insert({ ...payload as any, image_url });
+    .insert({ ...(payload as any), image_url });
 
   if (error) throw error;
 };
@@ -222,12 +280,9 @@ export const deleteDestination = async (id: string) => {
 export const updateDestination = async (
   id: string,
   payload: Partial<
-    Omit<
-      Database["public"]["Tables"]["destinations"]["Update"],
-      "image_url"
-    >
+    Omit<Database["public"]["Tables"]["destinations"]["Update"], "image_url">
   >,
-  file?: File
+  file?: File,
 ) => {
   let image_url: string | undefined;
 
@@ -269,10 +324,12 @@ export const getLeads = async (filters?: {
 }) => {
   let query = supabaseAdmin
     .from("inquiries")
-    .select(`
+    .select(
+      `
       *,
       tour:tours(*)
-    `)
+    `,
+    )
     .order("created_at", { ascending: false });
 
   if (filters?.status && filters.status !== "") {
@@ -290,7 +347,7 @@ export const getLeads = async (filters?: {
   if (filters?.search && filters.search.trim() !== "") {
     const term = filters.search.trim();
     query = query.or(
-      `full_name.ilike.%${term}%,email.ilike.%${term}%,phone.ilike.%${term}%`
+      `full_name.ilike.%${term}%,email.ilike.%${term}%,phone.ilike.%${term}%`,
     );
   }
 
@@ -336,15 +393,11 @@ export const updateLeadNotes = async (id: string, notes: string) => {
 };
 
 export const deleteLead = async (id: string) => {
-  const { error } = await supabaseAdmin
-    .from("inquiries")
-    .delete()
-    .eq("id", id);
+  const { error } = await supabaseAdmin.from("inquiries").delete().eq("id", id);
 
   if (error) throw error;
   return true;
 };
-
 
 // messageStuff from contact us
 
@@ -374,7 +427,7 @@ export const getContacts = async (filters?: {
   if (filters?.search && filters.search.trim() !== "") {
     const term = filters.search.trim();
     query = query.or(
-      `full_name.ilike.%${term}%,email.ilike.%${term}%,phone.ilike.%${term}%,message.ilike.%${term}%`
+      `full_name.ilike.%${term}%,email.ilike.%${term}%,phone.ilike.%${term}%,message.ilike.%${term}%`,
     );
   }
 
@@ -428,7 +481,7 @@ export const createAbout = async (
     footer_text: string;
   },
   heroImages: File[],
-  introImage: File
+  introImage: File,
 ) => {
   const hero_image_urls: string[] = [];
 
@@ -489,7 +542,6 @@ export async function deleteAbout(id: string) {
   if (error) {
     throw new Error("Failed to delete about");
   }
-
 }
 
 type Params = {
@@ -514,7 +566,7 @@ type Params = {
   footer_text: string;
 };
 
-export const updateAbout= async (params: Params) => {
+export const updateAbout = async (params: Params) => {
   const {
     id,
     hero_title,
@@ -581,13 +633,12 @@ export const updateAbout= async (params: Params) => {
 };
 // CONTACT CREATE (UPSERT SINGLETON)
 
-
 export const createContact = async (
   payload: Omit<
     Database["public"]["Tables"]["contact_section"]["Insert"],
     "image_url"
   >,
-  files: File[]
+  files: File[],
 ) => {
   const image_urls: string[] = [];
 
@@ -596,12 +647,10 @@ export const createContact = async (
     image_urls.push(url);
   }
 
-  const { error } = await supabaseAdmin
-    .from("contact_section")
-    .upsert({
-      ...(payload as any),
-      image_url: image_urls,
-    });
+  const { error } = await supabaseAdmin.from("contact_section").upsert({
+    ...(payload as any),
+    image_url: image_urls,
+  });
 
   if (error) throw new Error(error.message);
 };
@@ -619,7 +668,7 @@ export const getContact = async () => {
   return data[0];
 };
 
-export const updateContact= async (
+export const updateContact = async (
   id: string,
   payload: {
     title: string;
@@ -632,7 +681,7 @@ export const updateContact= async (
     map_url: string;
     existing_images?: string[];
   },
-  files?: File[]
+  files?: File[],
 ) => {
   const uploadedImages: string[] = [];
 
@@ -701,10 +750,7 @@ export async function toggleServiceStatus(id: string, is_active: boolean) {
 }
 
 export async function deleteService(id: string) {
-  const { error } = await supabaseAdmin
-    .from("services")
-    .delete()
-    .eq("id", id);
+  const { error } = await supabaseAdmin.from("services").delete().eq("id", id);
 
   if (error) throw new Error(error.message);
   return true;
@@ -746,6 +792,3 @@ export async function updateService(id: string, payload: any, file?: File) {
   if (error) throw new Error(error.message);
   return data;
 }
-
-
-

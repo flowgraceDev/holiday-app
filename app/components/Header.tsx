@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { name: "About Us", path: "/about" },
 ];
 
-const REGIONS = ["north", "south", "east", "west", "central"] as const;
+const REGIONS = ["north", "south", "east", "west", "central","indo-nepal"] as const;
 
 const SERVICES = [
   { name: "Tour Packages", path: "/services/tour-packages" },
@@ -196,7 +196,7 @@ export default function Header() {
             <div className="relative">
               <button
                 onClick={toggleServices}
-                className="text-[17px] font-medium text-slate-700 hover:text-slate-900 transition-colors"
+                className="cursor-pointer text-[17px] font-medium text-slate-700 hover:text-slate-900 transition-colors"
               >
                 Our Services
               </button>
@@ -221,7 +221,7 @@ export default function Header() {
             <div className="relative">
               <button
                 onClick={toggleTours}
-                className="text-[17px] font-medium text-slate-700 hover:text-slate-900 transition-colors"
+                className=" cursor-pointer text-[17px] font-medium text-slate-700 hover:text-slate-900 transition-colors"
               >
                 Tours Packages
               </button>

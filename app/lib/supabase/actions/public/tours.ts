@@ -27,7 +27,7 @@ export async function getTourBySlug(slug: string) {
   return data
 }
 
-export type Region = 'north' | 'south' | 'east' | 'west' | 'central' | 'unknown'
+export type Region = 'north' | 'south' | 'east' | 'west' | 'central' | 'indo-nepal'
 
 type GetToursResponse<T> =
   | { success: true; data: T }

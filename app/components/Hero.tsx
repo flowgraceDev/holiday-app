@@ -52,27 +52,26 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
 
   return (
     <section className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden">
-
-      {/* SLIDER IMAGES */}
       {items.map((item, i) => (
-        <div key={item.image} className="absolute inset-0">
+        <div
+          key={item.image}
+          className={`absolute inset-0 transition-opacity duration-700 ${
+            i === index ? "opacity-100 z-10" : "opacity-0 z-0"
+          }`}
+        >
           <Image
-            src={item.image}
-            alt={item.title}
-            fill
-            priority={i === 0}
-            quality={80}
-            sizes="100vw"
-            className={`object-cover object-center will-change-transform transform-gpu transition-all duration-700 ease-out ${
-              i === index ? "opacity-100 scale-100" : "opacity-0 scale-105"
-            }`}
-          />
+  src={item.image}
+  alt={item.title}
+  fill
+  priority={i === 0}
+  quality={90}
+  sizes="100vw"
+  className="object-cover object-center"
+/>
 
-          <div
-            className={`absolute inset-0 flex items-end justify-start p-6 md:p-10 transition-opacity duration-700 ${
-              i === index ? "opacity-100" : "opacity-0"
-            }`}
-          >
+          {/* <div className="absolute inset-0 bg-black/10" /> */}
+
+          <div className="absolute inset-0 flex items-end justify-start p-6 md:p-10">
             <h2
               className={`text-white text-3xl sm:text-5xl md:text-4xl font-light leading-tight tracking-wide 
               [text-shadow:0_2px_8px_rgba(0,0,0,0.9),0_0_24px_rgba(0,0,0,0.45)]
@@ -84,9 +83,8 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
         </div>
       ))}
 
-      {/* OVERLAY CARD (same style slider logic) */}
-      <div className="absolute bottom-8 right-6 md:right-10 w-full max-w-sm z-10 text-right">
-        <div className="bg-white/20 border border-white/30 rounded-2xl p-5 shadow-2xl  backdrop-blur-md">
+      <div className="absolute bottom-8 right-6 md:right-10 w-full max-w-sm z-20 text-right">
+        <div className="bg-white/20 border border-white/30 rounded-2xl p-5 shadow-2xl backdrop-blur-[2px]">
           <h2
             className={`text-2xl md:text-3xl text-yellow-400 ${dancing.className}`}
           >
@@ -113,8 +111,7 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
         </div>
       </div>
 
-      {/* DOTS */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
         {items.map((_, i) => (
           <button
             key={i}
