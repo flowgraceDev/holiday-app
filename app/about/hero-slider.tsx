@@ -56,17 +56,23 @@ export default function HeroSlider({
 
       <div className="absolute bottom-8 right-6 md:right-10 w-full max-w-sm z-10 text-right">
         <div className="bg-white/20 border border-white/30 rounded-2xl p-5 shadow-2xl  backdrop-blur-[2px]">
-          <h2
-            className={`text-2xl md:text-3xl text-yellow-400 ${
-              dancing?.className || ""
-            }`}
-          >
-            {title}
-          </h2>
+          <div className="space-y-2">
+            <h2
+              className={`text-2xl md:text-3xl px-4 py-2 rounded-xl bg-black/60 text-yellow-300 backdrop-blur-md shadow-lg ${
+                dancing?.className || ""
+              }`}
+            >
+              {title}
+            </h2>
 
-          <h3 className="mt-1 text-sm text-white">{subtitle}</h3>
+            <h3 className="text-sm text-white px-3 py-1 rounded-lg bg-black/50 backdrop-blur-sm inline-block">
+              {subtitle}
+            </h3>
 
-          <p className="mt-1 text-white/80 text-xs">{description}</p>
+            <p className="text-white/80 text-xs px-3 py-1 rounded-lg bg-black/40 backdrop-blur-sm inline-block">
+              {description}
+            </p>
+          </div>
 
           <button
             onClick={() => router.push("/about")}

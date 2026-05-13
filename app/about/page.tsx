@@ -103,7 +103,6 @@ export default async function AboutPage() {
             >
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-br from-black/5 to-black/10 transition" />
 
-              <div className="w-10 h-10 mx-auto mb-6 rounded-full bg-black/5 group-hover:bg-black/10 transition" />
 
               <h3 className="text-xl font-semibold mb-3">{item}</h3>
 

@@ -86,18 +86,19 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
       <div className="absolute bottom-8 right-6 md:right-10 w-full max-w-sm z-20 text-right">
         <div className="bg-white/20 border border-white/30 rounded-2xl p-5 shadow-2xl backdrop-blur-[2px]">
           <h2
-            className={`text-2xl md:text-3xl text-yellow-400 ${dancing.className}`}
-          >
-            {current.title}
-          </h2>
+  className={`text-3xl md:text-5xl ${dancing.className} px-4 py-2 rounded-xl
+  bg-black/60 text-yellow-300 backdrop-blur-md shadow-lg`}
+>
+  {current.title}
+</h2>
 
-          <h3 className="mt-1 text-sm text-white">
-            {current.subtitle}
-          </h3>
+<h3 className="mt-2 text-sm text-white px-3 py-1 rounded-lg bg-black/50 backdrop-blur-sm inline-block">
+  {current.subtitle}
+</h3>
 
-          <p className="mt-1 text-white/80 text-xs">
-            {current.desc}
-          </p>
+<p className="mt-2 text-white/80 text-xs px-3 py-1 rounded-lg bg-black/40 backdrop-blur-sm inline-block">
+  {current.desc}
+</p>
 
           <button
             onClick={() => router.push("/about")}
