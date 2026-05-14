@@ -60,14 +60,14 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
           }`}
         >
           <Image
-  src={item.image}
-  alt={item.title}
-  fill
-  priority={i === 0}
-  quality={90}
-  sizes="100vw"
-  className="object-cover object-center"
-/>
+            src={item.image}
+            alt={item.title}
+            fill
+            priority={i === 0}
+            quality={90}
+            sizes="100vw"
+            className="object-cover md:object-[50%_35%]"
+          />
 
           {/* <div className="absolute inset-0 bg-black/10" /> */}
 
@@ -86,19 +86,19 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
       <div className="absolute bottom-8 right-6 md:right-10 w-full max-w-sm z-20 text-right">
         <div className="bg-white/20 border border-white/30 rounded-2xl p-5 shadow-2xl backdrop-blur-[2px]">
           <h2
-  className={`text-3xl md:text-5xl ${dancing.className} px-4 py-2 rounded-xl
+            className={`text-3xl md:text-5xl ${dancing.className} px-4 py-2 rounded-xl
   bg-black/60 text-yellow-300 backdrop-blur-md shadow-lg`}
->
-  {current.title}
-</h2>
+          >
+            {current.title}
+          </h2>
 
-<h3 className="mt-2 text-sm text-white px-3 py-1 rounded-lg bg-black/50 backdrop-blur-sm inline-block">
-  {current.subtitle}
-</h3>
+          <h3 className="mt-2 text-sm text-white px-3 py-1 rounded-lg bg-black/50 backdrop-blur-sm inline-block">
+            {current.subtitle}
+          </h3>
 
-<p className="mt-2 text-white/80 text-xs px-3 py-1 rounded-lg bg-black/40 backdrop-blur-sm inline-block">
-  {current.desc}
-</p>
+          <p className="mt-2 text-white/80 text-xs px-3 py-1 rounded-lg bg-black/40 backdrop-blur-sm inline-block">
+            {current.desc}
+          </p>
 
           <button
             onClick={() => router.push("/about")}

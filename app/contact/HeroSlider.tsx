@@ -39,37 +39,21 @@ export default function HeroSlider({
   return (
     <section className="relative h-[60vh] md:h-[70vh] w-full overflow-hidden">
       {images.map((img, i) => (
-        <div key={img} className="absolute inset-0">
+        <div key={img} className="absolute inset-0 overflow-hidden">
           <Image
             src={img}
             alt="hero"
             fill
             priority={i === 0}
-            className={`object-cover transition-all duration-700 ease-out ${
+            sizes="100vw"
+            className={`object-cover object-center md:object-[50%_30%] lg:object-[50%_25%] transition-all duration-700 ease-out will-change-transform ${
               i === index ? "opacity-100 scale-100" : "opacity-0 scale-105"
             }`}
           />
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
         </div>
       ))}
-
-      <div className="absolute inset-0 bg-black/50" />
-
-      {/* TOP CENTER TEXT (OPTIONAL CLEAN LAYER) */}
-      {/* <div className="absolute inset-0 flex items-center justify-center text-center px-6 z-10">
-        <div className="max-w-3xl">
-          <p className="text-xs tracking-[0.4em] text-white/70 uppercase mb-4">
-            {subtitle}
-          </p>
-
-          <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
-            {title}
-          </h1>
-
-          <p className="mt-6 text-white/80 text-base md:text-lg">
-            {description}
-          </p>
-        </div>
-      </div> */}
 
       {/* YOUR RIGHT SIDE CARD (AS REQUESTED) */}
       <div className="absolute bottom-8 right-6 md:right-10 w-full max-w-sm z-10 text-right">

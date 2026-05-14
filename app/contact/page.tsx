@@ -14,25 +14,30 @@ export const dynamic = "force-dynamic";
 export default async function ContactPage() {
   const contact = await getContact();
 
-  // ✅ FIX: image_url is already an array from DB
   const heroImages =
     Array.isArray(contact?.image_url) && contact.image_url.length > 0
       ? contact.image_url
       : contact?.image_url
-      ? [contact.image_url]
-      : ["/images/chitkul.jpg"];
+        ? [contact.image_url]
+        : ["/images/chitkul.jpg"];
 
   return (
     <div className="bg-white text-slate-900 overflow-hidden">
-      {/* ✅ ONLY PASS WHAT SLIDER NEEDS */}
       <HeroSlider
         images={heroImages}
         title={contact?.title}
         subtitle={contact?.subtitle}
         description={contact?.description}
       />
-
-      <section className="relative py-24 md:py-32">
+      <div className="w-full flex justify-center bg-gradient-to-b from-slate-50 to-white py-10">
+        <h2 className="text-3xl md:text-5xl font-light tracking-tight text-slate-900 text-center">
+          <span className="relative inline-block">
+            Contact Us
+            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-[2px] bg-slate-900/70 rounded-full" />
+          </span>
+        </h2>
+      </div>
+      <section className="relative py-10 md:py-15 ">
         <div className="absolute inset-0 bg-gradient-to-b from-slate-50 to-white pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto px-6">
@@ -44,7 +49,6 @@ export default async function ContactPage() {
 
               <h2 className="text-4xl md:text-6xl font-semibold leading-[1.1] text-slate-900">
                 {contact?.section_title || "Start Your Journey With Us"}
-
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-pink-500 to-yellow-500 mt-4">
                   {contact?.section_highlight || "Across Incredible India"}
                 </span>
@@ -56,14 +60,18 @@ export default async function ContactPage() {
 
               <div className="grid grid-cols-2 gap-5 mt-12">
                 <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                  <h3 className="text-3xl font-semibold text-slate-900">24/7</h3>
+                  <h3 className="text-3xl font-semibold text-slate-900">
+                    24/7
+                  </h3>
                   <p className="text-sm text-slate-500 mt-2">
                     Dedicated support throughout your journey.
                   </p>
                 </div>
 
                 <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                  <h3 className="text-3xl font-semibold text-slate-900">100%</h3>
+                  <h3 className="text-3xl font-semibold text-slate-900">
+                    100%
+                  </h3>
                   <p className="text-sm text-slate-500 mt-2">
                     Personalized and flexible travel experiences.
                   </p>
@@ -85,7 +93,10 @@ export default async function ContactPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent z-10 pointer-events-none" />
 
         <iframe
-          src={contact?.map_url || "https://www.google.com/maps?q=delhi&output=embed"}
+          src={
+            contact?.map_url ||
+            "https://www.google.com/maps?q=delhi&output=embed"
+          }
           className="w-full h-full border-0"
           loading="lazy"
         />

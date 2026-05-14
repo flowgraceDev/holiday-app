@@ -39,16 +39,19 @@ export default function HeroSlider({
   return (
     <section className="relative h-[60vh] md:h-[70vh] w-full overflow-hidden">
       {images.map((img, i) => (
-        <div key={img} className="absolute inset-0">
+        <div key={img} className="absolute inset-0 overflow-hidden">
           <Image
             src={img}
             alt="hero"
             fill
             priority={i === 0}
-            className={`object-cover transition-all duration-700 ease-out ${
+            sizes="100vw"
+            className={`object-cover object-center md:object-[50%_30%] lg:object-[50%_25%] transition-all duration-700 ease-out will-change-transform ${
               i === index ? "opacity-100 scale-100" : "opacity-0 scale-105"
             }`}
           />
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
         </div>
       ))}
 
