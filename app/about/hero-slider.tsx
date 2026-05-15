@@ -30,16 +30,15 @@ export default function HeroSlider({
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [images]);
+  }, [images?.length]);
 
   if (!images?.length) return null;
 
-  const currentImage = images[index];
-
   return (
-    <section className="relative h-[60vh] md:h-[70vh] w-full overflow-hidden">
+    <section className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden">
+      {/* BACKGROUND SLIDES */}
       {images.map((img, i) => (
-        <div key={img} className="absolute inset-0 overflow-hidden">
+        <div key={img} className="absolute inset-0">
           <Image
             src={img}
             alt="hero"
@@ -51,35 +50,33 @@ export default function HeroSlider({
             }`}
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
         </div>
       ))}
 
-      <div className="absolute inset-0 " />
-
-      <div className="absolute bottom-8 right-6 md:right-10 w-full max-w-sm z-10 text-right">
-        <div className="bg-white/20 border border-white/30 rounded-2xl p-5 shadow-2xl  backdrop-blur-[2px]">
+      {/* DESKTOP CARD (fixed layering + responsive safe) */}
+      <div className="hidden md:block absolute bottom-6 md:bottom-8 right-4 md:right-10 z-30 w-full max-w-sm">
+        <div className="bg-white/20 border border-white/30 rounded-2xl p-4 sm:p-5 shadow-2xl backdrop-blur-md text-right">
           <div className="space-y-2">
             <h2
-              className={`text-2xl md:text-3xl px-4 py-2 rounded-xl bg-black/60 text-yellow-300 backdrop-blur-md shadow-lg ${
+              className={`text-xl sm:text-2xl md:text-3xl px-3 sm:px-4 py-2 rounded-xl bg-black/60 text-yellow-300 shadow-lg ${
                 dancing?.className || ""
               }`}
             >
               {title}
             </h2>
 
-            <h3 className="text-sm text-white px-3 py-1 rounded-lg bg-black/50 backdrop-blur-sm inline-block">
+            <h3 className="text-xs sm:text-sm text-white px-3 py-1 rounded-lg bg-black/50 inline-block">
               {subtitle}
             </h3>
 
-            <p className="text-white/80 text-xs px-3 py-1 rounded-lg bg-black/40 backdrop-blur-sm inline-block">
+            <p className="text-white/80 text-[11px] sm:text-xs px-3 py-1 rounded-lg bg-black/40 inline-block">
               {description}
             </p>
           </div>
 
           <button
             onClick={() => router.push("/about")}
-            className="mt-4 px-5 py-2 text-xs font-semibold rounded-full 
+            className="mt-3 sm:mt-4 px-4 sm:px-5 py-2 text-[11px] sm:text-xs font-semibold rounded-full 
             bg-gradient-to-r from-yellow-500 to-yellow-600 
             hover:from-yellow-600 hover:to-yellow-700 
             transition-all shadow-lg active:scale-95"
@@ -89,7 +86,27 @@ export default function HeroSlider({
         </div>
       </div>
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+      {/* MOBILE CTA BAR (safe overlay + no overlap issues) */}
+      <div className="md:hidden absolute bottom-0 left-0 right-0 z-30">
+        <div className="bg-black/60 backdrop-blur-md px-4 py-3 flex items-center justify-between">
+          <div className="min-w-0">
+            <h3 className={`text-white text-base font-medium truncate ${dancing?.className || ""}`}>
+              {title}
+            </h3>
+            <p className="text-white/70 text-xs truncate">{subtitle}</p>
+          </div>
+
+          <button
+            onClick={() => router.push("/about")}
+            className="px-4 py-2 text-xs font-semibold rounded-full bg-yellow-500 text-black active:scale-95 shrink-0"
+          >
+            Explore
+          </button>
+        </div>
+      </div>
+
+      {/* DOTS (highest layer for safety) */}
+      <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-40">
         {images.map((_, i) => (
           <button
             key={i}
