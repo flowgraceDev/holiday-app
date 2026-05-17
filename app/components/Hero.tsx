@@ -35,7 +35,7 @@ export default function Hero({ items = [] }: { items?: HeroItem[] }) {
   const current = content[index % content.length];
 
   return (
-    <section className="relative w-full h-[65vh] sm:h-[65vh] md:h-[65vh] overflow-hidden">
+    <section className="relative w-full h-[55vh] sm:h-[55vh] md:h-[55vh] overflow-hidden">
       {items.map((item, i) => (
         <div
           key={item.image}
