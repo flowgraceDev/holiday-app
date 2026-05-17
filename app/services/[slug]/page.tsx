@@ -9,16 +9,15 @@ export default async function ServicePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-
+  console.log(slug)
   const supabase = await supabaseServer();
 
   const { data, error } = await supabase
     .from("services")
     .select("*")
     .eq("slug", slug)
-    .eq("is_active", true)
     .single();
-
+  console.log(data)
   if (error || !data) return notFound();
 
   return <ServicePageClient service={data} />;

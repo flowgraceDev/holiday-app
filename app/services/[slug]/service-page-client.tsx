@@ -4,6 +4,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { createInquiry } from "./service-actions";
+import ComingSoonSection from "./coming-soon-section";
 
 type Service = {
   id: string;
@@ -12,9 +13,21 @@ type Service = {
   image: string;
   content: any;
   slug: string;
+  is_active: boolean;
 };
 
 export default function ServicePageClient({ service }: { service: Service }) {
+  if (service.is_active === false) {
+    return (
+      <div className="bg-white">
+        <ComingSoonSection
+          title={service.title}
+          description={service.description}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white">
       <Hero service={service} />
@@ -26,7 +39,7 @@ export default function ServicePageClient({ service }: { service: Service }) {
 
 function Hero({ service }: { service: Service }) {
   return (
-    <div className="relative w-full h-[340px] md:h-[460px]">
+    <div className="relative w-full h-[55vh] sm:h-[55vh] md:h-[55vh]">
       <Image
         src={service.image}
         alt={service.title}
@@ -75,11 +88,13 @@ function InquiryForm({ service }: { service: Service }) {
 
   function getServiceType(slug: string) {
     const text = slug.toLowerCase();
+
     if (text.includes("car")) return "car";
     if (text.includes("flight")) return "flight";
     if (text.includes("train")) return "train";
     if (text.includes("tour")) return "tour";
     if (text.includes("track") || text.includes("trek")) return "trek";
+
     return "default";
   }
 
@@ -89,39 +104,169 @@ function InquiryForm({ service }: { service: Service }) {
     switch (type) {
       case "flight":
         return [
-          { name: "from", placeholder: "From (City)" },
-          { name: "to", placeholder: "To (City)" },
-          { name: "date", placeholder: "Travel Date", type: "date" },
-          { name: "passengers", placeholder: "Passengers" },
+          {
+            label: "From",
+            name: "from",
+            placeholder: "From (City)",
+          },
+          {
+            label: "To",
+            name: "to",
+            placeholder: "To (City)",
+          },
+            {
+            label: "Arrival Date",
+            name: "arrivalDate",
+            placeholder: "Arrival Date",
+            type: "date",
+          },
+          {
+            label: "Departure Date",
+            name: "departureDate",
+            placeholder: "Departure Date",
+            type: "date",
+          },
+        
+          {
+            label: "Passengers",
+            name: "passengers",
+            placeholder: "Passengers",
+          },
         ];
+
       case "train":
         return [
-          { name: "from", placeholder: "From Station" },
-          { name: "to", placeholder: "To Station" },
-          { name: "date", placeholder: "Travel Date", type: "date" },
-          { name: "class", placeholder: "Class (Sleeper/3AC etc)" },
+          {
+            label: "From Station",
+            name: "from",
+            placeholder: "From Station",
+          },
+          {
+            label: "To Station",
+            name: "to",
+            placeholder: "To Station",
+          },
+           {
+            label: "Arrival Date",
+            name: "arrivalDate",
+            placeholder: "Arrival Date",
+            type: "date",
+          },
+          {
+            label: "Departure Date",
+            name: "departureDate",
+            placeholder: "Departure Date",
+            type: "date",
+          },
+         
+          {
+            label: "Class",
+            name: "class",
+            placeholder: "Class (Sleeper/3AC etc)",
+          },
         ];
+
       case "car":
         return [
-          { name: "pickup", placeholder: "Pickup Location" },
-          { name: "drop", placeholder: "Drop Location" },
-          { name: "date", placeholder: "Pickup Date", type: "date" },
-          { name: "carType", placeholder: "Car Type (SUV, Sedan)" },
+          {
+            label: "Pickup Location",
+            name: "pickup",
+            placeholder: "Pickup Location",
+          },
+          {
+            label: "Drop Location",
+            name: "drop",
+            placeholder: "Drop Location",
+          },
+            {
+            label: "Arrival Date",
+            name: "arrivalDate",
+            placeholder: "Arrival Date",
+            type: "date",
+          },
+          {
+            label: "Departure Date",
+            name: "departureDate",
+            placeholder: "Departure Date",
+            type: "date",
+          },
+        
+          {
+            label: "Car Type",
+            name: "carType",
+            placeholder: "Car Type (SUV, Sedan)",
+          },
         ];
+
       case "tour":
         return [
-          { name: "destination", placeholder: "Destination" },
-          { name: "days", placeholder: "No. of Days" },
-          { name: "people", placeholder: "Number of People" },
-          { name: "budget", placeholder: "Budget (₹)" },
+          {
+            label: "Destination",
+            name: "destination",
+            placeholder: "Destination",
+          },
+           {
+            label: "Arrival Date",
+            name: "arrivalDate",
+            placeholder: "Arrival Date",
+            type: "date",
+          },
+          {
+            label: "Departure Date",
+            name: "departureDate",
+            placeholder: "Departure Date",
+            type: "date",
+          },
+         
+          {
+            label: "No. of Days",
+            name: "days",
+            placeholder: "No. of Days",
+          },
+          {
+            label: "Number of People",
+            name: "people",
+            placeholder: "Number of People",
+          },
+          {
+            label: "Budget",
+            name: "budget",
+            placeholder: "Budget (₹)",
+          },
         ];
+
       case "trek":
         return [
-          { name: "trekName", placeholder: "Trek Name" },
-          { name: "date", placeholder: "Start Date", type: "date" },
-          { name: "people", placeholder: "Participants" },
-          { name: "experience", placeholder: "Experience Level" },
+          {
+            label: "Trek Name",
+            name: "trekName",
+            placeholder: "Trek Name",
+          },
+           {
+            label: "Arrival Date",
+            name: "arrivalDate",
+            placeholder: "Arrival Date",
+            type: "date",
+          },
+          {
+            label: "Departure Date",
+            name: "departureDate",
+            placeholder: "Departure Date",
+            type: "date",
+          },
+         
+          {
+            label: "Participants",
+            name: "people",
+            placeholder: "Participants",
+          },
+          {
+            label: "Experience Level",
+            name: "experience",
+            placeholder: "Experience Level",
+          },
         ];
+
       default:
         return [];
     }
@@ -130,7 +275,8 @@ function InquiryForm({ service }: { service: Service }) {
   const dynamicFields = getDynamicFields(type);
 
   const messagePlaceholderMap: any = {
-    flight: "E.g. Delhi to Mumbai, 2 passengers, morning flight preferred",
+    flight:
+      "E.g. Delhi to Mumbai, 2 passengers, morning flight preferred",
     train: "E.g. Delhi to Varanasi, sleeper class, flexible dates",
     car: "E.g. Pickup from Delhi airport, drop to Manali, SUV needed",
     tour: "E.g. Trip for 4 people, 5 days, mid-range budget",
@@ -144,9 +290,11 @@ function InquiryForm({ service }: { service: Service }) {
       phone: "",
       message: "",
     };
+
     dynamicFields.forEach((f: any) => {
       base[f.name] = "";
     });
+
     return base;
   });
 
@@ -160,9 +308,11 @@ function InquiryForm({ service }: { service: Service }) {
       phone: "",
       message: "",
     };
+
     dynamicFields.forEach((f: any) => {
       cleared[f.name] = "";
     });
+
     setForm(cleared);
   };
 
@@ -190,6 +340,8 @@ function InquiryForm({ service }: { service: Service }) {
         email: form.email,
         phone: form.phone,
         message: form.message,
+        departureDate: form.departureDate || "",
+        arrivalDate: form.arrivalDate || "",
         extra: dynamicFields.reduce((acc: any, field: any) => {
           acc[field.name] = form[field.name] || "";
           return acc;
@@ -214,6 +366,7 @@ function InquiryForm({ service }: { service: Service }) {
           <h2 className="text-2xl font-semibold text-slate-900">
             Get a Free Consultation
           </h2>
+
           <p className="text-slate-600 mt-2 text-sm">
             Tell us your requirements and we’ll get back within 24 hours.
           </p>
@@ -226,7 +379,9 @@ function InquiryForm({ service }: { service: Service }) {
               className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 placeholder:text-slate-500 outline-none focus:border-black focus:ring-2 focus:ring-black/10 transition"
               placeholder="Full Name *"
               value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, name: e.target.value })
+              }
             />
 
             <input
@@ -235,21 +390,31 @@ function InquiryForm({ service }: { service: Service }) {
               className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 placeholder:text-slate-500 outline-none focus:border-black focus:ring-2 focus:ring-black/10 transition"
               placeholder="Phone *"
               value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, phone: e.target.value })
+              }
             />
           </div>
 
           {dynamicFields.map((field: any) => (
-            <input
-              key={field.name}
-              type={field.type || "text"}
-              placeholder={field.placeholder}
-              value={form[field.name] || ""}
-              onChange={(e) =>
-                setForm({ ...form, [field.name]: e.target.value })
-              }
-              className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 placeholder:text-slate-500 outline-none focus:border-black focus:ring-2 focus:ring-black/10 transition"
-            />
+            <div key={field.name} className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">
+                {field.label}
+              </label>
+
+              <input
+                type={field.type || "text"}
+                placeholder={field.placeholder}
+                value={form[field.name] || ""}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    [field.name]: e.target.value,
+                  })
+                }
+                className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 placeholder:text-slate-500 outline-none focus:border-black focus:ring-2 focus:ring-black/10 transition"
+              />
+            </div>
           ))}
 
           <input
@@ -258,23 +423,26 @@ function InquiryForm({ service }: { service: Service }) {
             className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 placeholder:text-slate-500 outline-none focus:border-black focus:ring-2 focus:ring-black/10 transition"
             placeholder="Email (required)"
             value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, email: e.target.value })
+            }
           />
 
           <textarea
             className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 placeholder:text-slate-500 outline-none focus:border-black focus:ring-2 focus:ring-black/10 transition min-h-[130px]"
             placeholder={
-              messagePlaceholderMap[type] || "Describe your requirement..."
+              messagePlaceholderMap[type] ||
+              "Describe your requirement..."
             }
             value={form.message}
-            onChange={(e) => setForm({ ...form, message: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, message: e.target.value })
+            }
           />
 
           <button
             onClick={submit}
-            disabled={
-              loading || !form.name || !form.phone || !form.email
-            }
+            disabled={loading || !form.name || !form.phone || !form.email}
             className="w-full bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Submitting..." : "Submit Inquiry"}

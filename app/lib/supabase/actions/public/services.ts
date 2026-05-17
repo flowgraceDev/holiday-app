@@ -7,7 +7,8 @@ export const getServices = async () => {
 
   const { data, error } = await supabase
     .from("services")
-    .select("*");
+    .select("*")
+    .eq('is_active', true);
   return data;
 };
 export const getDestinations = async () => {

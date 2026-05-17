@@ -12,7 +12,8 @@ export const fetchHero = async () => {
   const { data, error } = await supabase
     .from("hero_sections")
     .select("*")
-    .order("sort_order");
+    .eq('is_active', true)
+    .order('created_at', { ascending: false })
 
   if (error) throw error;
   return data;

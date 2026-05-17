@@ -122,7 +122,7 @@ export default function CreateTourModal() {
                   <option value="east">East</option>
                   <option value="west">West</option>
                   <option value="central">Central</option>
-                  <option value="indo-nepal">Indo-Nepal</option>
+                  <option value="india-nepal">India-Nepal</option>
                 </Select>
 
                 <Input name="seo_title" placeholder="SEO Title" />

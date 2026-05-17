@@ -6,14 +6,14 @@ import { usePathname } from "next/navigation";
 import LogoutButton from "../../logout-button";
 
 const links = [
-  { href: "/admin/dashboard/hero", label: "Hero Images" },
+  { href: "/admin/dashboard/hero", label: "Home Hero Images" },
+  { href: "/admin/dashboard/destinations", label: "Home Destinations Images" },
   { href: "/admin/dashboard/tours", label: "Tour Packages" },
-  { href: "/admin/dashboard/destinations", label: "Destinations" },
+  { href: "/admin/dashboard/services", label: "Our Services" },
   { href: "/admin/dashboard/about", label: "About Us" },
   { href: "/admin/dashboard/contact", label: "Contact Us" },
   { href: "/admin/dashboard/leads", label: "Inquiries" },
   { href: "/admin/dashboard/messages", label: "Messages" },
-  { href: "/admin/dashboard/services", label: "Services" },
 ];
 
 export default function Sidebar() {

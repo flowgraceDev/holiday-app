@@ -220,7 +220,7 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
 
                     <option value="central">Central</option>
 
-                    <option value="indo-nepal">Indo-Nepal</option>
+                    <option value="india-nepal">India-Nepal</option>
                   </Select>
                 </Field>
 

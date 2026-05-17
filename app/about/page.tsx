@@ -36,7 +36,7 @@ export default async function AboutPage() {
       <section className="max-w-7xl mx-auto px-6 md:px-10 py-5 space-y-32">
         {/* INTRO TITLE */}
         <div className="text-center max-w-4xl mx-auto space-y-4 animate-[fadeIn_0.8s_ease_forwards]">
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tight">
+          <h2 className="text-4xl md:text-4xl font-bold tracking-tight">
             {about?.intro?.title}
           </h2>
           <div className="h-[2px] w-20 bg-black mx-auto rounded-full" />

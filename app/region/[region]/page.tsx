@@ -7,7 +7,7 @@ const REGIONS = [
   "east",
   "west",
   "central",
-  "indo-nepal",
+  "india-nepal",
 ] as const;
 
 type Region = (typeof REGIONS)[number];

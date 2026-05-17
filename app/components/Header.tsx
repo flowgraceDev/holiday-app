@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { name: "About Us", path: "/about" },
 ];
 
-const REGIONS = ["north", "south", "east", "west", "central","indo-nepal"] as const;
+const REGIONS = ["north", "south", "east", "west", "central","india-nepal"] as const;
 
 const SERVICES = [
   { name: "Tour Packages", path: "/services/tour-packages" },
