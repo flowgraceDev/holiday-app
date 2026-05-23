@@ -16,7 +16,6 @@ export default function Footer() {
         />
       </div>
 
-      <div className="absolute inset-0 bg-black/80" />
 
       <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-10">
         <div className="grid md:grid-cols-2 gap-12 pb-14 border-b border-white/10">

@@ -2,8 +2,7 @@
 
 import { useMemo, useState, useTransition, useEffect } from "react";
 import { createContact } from "@/app/lib/supabase/actions/public/contact";
-import StatusModal from "@/app/components/StatusModal";
-
+import StatusModal from "./StatusModal";
 type Errors = {
   full_name?: string;
   email?: string;

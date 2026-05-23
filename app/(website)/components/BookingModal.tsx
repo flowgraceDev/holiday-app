@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import Image from "next/image";
 import { createInquiry } from "@/app/lib/supabase/actions/public/inquiry";
 import { dancing } from "@/app/fonts";
-import InquiryStatusModal from "@/app/components/BookingStatusModal";
+import InquiryStatusModal from "@/app/website/components/BookingStatusModal";
 
 type Trip = {
   id: string;

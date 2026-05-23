@@ -1,3 +1,4 @@
+// app/admin/login/layout.tsx
 import { ReactNode } from "react";
 
 export default function LoginLayout({
@@ -5,5 +6,9 @@ export default function LoginLayout({
 }: {
   children: ReactNode;
 }) {
-  return <div className="min-h-screen flex items-center justify-center">{children}</div>;
+  return (
+    <div className="min-h-screen overflow-hidden bg-[#050816] text-white">
+      {children}
+    </div>
+  );
 }

@@ -1,4 +1,3 @@
-// app/admin/modules/hero/components/edit-hero-modal.tsx
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
@@ -53,7 +52,7 @@ export default function EditHeroModal({ hero }: { hero: Hero }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex h-10 items-center justify-center rounded-xl bg-yellow-400 px-4 text-sm font-medium text-black transition hover:bg-yellow-500"
+        className="inline-flex h-10 items-center justify-center rounded-xl bg-gradient-to-r from-yellow-400 to-amber-500 px-4 text-sm font-medium text-black transition hover:opacity-90"
       >
         <Pencil className="mr-2 h-4 w-4" />
         Edit
@@ -62,24 +61,24 @@ export default function EditHeroModal({ hero }: { hero: Hero }) {
       {mounted &&
         open &&
         createPortal(
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
-            <div className="w-full max-w-xl rounded-3xl bg-white p-6 shadow-2xl">
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="w-full max-w-xl rounded-3xl bg-[#0B1020] border border-white/10 p-6 shadow-2xl text-white">
               <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-neutral-900">
+                <h2 className="text-xl font-semibold text-white">
                   Edit Hero
                 </h2>
 
                 <button
                   onClick={() => setOpen(false)}
-                  className="rounded-full p-2 transition hover:bg-neutral-100"
+                  className="rounded-full p-2 transition hover:bg-white/10"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-5 w-5 text-white/70" />
                 </button>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-700">
+                  <label className="text-sm font-medium text-white/70">
                     Title
                   </label>
 
@@ -92,12 +91,12 @@ export default function EditHeroModal({ hero }: { hero: Hero }) {
                         title: e.target.value,
                       }))
                     }
-                    className="w-full rounded-2xl border border-neutral-300 px-4 py-3 text-black placeholder:text-neutral-500 outline-none focus:border-black"
+                    className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white placeholder:text-white/40 outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-700">
+                  <label className="text-sm font-medium text-white/70">
                     Subtitle
                   </label>
 
@@ -110,7 +109,7 @@ export default function EditHeroModal({ hero }: { hero: Hero }) {
                         subtitle: e.target.value,
                       }))
                     }
-                    className="w-full rounded-2xl border border-neutral-300 px-4 py-3 text-black placeholder:text-neutral-500 outline-none focus:border-black"
+                    className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white placeholder:text-white/40 outline-none focus:border-indigo-500"
                   />
                 </div>
 
@@ -124,17 +123,17 @@ export default function EditHeroModal({ hero }: { hero: Hero }) {
                         is_active: e.target.checked,
                       }))
                     }
-                    className="h-4 w-4"
+                    className="h-4 w-4 accent-indigo-500"
                   />
 
-                  <span className="text-sm text-neutral-700">Active Hero</span>
+                  <span className="text-sm text-white/80">Active Hero</span>
                 </label>
 
                 <div className="flex justify-end gap-3 pt-4">
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="rounded-2xl border border-neutral-300 px-5 py-2.5 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100"
+                    className="rounded-2xl border border-white/10 px-5 py-2.5 text-sm font-medium text-white/70 transition hover:bg-white/10"
                   >
                     Cancel
                   </button>
@@ -142,7 +141,7 @@ export default function EditHeroModal({ hero }: { hero: Hero }) {
                   <button
                     type="submit"
                     disabled={pending}
-                    className="rounded-2xl bg-black px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800 disabled:opacity-50"
+                    className="rounded-2xl bg-gradient-to-r from-indigo-500 to-violet-500 px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-50"
                   >
                     {pending ? "Saving..." : "Save Changes"}
                   </button>

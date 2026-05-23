@@ -60,12 +60,12 @@ export default function EditServiceModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-      <div className="bg-white w-[450px] rounded-2xl p-5 space-y-3 shadow-lg">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-[#0B1020] w-[480px] rounded-3xl p-6 space-y-4 shadow-2xl border border-white/10 text-white">
         <h2 className="text-lg font-semibold">Update Service</h2>
 
         <input
-          className="w-full border p-2 rounded"
+          className="w-full bg-white/[0.03] border border-white/10 p-3 rounded-xl text-white placeholder:text-white/40 focus:outline-none focus:border-white/20"
           value={form.title}
           onChange={(e) =>
             setForm({ ...form, title: e.target.value })
@@ -73,7 +73,7 @@ export default function EditServiceModal({
         />
 
         <input
-          className="w-full border p-2 rounded"
+          className="w-full bg-white/[0.03] border border-white/10 p-3 rounded-xl text-white placeholder:text-white/40 focus:outline-none focus:border-white/20"
           value={form.slug}
           onChange={(e) =>
             setForm({ ...form, slug: e.target.value })
@@ -81,7 +81,7 @@ export default function EditServiceModal({
         />
 
         <input
-          className="w-full border p-2 rounded"
+          className="w-full bg-white/[0.03] border border-white/10 p-3 rounded-xl text-white placeholder:text-white/40 focus:outline-none focus:border-white/20"
           value={form.route}
           onChange={(e) =>
             setForm({ ...form, route: e.target.value })
@@ -89,35 +89,32 @@ export default function EditServiceModal({
         />
 
         <textarea
-          className="w-full border p-2 rounded"
+          className="w-full bg-white/[0.03] border border-white/10 p-3 rounded-xl text-white placeholder:text-white/40 focus:outline-none focus:border-white/20"
           value={form.description}
           onChange={(e) =>
             setForm({ ...form, description: e.target.value })
           }
         />
 
-        {/* IMAGE PREVIEW */}
         <div className="space-y-2">
-          <p className="text-xs text-slate-500">Current Image</p>
+          <p className="text-xs text-white/60">Current Image</p>
           <img
             src={form.image}
             alt="service"
-            className="w-full h-32 object-cover rounded-lg border"
+            className="w-full h-36 object-cover rounded-2xl border border-white/10"
           />
         </div>
 
-        {/* NEW IMAGE UPLOAD */}
         <input
           type="file"
-          className="w-full border p-2 rounded"
+          className="w-full bg-white/[0.03] border border-white/10 p-3 rounded-xl text-white"
           onChange={(e) =>
             setFile(e.target.files?.[0] || null)
           }
         />
 
-        {/* STATUS */}
         <select
-          className="w-full border p-2 rounded"
+          className="w-full bg-white/[0.03] border border-white/10 p-3 rounded-xl text-white"
           value={form.is_active ? "true" : "false"}
           onChange={(e) =>
             setForm({
@@ -130,10 +127,10 @@ export default function EditServiceModal({
           <option value="false">Disabled</option>
         </select>
 
-        <div className="flex justify-end gap-2 pt-3">
+        <div className="flex justify-end gap-3 pt-3">
           <button
             onClick={onClose}
-            className="px-3 py-1 border rounded"
+            className="px-4 py-2 rounded-xl border border-white/10 text-white/70 hover:bg-white/[0.05]"
           >
             Cancel
           </button>
@@ -141,7 +138,7 @@ export default function EditServiceModal({
           <button
             onClick={handleUpdate}
             disabled={loading}
-            className="px-3 py-1 bg-black text-white rounded"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-medium disabled:opacity-50"
           >
             {loading ? "Updating..." : "Update"}
           </button>

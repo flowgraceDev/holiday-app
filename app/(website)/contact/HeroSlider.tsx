@@ -35,7 +35,7 @@ export default function HeroSlider({
   if (!images?.length) return null;
 
   return (
-    <section className="relative w-full h-[55vh] sm:h-[55vh] md:h-[55vh] overflow-hidden">
+    <section className="relative w-full h-[55vh] sm:h-[55vh] md:h-[55vh] rounded-xl sm:rounded-2xl overflow-hidden">
       {/* BACKGROUND */}
       {images.map((img, i) => (
         <div key={img} className="absolute inset-0">
@@ -45,7 +45,7 @@ export default function HeroSlider({
             fill
             priority={i === 0}
             sizes="100vw"
-            className={`object-cover object-center md:object-[50%_30%] lg:object-[50%_25%] transition-all duration-700 ease-out will-change-transform ${
+            className={`object-cover object-center md:object-[50%_20%] rounded-xl sm:rounded-2xl lg:object-[50%_25%] transition-all duration-700 ease-out will-change-transform ${
               i === index ? "opacity-100 scale-100" : "opacity-0 scale-105"
             }`}
           />

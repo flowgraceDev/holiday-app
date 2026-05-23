@@ -5,7 +5,6 @@ export const revalidate = 0;
 import { redirect } from "next/navigation";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import LogoutButton from "./logout-button";
 
 export default async function AdminDashboard() {
   const cookieStore = await  cookies();

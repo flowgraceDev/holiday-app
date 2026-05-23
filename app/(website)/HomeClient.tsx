@@ -3,25 +3,25 @@
 import dynamic from "next/dynamic";
 
 // ✅ lazy load (allowed here)
-const Services = dynamic(() => import("@/app/components/Services"), {
+const Services = dynamic(() => import("@/app/(website)/components/Services"), {
   ssr: false,
   loading: () => <div className="h-40" />,
 });
 
 const HeroDestinations = dynamic(
-  () => import("@/app/components/HeroDestinations"),
+  () => import("@/app/(website)/components/HeroDestinations"),
   {
     ssr: false,
     loading: () => <div className="h-40" />,
   }
 );
 
-const Features = dynamic(() => import("@/app/components/HeroFeatures"), {
+const Features = dynamic(() => import("@/app/(website)/components/HeroFeatures"), {
   ssr: false,
   loading: () => <div className="h-40" />,
 });
 
-const About = dynamic(() => import("@/app/components/HeroAbout"), {
+const About = dynamic(() => import("@/app/(website)/components/HeroAbout"), {
   ssr: false,
   loading: () => <div className="h-40" />,
 });

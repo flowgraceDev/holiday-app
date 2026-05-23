@@ -20,19 +20,17 @@ export default function DeleteAboutButton({ id }: { id: string }) {
       <button
         onClick={() => setOpen(true)}
         disabled={pending}
-        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition disabled:opacity-50"
+        className="px-5 py-2.5 bg-red-600 text-white rounded-xl text-sm font-medium hover:bg-red-700 transition shadow-sm disabled:opacity-50"
       >
         Delete
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
-            <h2 className="text-lg font-semibold text-gray-900">
-              Confirm Delete
-            </h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1020]/80 backdrop-blur-xl p-4">
+          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-white/5 backdrop-blur-2xl shadow-2xl p-6 text-white">
+            <h2 className="text-lg font-semibold text-white">Confirm Delete</h2>
 
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-white/50">
               Are you sure you want to delete this item?
             </p>
 
@@ -40,7 +38,7 @@ export default function DeleteAboutButton({ id }: { id: string }) {
               <button
                 onClick={() => setOpen(false)}
                 disabled={pending}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
+                className="px-4 py-2 rounded-xl border border-white/10 text-sm font-medium text-white hover:bg-white/10 transition"
               >
                 No
               </button>
@@ -48,7 +46,7 @@ export default function DeleteAboutButton({ id }: { id: string }) {
               <button
                 onClick={handleDelete}
                 disabled={pending}
-                className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 transition disabled:opacity-50"
+                className="px-4 py-2 rounded-xl bg-red-500/20 border border-red-500/30 text-red-200 text-sm font-medium hover:bg-red-500/30 transition disabled:opacity-50"
               >
                 {pending ? "Deleting..." : "Yes"}
               </button>

@@ -1,5 +1,6 @@
 // next.config.ts
-import type { NextConfig } from "next"
+
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -7,11 +8,16 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "75mb",
     },
   },
-    images: {
-      formats: ["image/avif", "image/webp"],
-    minimumCacheTTL: 60,
-      unoptimized: true,
-      qualities: [20, 30, 50, 60, 75, 80, 90],
+
+  images: {
+    unoptimized: true,
+
+    formats: ["image/avif", "image/webp"],
+
+    qualities: [20, 30, 50, 60, 65, 70, 75, 80, 90],
+
+    minimumCacheTTL: 31536000,
+
     remotePatterns: [
       {
         protocol: "https",
@@ -20,6 +26,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

@@ -1,14 +1,26 @@
-// app/admin/module/services/page.tsx
+// app/admin/modules/services/ServicesPage.tsx
+
 import { getServices } from "../actions";
-import ServicesList from "../components/ServicesList";
-import CreateServiceModal from "../components/CreateServiceModal";
-import DeleteModal from "../components/DeleteModal";
 import ClientWrapper from "../ui/client-wrapper";
 
-export default async function ServicesPage() {
-  const data = await getServices();
+type SearchParams = {
+  service?: string | string[];
+};
 
-  return (
-    <ClientWrapper initialData={data || []} />
-  );
+type Props = {
+  service?: SearchParams;
+};
+
+export default async function ServicePage({ service }: Props) {
+  console.log("searchParams 2",service)
+  const services =
+    typeof service?.service === "string"
+      ? service.service
+      : Array.isArray(service?.service)
+        ? service.service[0]
+        : "";
+
+  const data = await getServices(services);
+
+  return <ClientWrapper initialData={data ?? []} />;
 }

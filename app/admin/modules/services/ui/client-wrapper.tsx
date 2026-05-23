@@ -1,18 +1,20 @@
 // app/admin/module/services/ui/client-wrapper.tsx
 "use client";
 
-import { useState } from "react";
-import { getServices } from "../actions";
+import { useEffect, useState, useCallback } from "react";
 
 import ServicesList from "../components/ServicesList";
 import CreateServiceModal from "../components/CreateServiceModal";
 import DeleteModal from "../components/DeleteModal";
 import EditServiceModal from "../components/EditServiceModal";
+import { getServices } from "../actions";
 
 export default function ClientWrapper({
   initialData,
+  service,
 }: {
   initialData: any[];
+  service?: string;
 }) {
   const [data, setData] = useState(initialData);
 
@@ -28,14 +30,17 @@ export default function ClientWrapper({
     data: any | null;
   }>({ open: false, data: null });
 
-  const refresh = async () => {
-    const res = await getServices();
+  const refresh = useCallback(async () => {
+    const res = await getServices(service ?? "");
     setData(res || []);
-  };
+  }, [service]);
+
+  useEffect(() => {
+    setData(initialData);
+  }, [initialData]);
 
   return (
     <div className="p-6 space-y-4">
-      {/* Header */}
       <div className="flex justify-end">
         <button
           onClick={() => setCreateOpen(true)}
@@ -45,41 +50,29 @@ export default function ClientWrapper({
         </button>
       </div>
 
-      {/* List */}
       <ServicesList
         data={data}
-        onDelete={(id) =>
-          setDeleteState({ open: true, id })
-        }
-        onEdit={(item) =>
-          setEditState({ open: true, data: item })
-        }
+        onDelete={(id) => setDeleteState({ open: true, id })}
+        onEdit={(item) => setEditState({ open: true, data: item })}
       />
 
-      {/* Create */}
       <CreateServiceModal
         open={createOpen}
         onClose={() => setCreateOpen(false)}
         onSuccess={refresh}
       />
 
-      {/* Edit */}
       <EditServiceModal
         open={editState.open}
         data={editState.data}
-        onClose={() =>
-          setEditState({ open: false, data: null })
-        }
+        onClose={() => setEditState({ open: false, data: null })}
         onSuccess={refresh}
       />
 
-      {/* Delete */}
       <DeleteModal
         open={deleteState.open}
         id={deleteState.id}
-        onClose={() =>
-          setDeleteState({ open: false, id: null })
-        }
+        onClose={() => setDeleteState({ open: false, id: null })}
         onSuccess={refresh}
       />
     </div>

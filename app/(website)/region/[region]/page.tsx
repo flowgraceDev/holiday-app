@@ -1,5 +1,5 @@
 // app/region/[region]/page.tsx
-import TourByRegions from "@/app/components/TourPackagesByRegion";
+import TourByRegions from "@/app/(website)/components/TourPackagesByRegion";
 
 const REGIONS = [
   "north",

@@ -1,4 +1,3 @@
-// app/admin/modules/tours/components/edit-tour-modal.tsx
 "use client";
 
 import { useRef, useState } from "react";
@@ -12,7 +11,7 @@ const Field = ({
   children: React.ReactNode;
 }) => (
   <div className="space-y-1.5">
-    <label className="text-xs font-medium text-neutral-600">{label}</label>
+    <label className="text-xs font-medium text-white/60">{label}</label>
     {children}
   </div>
 );
@@ -20,14 +19,14 @@ const Field = ({
 const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input
     {...props}
-    className="w-full px-3 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+    className="w-full px-3 py-2.5 rounded-lg border border-white/10 bg-white/[0.03] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm"
   />
 );
 
 const Textarea = (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
   <textarea
     {...props}
-    className="w-full px-3 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm min-h-[90px]"
+    className="w-full px-3 py-2.5 rounded-lg border border-white/10 bg-white/[0.03] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm min-h-[90px]"
   />
 );
 
@@ -37,7 +36,7 @@ const Select = ({
 }: React.SelectHTMLAttributes<HTMLSelectElement>) => (
   <select
     {...props}
-    className="w-full px-3 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm bg-white"
+    className="w-full px-3 py-2.5 rounded-lg border border-white/10 bg-white/[0.03] text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm"
   >
     {children}
   </select>
@@ -95,18 +94,23 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="opacity-0 group-hover:opacity-100 transition px-3 py-1.5 rounded-lg bg-neutral-800 text-white text-xs font-medium"
+        className="opacity-0 group-hover:opacity-100 transition px-3 py-1.5 rounded-lg bg-white/[0.05] border border-white/10 text-white text-xs font-medium hover:bg-white/[0.08]"
       >
         Edit
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="w-full max-w-4xl rounded-2xl bg-white shadow-2xl border border-neutral-200 max-h-[90vh] overflow-y-auto">
-            <div className="px-6 py-4 border-b flex justify-between items-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="w-full max-w-4xl rounded-3xl bg-[#0B1020] border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto text-white">
+            <div className="px-6 py-4 border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
               <h2 className="text-lg font-semibold">Edit Tour</h2>
 
-              <button onClick={() => setOpen(false)}>✕</button>
+              <button
+                onClick={() => setOpen(false)}
+                className="text-white/60 hover:text-white"
+              >
+                ✕
+              </button>
             </div>
 
             <form
@@ -209,17 +213,11 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
                     <option value="" disabled>
                       Select Region
                     </option>
-
                     <option value="north">North</option>
-
                     <option value="south">South</option>
-
                     <option value="east">East</option>
-
                     <option value="west">West</option>
-
                     <option value="central">Central</option>
-
                     <option value="india-nepal">India-Nepal</option>
                   </Select>
                 </Field>
@@ -241,12 +239,12 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
               </Field>
 
               <div className="space-y-4">
-                <h3 className="font-semibold text-neutral-800">
+                <h3 className="font-semibold text-white">
                   Featured Image
                 </h3>
 
                 {featuredImage && (
-                  <div className="relative border rounded-xl overflow-hidden w-full max-w-sm">
+                  <div className="relative border border-white/10 rounded-xl overflow-hidden w-full max-w-sm">
                     <img
                       src={featuredImage}
                       alt="Featured"
@@ -256,7 +254,7 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
                     <button
                       type="button"
                       onClick={removeFeaturedImage}
-                      className="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1 rounded-md"
+                      className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-md border border-white/10"
                     >
                       Remove
                     </button>
@@ -267,12 +265,12 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
                   type="file"
                   name="featured_image"
                   accept="image/*"
-                  className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-black file:text-white"
+                  className="w-full text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-white/[0.08] file:text-white hover:file:bg-white/[0.12]"
                 />
               </div>
 
               <div className="space-y-4">
-                <h3 className="font-semibold text-neutral-800">
+                <h3 className="font-semibold text-white">
                   Gallery Images
                 </h3>
 
@@ -280,7 +278,7 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
                   {galleryImages.map((img) => (
                     <div
                       key={img}
-                      className="relative border rounded-xl overflow-hidden"
+                      className="relative border border-white/10 rounded-xl overflow-hidden"
                     >
                       <img
                         src={img}
@@ -291,7 +289,7 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
                       <button
                         type="button"
                         onClick={() => removeGalleryImage(img)}
-                        className="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1 rounded-md"
+                        className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-md border border-white/10"
                       >
                         Remove
                       </button>
@@ -304,12 +302,12 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
                   name="gallery"
                   multiple
                   accept="image/*"
-                  className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-black file:text-white"
+                  className="w-full text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-white/[0.08] file:text-white hover:file:bg-white/[0.12]"
                 />
               </div>
 
               <div className="flex flex-wrap gap-4">
-                <label className="flex items-center gap-2 border px-3 py-2 rounded-lg">
+                <label className="flex items-center gap-2 border border-white/10 bg-white/[0.03] px-3 py-2 rounded-lg">
                   <input
                     type="checkbox"
                     name="featured"
@@ -318,7 +316,7 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
                   Featured
                 </label>
 
-                <label className="flex items-center gap-2 border px-3 py-2 rounded-lg">
+                <label className="flex items-center gap-2 border border-white/10 bg-white/[0.03] px-3 py-2 rounded-lg">
                   <input
                     type="checkbox"
                     name="is_active"
@@ -327,7 +325,7 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
                   Active
                 </label>
 
-                <label className="flex items-center gap-2 border px-3 py-2 rounded-lg">
+                <label className="flex items-center gap-2 border border-white/10 bg-white/[0.03] px-3 py-2 rounded-lg">
                   <input
                     type="checkbox"
                     name="cta_enabled"
@@ -338,29 +336,29 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
               </div>
 
               {status === "success" && (
-                <p className="text-green-600 text-sm">Updated</p>
+                <p className="text-emerald-400 text-sm">Updated</p>
               )}
 
               {status === "error" && (
-                <p className="text-red-600 text-sm">Error</p>
+                <p className="text-red-400 text-sm">Error</p>
               )}
 
               {status === "loading" && (
-                <p className="text-neutral-500 text-sm">Updating...</p>
+                <p className="text-white/60 text-sm">Updating...</p>
               )}
 
               <div className="flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="px-4 py-2 border rounded-lg"
+                  className="px-4 py-2 border border-white/10 rounded-lg text-white/70 hover:bg-white/[0.05]"
                 >
                   Cancel
                 </button>
 
                 <button
                   disabled={status === "loading"}
-                  className="px-5 py-2.5 bg-black text-white rounded-lg disabled:opacity-50"
+                  className="px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-violet-500 text-white rounded-lg disabled:opacity-50"
                 >
                   Update
                 </button>

@@ -11,8 +11,8 @@ import {
   toggleServiceStatus as toggle,
 } from "@/app/lib/supabase/actions/admin/adminCreate"
 
-export const getServices = async () => {
-  return await fetchServices();
+export const getServices = async (service:string) => {
+  return await fetchServices(service);
 };
 
 export const createService = async (payload: any, file: File) => {

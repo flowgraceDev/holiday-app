@@ -1,3 +1,5 @@
+// app/admin/dashboard/layout.tsx (or your current DashboardLayout file)
+
 import { ReactNode } from "react";
 import Sidebar from "@/app/admin/components/admin/sidebar";
 import { cookies } from "next/headers";
@@ -31,10 +33,13 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex bg-gray-50 text-gray-900">
+    <div className="fixed inset-0 z-50 flex bg-[#0B1020] text-white">
       <Sidebar />
+
       <div className="flex flex-1 flex-col overflow-auto">
-        <main className="p-6">{children}</main>
+        <main className="p-6 bg-[#0B1020] min-h-screen">
+          {children}
+        </main>
       </div>
     </div>
   );

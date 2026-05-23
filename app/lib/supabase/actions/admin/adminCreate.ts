@@ -727,13 +727,20 @@ export const deleteContact = async (id: string) => {
 
 // Services apis
 
-export async function getServices() {
-  const { data, error } = await supabaseAdmin
+export async function getServices(service?: string) {
+  let query = supabaseAdmin
     .from("services")
     .select("*")
     .order("created_at", { ascending: false });
 
+  if (service) {
+    query = query.eq("slug", service);
+  }
+
+  const { data, error } = await query;
+
   if (error) throw new Error(error.message);
+
   return data;
 }
 

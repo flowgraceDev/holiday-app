@@ -39,3 +39,8 @@ body {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
+
+.admin-root {
+  --background: #0B1020;
+  --foreground: #ffffff;
+}

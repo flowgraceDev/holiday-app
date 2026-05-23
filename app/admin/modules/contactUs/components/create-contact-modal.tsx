@@ -4,19 +4,33 @@ import { useState, useRef } from "react";
 import { createContactAction } from "../actions";
 
 const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
-  <input
-    {...props}
-    className="w-full px-3 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
-  />
+  <div className="space-y-1">
+    {props.name && (
+      <label className="text-xs text-white/60 capitalize">
+        {String(props.name).replace(/_/g, " ")}
+      </label>
+    )}
+    <input
+      {...props}
+      className="w-full px-3 py-2.5 rounded-lg border border-white/10 bg-white/5 backdrop-blur-md text-white text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
+    />
+  </div>
 );
 
 const Textarea = (
   props: React.TextareaHTMLAttributes<HTMLTextAreaElement>
 ) => (
-  <textarea
-    {...props}
-    className="w-full px-3 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm min-h-[90px]"
-  />
+  <div className="space-y-1">
+    {props.name && (
+      <label className="text-xs text-white/60 capitalize">
+        {String(props.name).replace(/_/g, " ")}
+      </label>
+    )}
+    <textarea
+      {...props}
+      className="w-full px-3 py-2.5 rounded-lg border border-white/10 bg-white/5 backdrop-blur-md text-white text-sm min-h-[90px] focus:outline-none focus:ring-2 focus:ring-white/20"
+    />
+  </div>
 );
 
 export default function CreateContactModal() {
@@ -30,16 +44,16 @@ export default function CreateContactModal() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="bg-neutral-900 hover:bg-neutral-800 text-white px-5 py-2.5 rounded-xl text-sm font-medium"
+        className="bg-white/10 backdrop-blur-md border border-white/10 hover:bg-white/15 text-white px-5 py-2.5 rounded-xl text-sm font-medium"
       >
         Create Contact
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl border max-h-[90vh] overflow-y-auto">
-            <div className="px-6 py-4 border-b flex justify-between items-center">
-              <h2 className="text-lg font-semibold">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1020]/80 backdrop-blur-xl">
+          <div className="w-full max-w-4xl rounded-2xl border border-white/10 bg-white/5 backdrop-blur-2xl shadow-2xl max-h-[90vh] overflow-y-auto text-white">
+            <div className="px-6 py-4 border-b border-white/10 flex justify-between items-center">
+              <h2 className="text-lg font-semibold text-white">
                 Contact Section Editor
               </h2>
               <button onClick={() => setOpen(false)}>✕</button>
@@ -65,9 +79,8 @@ export default function CreateContactModal() {
               }}
               className="p-6 space-y-8"
             >
-              {/* HERO */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-neutral-800">
+                <h3 className="font-semibold text-white/80">
                   Hero Section
                 </h3>
 
@@ -76,33 +89,25 @@ export default function CreateContactModal() {
                   <Input name="subtitle" placeholder="Subtitle" />
                 </div>
 
-                <Textarea
-                  name="description"
-                  placeholder="Description"
-                />
+                <Textarea name="description" placeholder="Description" />
 
-                <Input
-                  name="highlight"
-                  placeholder="Highlight Text"
-                />
+                <Input name="highlight" placeholder="Highlight Text" />
 
-                {/* MULTIPLE IMAGES */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">
+                  <label className="text-xs text-white/60">
                     Hero Images (Multiple)
                   </label>
                   <input
                     name="images"
                     type="file"
                     multiple
-                    className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-black file:text-white"
+                    className="w-full text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-white/10 file:text-white hover:file:bg-white/15"
                   />
                 </div>
               </div>
 
-              {/* SECTION */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-neutral-800">
+                <h3 className="font-semibold text-white/80">
                   Content Section
                 </h3>
 
@@ -120,9 +125,8 @@ export default function CreateContactModal() {
                 />
               </div>
 
-              {/* MAP */}
               <div className="space-y-2">
-                <h3 className="font-semibold text-neutral-800">Map</h3>
+                <h3 className="font-semibold text-white/80">Map</h3>
                 <Input
                   name="map_url"
                   placeholder="Google Map Embed URL"
@@ -130,31 +134,31 @@ export default function CreateContactModal() {
               </div>
 
               {status === "success" && (
-                <p className="text-green-600 text-sm">
+                <p className="text-green-400 text-sm">
                   Saved successfully
                 </p>
               )}
               {status === "error" && (
-                <p className="text-red-600 text-sm">
+                <p className="text-red-400 text-sm">
                   Something went wrong
                 </p>
               )}
               {status === "loading" && (
-                <p className="text-neutral-500 text-sm">Saving...</p>
+                <p className="text-white/50 text-sm">Saving...</p>
               )}
 
               <div className="flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="px-4 py-2 border rounded-lg"
+                  className="px-4 py-2 border border-white/10 rounded-lg text-white"
                 >
                   Cancel
                 </button>
 
                 <button
                   disabled={status === "loading"}
-                  className="px-5 py-2.5 bg-black text-white rounded-lg disabled:opacity-50"
+                  className="px-5 py-2.5 bg-white/10 border border-white/10 text-white rounded-lg disabled:opacity-50 hover:bg-white/15"
                 >
                   Save
                 </button>

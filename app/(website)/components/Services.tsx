@@ -10,7 +10,7 @@ import {
   FaRoute,
 } from "react-icons/fa";
 import { useEffect, useMemo, useState } from "react";
-import { getServices } from "../lib/supabase/actions/public/services";
+import { getServices } from "../../lib/supabase/actions/public/services";
 
 type Service = {
   id: string;
@@ -35,14 +35,26 @@ const getIcon = (service: Service) => {
   return FaRoute;
 };
 
+const blurDataURL =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWxsPSIjZTVlN2ViIj48L3N2Zz4=";
+
 export default function Services() {
   const [services, setServices] = useState<Service[]>([]);
 
   useEffect(() => {
+    let mounted = true;
+
     (async () => {
       const res = await getServices();
+
+      if (!mounted) return;
+
       setServices(res || []);
     })();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const activeServices = useMemo(
@@ -54,8 +66,9 @@ export default function Services() {
           title: s.title.trim(),
           slug: s.slug.trim(),
           route: s.route.trim(),
+          image: `${s.image}?width=800&quality=60`,
         })),
-    [services],
+    [services]
   );
 
   const count = activeServices.length;
@@ -63,7 +76,7 @@ export default function Services() {
   const isScroll = count > 5;
 
   const containerClass = isScroll
-    ? "flex gap-5 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-2"
+    ? "flex gap-5 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-2 pb-2 will-change-scroll"
     : "flex justify-center flex-wrap gap-5";
 
   const itemClass = isScroll ? "min-w-[200px] snap-start" : "w-[200px]";
@@ -72,7 +85,7 @@ export default function Services() {
     <section className="pt-6 pb-16 bg-gradient-to-b from-white via-slate-50 to-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-10">
-          <p className="text-yellow-600 font-semibold tracking-widest uppercase text-sm flex items-center justify-center gap-2">
+          <p className="flex items-center justify-center gap-2 text-sm font-semibold tracking-widest uppercase text-yellow-600">
             <span className="w-8 h-[2px] bg-yellow-500" />
             Our Services
             <span className="w-8 h-[2px] bg-yellow-500" />
@@ -81,38 +94,45 @@ export default function Services() {
           <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
             Travel Solutions
           </h2>
-          <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+
+          <p className="max-w-xl mx-auto text-sm leading-relaxed text-slate-600 md:text-base">
             Crafted journeys for seamless travel across India & beyond.
           </p>
         </div>
 
         <div className={containerClass}>
-          {activeServices.map((s) => {
+          {activeServices.map((s, index) => {
             const Icon = getIcon(s);
 
             return (
               <Link
                 key={s.id}
                 href={s.route}
-                className={`group rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm hover:shadow-md transition ${itemClass}`}
+                prefetch={false}
+                className={`group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md active:scale-[0.98] ${itemClass}`}
               >
-                {/* INCREASED IMAGE HEIGHT */}
-                <div className="relative h-40 w-full">
+                <div className="relative h-40 w-full overflow-hidden bg-slate-100">
                   <Image
                     src={s.image}
                     alt={s.title}
                     fill
-                    quality={80}
-                    sizes="(max-width: 768px) 50vw, 20vw"
-                    className="object-cover object-center will-change-transform transform-gpu group-hover:scale-105 transition-transform duration-500 ease-out"
+                    unoptimized
+                    quality={60}
+                    loading={index < 2 ? "eager" : "lazy"}
+                    priority={index < 2}
+                    draggable={false}
                     placeholder="blur"
-                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWxsPSIjMTExIj48L3N2Zz4="
+                    blurDataURL={blurDataURL}
+                    sizes="(max-width:768px) 50vw, 20vw"
+                    className="object-cover object-center transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.03]"
                   />
-                  <div className="absolute inset-0 bg-black/40" />
+
+                  <div className="absolute inset-0 bg-black/35" />
 
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                    <Icon className="text-2xl mb-1" />
-                    <span className="text-xs font-semibold text-center px-2 leading-tight">
+                    <Icon className="mb-1 text-2xl" />
+
+                    <span className="px-2 text-center text-xs font-semibold leading-tight">
                       {s.title}
                     </span>
                   </div>

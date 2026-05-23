@@ -1,3 +1,4 @@
+// app/admin/layout.tsx
 import { ReactNode } from "react";
 
 export default function AdminRootLayout({
@@ -5,5 +6,9 @@ export default function AdminRootLayout({
 }: {
   children: ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <div className="admin-root">
+      {children}
+    </div>
+  );
 }

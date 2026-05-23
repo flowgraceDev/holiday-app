@@ -1,6 +1,6 @@
 // app/contact/page.tsx
 
-import ContactForm from "@/app/components/ContactForm";
+import ContactForm from "@/app/(website)/components/ContactForm";
 import HeroSlider from "./HeroSlider";
 import { getContact } from "@/app/lib/supabase/actions/admin/adminCreate";
 

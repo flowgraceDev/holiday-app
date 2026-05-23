@@ -1,23 +1,29 @@
 "use client";
 
-import { useState, useRef, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { updateAbout } from "../actions";
 
 const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input
     {...props}
-    className="w-full px-3 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+    className="w-full px-3 py-2.5 rounded-lg border border-white/10 bg-transparent text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 text-sm"
   />
 );
 
-const Textarea = (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
+const Textarea = (
+  props: React.TextareaHTMLAttributes<HTMLTextAreaElement>
+) => (
   <textarea
     {...props}
-    className="w-full px-3 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm min-h-[90px]"
+    className="w-full px-3 py-2.5 rounded-lg border border-white/10 bg-transparent text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 text-sm min-h-[90px]"
   />
 );
 
 type About = any;
+
+const Label = ({ children }: { children: React.ReactNode }) => (
+  <label className="text-xs font-medium text-white/60">{children}</label>
+);
 
 export default function UpdateAboutModal({ about }: { about: About }) {
   const [open, setOpen] = useState(false);
@@ -63,15 +69,15 @@ export default function UpdateAboutModal({ about }: { about: About }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="bg-neutral-900 hover:bg-neutral-800 text-white px-5 py-2.5 rounded-xl text-sm font-medium"
+        className="backdrop-blur-md border border-white/10 hover:bg-white/10 text-white px-5 py-2.5 rounded-xl text-sm font-medium"
       >
         Edit About
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="w-full max-w-5xl bg-white rounded-2xl shadow-2xl border max-h-[90vh] overflow-y-auto">
-            <div className="px-6 py-4 border-b flex justify-between items-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1020]/70 backdrop-blur-xl">
+          <div className="w-full max-w-5xl rounded-2xl border border-white/10 bg-transparent backdrop-blur-2xl  text-white max-h-[90vh] overflow-y-auto">
+            <div className="px-6 py-4 border-b border-white/10 flex justify-between items-center">
               <h2 className="text-lg font-semibold">Update About Section</h2>
               <button onClick={() => setOpen(false)}>✕</button>
             </div>
@@ -104,36 +110,40 @@ export default function UpdateAboutModal({ about }: { about: About }) {
             >
               <input type="hidden" name="id" value={about?.id} />
 
-              {/* HERO */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-neutral-800">
-                  Hero Section
-                </h3>
+                <h3 className="font-semibold text-white/80">Hero Section</h3>
 
                 <div className="grid grid-cols-2 gap-5">
-                  <Input
-                    name="hero_title"
-                    defaultValue={parsedHero?.title}
-                  />
-                  <Input
-                    name="hero_subtitle"
-                    defaultValue={parsedHero?.subtitle}
+                  <div className="space-y-1">
+                    <Label>Title</Label>
+                    <Input name="hero_title" defaultValue={parsedHero?.title} />
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label>Subtitle</Label>
+                    <Input
+                      name="hero_subtitle"
+                      defaultValue={parsedHero?.subtitle}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <Label>Description</Label>
+                  <Textarea
+                    name="hero_description"
+                    defaultValue={parsedHero?.description}
                   />
                 </div>
 
-                <Textarea
-                  name="hero_description"
-                  defaultValue={parsedHero?.description}
-                />
+                <div className="space-y-2">
+                  <Label>Hero Images</Label>
 
-                <div>
-                  <label className="text-sm font-medium">Hero Images</label>
-
-                  <div className="grid grid-cols-3 gap-3 mt-3">
+                  <div className="grid grid-cols-3 gap-3 mt-2">
                     {heroImages.map((img) => (
                       <div
                         key={img}
-                        className="relative border rounded-lg overflow-hidden"
+                        className="relative border border-white/10 rounded-lg overflow-hidden"
                       >
                         <img
                           src={img}
@@ -142,7 +152,7 @@ export default function UpdateAboutModal({ about }: { about: About }) {
                         <button
                           type="button"
                           onClick={() => removeHeroImage(img)}
-                          className="absolute top-1 right-1 bg-black text-white text-xs px-2 py-1 rounded"
+                          className="absolute top-1 right-1 bg-black/60 text-white text-xs px-2 py-1 rounded"
                         >
                           Remove
                         </button>
@@ -155,38 +165,41 @@ export default function UpdateAboutModal({ about }: { about: About }) {
                     type="file"
                     multiple
                     accept="image/*"
-                    className="w-full mt-3 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-black file:text-white"
+                    className="w-full mt-3 text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:border-white/10 file:bg-transparent file:text-white"
                   />
                 </div>
               </div>
 
-              {/* INTRO */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-neutral-800">
-                  Intro Section
-                </h3>
+                <h3 className="font-semibold text-white/80">Intro Section</h3>
 
-                <Input
-                  name="intro_title"
-                  defaultValue={parsedIntro?.title}
-                />
+                <div className="space-y-1">
+                  <Label>Title</Label>
+                  <Input name="intro_title" defaultValue={parsedIntro?.title} />
+                </div>
 
-                <Textarea
-                  name="intro_para1"
-                  defaultValue={parsedIntro?.para1}
-                />
+                <div className="space-y-1">
+                  <Label>Paragraph 1</Label>
+                  <Textarea
+                    name="intro_para1"
+                    defaultValue={parsedIntro?.para1}
+                  />
+                </div>
 
-                <Textarea
-                  name="intro_para2"
-                  defaultValue={parsedIntro?.para2}
-                />
+                <div className="space-y-1">
+                  <Label>Paragraph 2</Label>
+                  <Textarea
+                    name="intro_para2"
+                    defaultValue={parsedIntro?.para2}
+                  />
+                </div>
 
-                <div>
-                  <label className="text-sm font-medium">Intro Image</label>
+                <div className="space-y-2">
+                  <Label>Intro Image</Label>
 
-                  <div className="mt-3">
+                  <div className="mt-2">
                     {introImage ? (
-                      <div className="relative w-48 border rounded-lg overflow-hidden">
+                      <div className="relative w-48 border border-white/10 rounded-lg overflow-hidden">
                         <img
                           src={introImage}
                           className="w-full h-32 object-cover"
@@ -194,13 +207,13 @@ export default function UpdateAboutModal({ about }: { about: About }) {
                         <button
                           type="button"
                           onClick={removeIntroImage}
-                          className="absolute top-1 right-1 bg-black text-white text-xs px-2 py-1 rounded"
+                          className="absolute top-1 right-1 bg-black/60 text-white text-xs px-2 py-1 rounded"
                         >
                           Remove
                         </button>
                       </div>
                     ) : (
-                      <p className="text-xs text-neutral-500">
+                      <p className="text-xs text-white/40">
                         No image uploaded
                       </p>
                     )}
@@ -210,55 +223,65 @@ export default function UpdateAboutModal({ about }: { about: About }) {
                     name="intro_image"
                     type="file"
                     accept="image/*"
-                    className="w-full mt-3 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-black file:text-white"
+                    className="w-full mt-3 text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:border-white/10 file:bg-transparent file:text-white"
                   />
                 </div>
               </div>
 
-              {/* SERVICES */}
-              <Textarea
-                name="services"
-                defaultValue={about?.services?.join(", ")}
-              />
-
-              <div className="grid grid-cols-2 gap-5">
+              <div className="space-y-1">
+                <Label>Services</Label>
                 <Textarea
-                  name="vision"
-                  defaultValue={about?.vision}
-                />
-                <Textarea
-                  name="mission"
-                  defaultValue={about?.mission}
+                  name="services"
+                  defaultValue={about?.services?.join(", ")}
                 />
               </div>
 
-              <Textarea
-                name="footer_text"
-                defaultValue={about?.footer_text}
-              />
+              <div className="grid grid-cols-2 gap-5">
+                <div className="space-y-1">
+                  <Label>Vision</Label>
+                  <Textarea name="vision" defaultValue={about?.vision} />
+                </div>
+
+                <div className="space-y-1">
+                  <Label>Mission</Label>
+                  <Textarea name="mission" defaultValue={about?.mission} />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <Label>Footer Text</Label>
+                <Textarea
+                  name="footer_text"
+                  defaultValue={about?.footer_text}
+                />
+              </div>
 
               {status === "success" && (
-                <p className="text-green-600 text-sm">Updated successfully</p>
+                <p className="text-green-400 text-sm">
+                  Updated successfully
+                </p>
               )}
               {status === "error" && (
-                <p className="text-red-600 text-sm">Something went wrong</p>
+                <p className="text-red-400 text-sm">
+                  Something went wrong
+                </p>
               )}
               {status === "loading" && (
-                <p className="text-neutral-500 text-sm">Updating...</p>
+                <p className="text-white/50 text-sm">Updating...</p>
               )}
 
               <div className="flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="px-4 py-2 border rounded-lg"
+                  className="px-4 py-2 border border-white/10 rounded-lg text-white"
                 >
                   Cancel
                 </button>
 
                 <button
                   disabled={status === "loading"}
-                  className="px-5 py-2.5 bg-black text-white rounded-lg disabled:opacity-50"
+                  className="px-5 py-2.5 bg-transparent hover:bg-white/10 border border-white/10 text-white rounded-lg disabled:opacity-50"
                 >
                   Update
                 </button>
