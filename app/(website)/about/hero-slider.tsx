@@ -35,7 +35,7 @@ export default function HeroSlider({
   if (!images?.length) return null;
 
   return (
-    <section className="relative w-full h-[55vh] sm:h-[55vh] md:h-[55vh]  rounded-xl sm:rounded-2xl overflow-hidden">
+    <section className="relative w-full h-[55vh] sm:h-[55vh] md:h-[55vh] rounded-xl sm:rounded-2xl overflow-hidden pb-12 md:pb-16">
       {/* BACKGROUND SLIDES */}
       {images.map((img, i) => (
         <div key={img} className="absolute inset-0">

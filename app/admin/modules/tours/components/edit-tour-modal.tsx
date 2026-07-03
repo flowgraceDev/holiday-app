@@ -26,7 +26,7 @@ const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
 const Textarea = (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
   <textarea
     {...props}
-    className="w-full px-3 py-2.5 rounded-lg border border-white/10 bg-white/[0.03] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm min-h-[90px]"
+    className="w-full px-3 py-2.5 rounded-lg border border-white/10 bg-white/[0.03] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm min-h-[90px] font-mono"
   />
 );
 
@@ -42,6 +42,24 @@ const Select = ({
   </select>
 );
 
+/**
+ * DB fields like itinerary/highlights/inclusions/exclusions come back from
+ * Supabase already parsed (jsonb -> JS array/object), not as a raw string.
+ * Dumping that straight into `defaultValue` lets React coerce it with the
+ * default Array.prototype.toString(), which stringifies each object as
+ * "[object Object]" and joins them with commas — that's the bug.
+ * This helper always produces a readable JSON string for the textarea.
+ */
+const toJSONText = (value: unknown): string => {
+  if (value === null || value === undefined) return "";
+  if (typeof value === "string") return value;
+  try {
+    return JSON.stringify(value, null, 2);
+  } catch {
+    return "";
+  }
+};
+
 type Tour = {
   id: number;
   title: string;
@@ -54,10 +72,10 @@ type Tour = {
   max_people?: number;
   featured_image?: string;
   gallery?: string[];
-  itinerary?: string;
-  inclusions?: string;
-  exclusions?: string;
-  highlights?: string;
+  itinerary?: unknown;
+  inclusions?: unknown;
+  exclusions?: unknown;
+  highlights?: unknown;
   featured?: boolean;
   is_active?: boolean;
   seo_title?: string;
@@ -70,7 +88,7 @@ type Tour = {
 export default function EditTourModal({ tour }: { tour: Tour }) {
   const [open, setOpen] = useState(false);
 
-  const [status, setStatus] = useState<
+ const [status, setStatus] = useState<
     "idle" | "success" | "error" | "loading"
   >("idle");
 
@@ -189,21 +207,33 @@ export default function EditTourModal({ tour }: { tour: Tour }) {
 
               <div className="grid grid-cols-2 gap-5">
                 <Field label="Itinerary (JSON)">
-                  <Textarea name="itinerary" defaultValue={tour.itinerary} />
+                  <Textarea
+                    name="itinerary"
+                    defaultValue={toJSONText(tour.itinerary)}
+                  />
                 </Field>
 
                 <Field label="Highlights (JSON)">
-                  <Textarea name="highlights" defaultValue={tour.highlights} />
+                  <Textarea
+                    name="highlights"
+                    defaultValue={toJSONText(tour.highlights)}
+                  />
                 </Field>
               </div>
 
               <div className="grid grid-cols-2 gap-5">
                 <Field label="Inclusions (JSON)">
-                  <Textarea name="inclusions" defaultValue={tour.inclusions} />
+                  <Textarea
+                    name="inclusions"
+                    defaultValue={toJSONText(tour.inclusions)}
+                  />
                 </Field>
 
                 <Field label="Exclusions (JSON)">
-                  <Textarea name="exclusions" defaultValue={tour.exclusions} />
+                  <Textarea
+                    name="exclusions"
+                    defaultValue={toJSONText(tour.exclusions)}
+                  />
                 </Field>
               </div>
 

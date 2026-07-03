@@ -47,7 +47,7 @@ export default function Destinations() {
         ...d,
         image_url: `${d.image_url}?width=1200&quality=60`,
       })),
-    [destinations]
+    [destinations],
   );
 
   if (loading) {
@@ -60,7 +60,7 @@ export default function Destinations() {
   const rest = optimizedDestinations.slice(1, 5);
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 pb-24">
+    <section className="relative overflow-hidden bg-transparent py-20 pb-24">
       <div className="absolute -left-40 top-20 h-[400px] w-[400px] rounded-full bg-blue-200/20 blur-2xl" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
@@ -75,8 +75,8 @@ export default function Destinations() {
             <span className="h-[2px] w-8 bg-yellow-500" />
           </div>
 
-          <h2 className="text-2xl font-semibold leading-tight text-slate-900 md:text-4xl">
-            Explore Top Indian Destinations
+          <h2 className="text-2xl md:text-3xl font-bold text-white">
+             Explore Top Indian <span className="text-yellow-600">Destinations</span>
           </h2>
 
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 md:text-base">
@@ -140,9 +140,7 @@ export default function Destinations() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10" />
 
                 <div className="absolute bottom-2 left-2 right-2">
-                  <p className="text-xs font-medium text-white">
-                    {d.name}
-                  </p>
+                  <p className="text-xs font-medium text-white">{d.name}</p>
                 </div>
               </div>
             ))}

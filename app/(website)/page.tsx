@@ -20,9 +20,9 @@ export default async function page() {
     <div className="flex flex-col">
       <Hero items={items} />
 
-      <section className="mt-6 bg-gradient-to-b from-black via-white to-white">
-        <TourPackages tours={tours} />
-      </section>
+    <section className="mt-6 bg-gradient-to-b from-transparent via-transparent to-transparent">
+  <TourPackages tours={tours} />
+</section>
 
       <HomeClient />
     </div>

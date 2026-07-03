@@ -32,7 +32,6 @@ export default function HomeClient() {
       <Services />
       <HeroDestinations />
       <Features />
-      {/* <About /> */}
     </>
   );
 }

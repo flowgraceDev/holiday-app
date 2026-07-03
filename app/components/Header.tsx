@@ -11,7 +11,14 @@ const NAV_ITEMS = [
   { name: "About Us", path: "/about" },
 ];
 
-const REGIONS = ["north", "south", "east", "west", "central","india-nepal"] as const;
+const REGIONS = [
+  "north",
+  "south",
+  "east",
+  "west",
+  "central",
+  "india-nepal",
+] as const;
 
 const SERVICES = [
   { name: "Tour Packages", path: "/services/tour-packages" },
@@ -55,18 +62,32 @@ export default function Header() {
     [],
   );
 
-  const toggleTours = useCallback(() => {
+  const openServices = useCallback(() => {
     setUI((p) => ({
       ...p,
-      desktopTours: !p.desktopTours,
+      desktopServices: true,
+      desktopTours: false,
+    }));
+  }, []);
+
+  const closeServices = useCallback(() => {
+    setUI((p) => ({
+      ...p,
       desktopServices: false,
     }));
   }, []);
 
-  const toggleServices = useCallback(() => {
+  const openTours = useCallback(() => {
     setUI((p) => ({
       ...p,
-      desktopServices: !p.desktopServices,
+      desktopTours: true,
+      desktopServices: false,
+    }));
+  }, []);
+
+  const closeTours = useCallback(() => {
+    setUI((p) => ({
+      ...p,
       desktopTours: false,
     }));
   }, []);
@@ -140,10 +161,10 @@ export default function Header() {
           key={item.path}
           href={item.path}
           onClick={closeAll}
-          className={`relative text-[17px] font-medium transition-colors duration-170 ${
+          className={`relative text-[17px] font-medium transition-all duration-300 ${
             isActive(item.path)
-              ? "text-slate-900"
-              : "text-slate-700 hover:text-slate-900"
+              ? "text-amber-400"
+              : "text-slate-200 hover:text-sky-400"
           }`}
         >
           {item.name}
@@ -159,32 +180,32 @@ export default function Header() {
       }`}
     >
       {/* TOP BAR */}
-      <div className="bg-slate-950 text-white text-xs">
+     {/* <div className="bg-white/5 backdrop-blur-xl border-b border-white/10 text-white text-xs shadow-lg">
         <div className="max-w-7xl mx-auto flex justify-end px-4 py-2">
           <div className="flex items-center gap-2">
-            <a className="w-8 h-8 flex items-center justify-center rounded-full bg-emerald-500 text-white">
+            <a className="w-8 h-8 flex items-center justify-center rounded-full bg-emerald-500 hover:bg-emerald-600 transition-all duration-300 text-white">
               <FaWhatsapp />
             </a>
 
-            <a className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-800 text-white">
+            <a className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white">
               <FaFacebookF />
             </a>
 
-            <a className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-800 text-white">
+            <a className="w-8 h-8 flex items-center justify-center rounded-full bg-pink-500 hover:bg-pink-600 transition-all duration-300 text-white">
               <FaInstagram />
             </a>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* NAVBAR */}
       {/* NAVBAR */}
-      <div className="bg-white border-b border-slate-170 shadow-sm h-16 md:h-auto">
+      <div className="bg-[#07111F] border-b border-white/10 h-16 md:h-auto overflow-visible">
         <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 h-full md:py-4">
           <Link
             href="/"
             onClick={closeAll}
-            className={`${cormorant.className} text-3xl md:text-3xl font-semibold text-slate-900 leading-none`}
+            className={`${cormorant.className} text-3xl md:text-3xl font-semibold text-white leading-none`}
           >
             TDIPL
           </Link>
@@ -193,22 +214,30 @@ export default function Header() {
             {navLinks}
 
             {/* SERVICES */}
-            <div className="relative">
+            <div
+              className="relative"
+              onMouseEnter={openServices}
+              onMouseLeave={closeServices}
+            >
               <button
-                onClick={toggleServices}
-                className="cursor-pointer text-[17px] font-medium text-slate-700 hover:text-slate-900 transition-colors"
+                type="button"
+                className="text-[17px] font-medium text-slate-200 hover:text-sky-400 transition-colors"
               >
                 Our Services
               </button>
 
               {ui.desktopServices && (
-                <div className="absolute top-12 left-0 w-64 rounded-2xl border border-slate-170 bg-white shadow-xl overflow-hidden">
+                <div
+                  className="absolute left-0 top-full mt-1 z-50 w-72 overflow-hidden rounded-2xl border border-white/10 bg-[#0F172A] shadow-2xl"
+                  onMouseEnter={openServices}
+                  onMouseLeave={closeServices}
+                >
                   {SERVICES.map((s) => (
                     <Link
                       key={s.name}
                       href={s.path}
                       onClick={closeAll}
-                      className="block px-5 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                      className="block px-5 py-3 text-sm text-slate-200 hover:bg-sky-500/10 hover:text-amber-300 transition-colors"
                     >
                       {s.name}
                     </Link>
@@ -218,22 +247,30 @@ export default function Header() {
             </div>
 
             {/* TOURS */}
-            <div className="relative">
+            <div
+              className="relative"
+              onMouseEnter={openTours}
+              onMouseLeave={closeTours}
+            >
               <button
-                onClick={toggleTours}
-                className=" cursor-pointer text-[17px] font-medium text-slate-700 hover:text-slate-900 transition-colors"
+                type="button"
+                className="text-[17px] font-medium text-slate-200 hover:text-sky-400 transition-colors"
               >
                 Tours Packages
               </button>
 
               {ui.desktopTours && (
-                <div className="absolute top-12 left-0 w-64 rounded-2xl border border-slate-170 bg-white shadow-xl overflow-hidden">
+                <div
+                  className="absolute left-0 top-full mt-1 z-50 w-72 overflow-hidden rounded-2xl border border-white/10 bg-[#0F172A] shadow-2xl"
+                  onMouseEnter={openTours}
+                  onMouseLeave={closeTours}
+                >
                   {REGIONS.map((region) => (
                     <Link
                       key={region}
                       href={`/region/${region}`}
                       onClick={closeAll}
-                      className="block px-5 py-3 capitalize text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                      className="block px-5 py-3 capitalize text-sm text-slate-200 hover:bg-sky-500/10 hover:text-amber-300 transition-colors"
                     >
                       {region} India Tours
                     </Link>
@@ -245,7 +282,7 @@ export default function Header() {
             <Link
               href="/contact"
               onClick={closeAll}
-              className="text-[17px] font-medium text-slate-700 hover:text-slate-900 transition-colors"
+              className="text-[17px] font-medium text-slate-200 hover:text-sky-400 transition-colors"
             >
               Contact Us
             </Link>

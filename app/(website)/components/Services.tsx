@@ -68,7 +68,7 @@ export default function Services() {
           route: s.route.trim(),
           image: `${s.image}?width=800&quality=60`,
         })),
-    [services]
+    [services],
   );
 
   const count = activeServices.length;
@@ -82,7 +82,7 @@ export default function Services() {
   const itemClass = isScroll ? "min-w-[200px] snap-start" : "w-[200px]";
 
   return (
-    <section className="pt-6 pb-16 bg-gradient-to-b from-white via-slate-50 to-white">
+    <section className="pt-6 pb-16 bg-transparent py-8 md:py-10">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-10">
           <p className="flex items-center justify-center gap-2 text-sm font-semibold tracking-widest uppercase text-yellow-600">
@@ -91,8 +91,8 @@ export default function Services() {
             <span className="w-8 h-[2px] bg-yellow-500" />
           </p>
 
-          <h2 className="text-2xl md:text-3xl font-semibold text-slate-900">
-            Travel Solutions
+          <h2 className="text-2xl md:text-3xl font-bold text-white">
+            Travel <span className="text-yellow-600">Solutions</span>
           </h2>
 
           <p className="max-w-xl mx-auto text-sm leading-relaxed text-slate-600 md:text-base">
@@ -109,7 +109,7 @@ export default function Services() {
                 key={s.id}
                 href={s.route}
                 prefetch={false}
-                className={`group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md active:scale-[0.98] ${itemClass}`}
+                className={`group overflow-hidden rounded bg-white shadow-sm transition-all duration-300 hover:shadow-md active:scale-[0.98] ${itemClass}`}
               >
                 <div className="relative h-40 w-full overflow-hidden bg-slate-100">
                   <Image

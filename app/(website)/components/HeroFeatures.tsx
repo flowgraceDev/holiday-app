@@ -32,7 +32,7 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="relative py-5 bg-gradient-to-b from-white to-slate-50">
+    <section className="relative py-5 bg-transparent py-20">
   <div className="max-w-7xl mx-auto px-6">
     
     <div className="text-center mb-10">

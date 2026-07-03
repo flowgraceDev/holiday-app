@@ -27,18 +27,11 @@ function formatTitle(title: string) {
 const AUTO_SCROLL_INTERVAL = 3500;
 const CARD_FALLBACK_WIDTH = 280;
 
-export default function TourPackagesClient({
-  tours,
-}: {
-  tours: Tour[];
-}) {
+export default function TourPackagesClient({ tours }: { tours: Tour[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const duplicatedTours = useMemo(
-    () => [...tours, ...tours],
-    [tours]
-  );
+  const duplicatedTours = useMemo(() => [...tours, ...tours], [tours]);
 
   const getCardWidth = useCallback(() => {
     const el = scrollRef.current;
@@ -63,7 +56,7 @@ export default function TourPackagesClient({
         behavior: "smooth",
       });
     },
-    [getCardWidth]
+    [getCardWidth],
   );
 
   const stopAutoScroll = useCallback(() => {
@@ -106,13 +99,13 @@ export default function TourPackagesClient({
   }, [startAutoScroll, stopAutoScroll]);
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white">
-      <div className="relative max-w-7xl mx-auto px-3 sm:px-4">
-        <div className="mb-4 sm:mb-6 text-center">
-          <p className="flex items-center justify-center gap-2 text-[11px] sm:text-sm font-semibold tracking-widest uppercase text-yellow-600">
-            <span className="w-6 sm:w-10 h-[2px] bg-yellow-500" />
+    <section className="relative overflow-hidden bg-transparent ">
+      <div className="relative mx-auto max-w-7xl px-3 sm:px-4">
+        <div className="mb-3 sm:mb-4 text-center">
+          <p className="flex items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-yellow-600 sm:text-sm">
+            <span className="h-[2px] w-6 bg-yellow-500 sm:w-10" />
             Discover top destinations
-            <span className="w-6 sm:w-10 h-[2px] bg-yellow-500" />
+            <span className="h-[2px] w-6 bg-yellow-500 sm:w-10" />
           </p>
         </div>
 
@@ -120,7 +113,7 @@ export default function TourPackagesClient({
           <button
             type="button"
             onClick={() => scroll("left")}
-            className="flex items-center justify-center w-10 h-10 rounded-full border border-white/10 bg-black/70 text-white shadow-lg transition hover:bg-black"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-800 shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-105"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -128,7 +121,7 @@ export default function TourPackagesClient({
           <button
             type="button"
             onClick={() => scroll("right")}
-            className="flex items-center justify-center w-10 h-10 rounded-full border border-white/10 bg-black/70 text-white shadow-lg transition hover:bg-black"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-800 shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-105"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -145,10 +138,10 @@ export default function TourPackagesClient({
               key={`${tour.id}-${index}`}
               href={`/tours/${tour.slug}`}
               prefetch={false}
-              className="group flex-shrink-0 snap-start w-[85%] sm:w-[45%] lg:w-[22%]"
+              className="group flex-shrink-0 snap-start w-[84%] sm:w-[46%] lg:w-[23%]"
             >
-              <article className="overflow-hidden rounded-xl sm:rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg active:scale-[0.98]">
-                <div className="relative h-40 sm:h-44 overflow-hidden bg-slate-100">
+              <article className="overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 hover:shadow-lg active:scale-[0.98]">
+                <div className="relative h-40 sm:h-40 overflow-hidden bg-slate-100">
                   <Image
                     src={tour.featured_image}
                     alt={tour.title}
@@ -158,12 +151,12 @@ export default function TourPackagesClient({
                     unoptimized
                     draggable={false}
                     sizes="(max-width:640px) 85vw, (max-width:1024px) 45vw, 22vw"
-                    className="object-cover transition-transform duration-500 will-change-transform group-hover:scale-[1.03]"
+                    className="object-cover transition-transform duration-500 will-change-transform group-hover:scale-105"
                   />
                 </div>
 
-                <div className="flex items-center justify-between p-2 sm:p-3">
-                  <h3 className="line-clamp-2 text-[11px] sm:text-xs font-semibold text-slate-900">
+                <div className="flex items-center justify-between p-4">
+                  <h3 className="line-clamp-2 text-sm font-semibold leading-5 font-semibold text-slate-900">
                     {formatTitle(tour.title)}
                   </h3>
                 </div>
