@@ -1,6 +1,5 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import CovenantOceanBackground from "@/app/particals";
 
 export default function WebsiteLayout({
   children,
@@ -8,22 +7,27 @@ export default function WebsiteLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex min-h-screen flex-col bg-[#070A12] text-white overflow-hidden">
-      {/* Particles */}
-      <div className="fixed inset-0 -z-10 pointer-events-none">
-        <CovenantOceanBackground />
-      </div>
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-[#061826] text-white">
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        {/* Top glow */}
+        <div className="absolute left-1/2 top-[-250px] h-[900px] w-[900px] -translate-x-1/2 rounded-full bg-sky-500/20 blur-[220px]" />
 
-      {/* Glow Effects */}
-      <div className="pointer-events-none fixed inset-0 -z-[5] overflow-hidden">
-        <div className="absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-blue-500/10 blur-[120px] animate-pulse" />
-        <div className="absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full bg-purple-500/10 blur-[140px] animate-[pulse_6s_ease-in-out_infinite]" />
-        <div className="absolute top-1/2 left-0 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-cyan-500/10 blur-[120px] animate-[pulse_8s_ease-in-out_infinite]" />
+        {/* Left glow */}
+        <div className="absolute -left-52 top-1/2 h-[700px] w-[700px] -translate-y-1/2 rounded-full bg-cyan-400/15 blur-[220px]" />
+
+        {/* Right glow */}
+        <div className="absolute -right-52 bottom-[-120px] h-[700px] w-[700px] rounded-full bg-indigo-500/15 blur-[220px]" />
+
+        {/* Orange accent */}
+        <div className="absolute right-1/4 top-32 h-[260px] w-[260px] rounded-full bg-orange-400/10 blur-[140px]" />
+
+        {/* Background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#103B63]/30 via-transparent to-[#020B14]" />
       </div>
 
       <Header />
 
-      <main className="relative z-10 flex-1 w-full pt-[120px] px-4">
+      <main className="relative z-10 flex-1 w-full px-4 pt-[120px]">
         {children}
       </main>
 
