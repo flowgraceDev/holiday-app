@@ -11,6 +11,13 @@ const fontDisplay = Playfair_Display({
   display: "swap",
 });
 
+const formatMission = (text: string) => {
+  return text
+    .replace(/(\d+\.)/g, "\n$1")
+    .split("\n")
+    .filter(Boolean);
+};
+
 const fontBody = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
@@ -36,26 +43,27 @@ const INK_GRADIENT =
 export default async function AboutPage() {
   const about = await getAbout();
 
-  const heroImages =
-    about?.hero?.images?.length
-      ? about.hero.images
-      : about?.hero?.image_url
-        ? [about.hero.image_url]
-        : [];
+  const heroImages = about?.hero?.images?.length
+    ? about.hero.images
+    : about?.hero?.image_url
+      ? [about.hero.image_url]
+      : [];
 
-  const introImages =
-    about?.intro?.images?.length
-      ? about.intro.images
-      : about?.intro?.image_url
-        ? [about.intro.image_url]
-        : [];
+  const introImages = about?.intro?.images?.length
+    ? about.intro.images
+    : about?.intro?.image_url
+      ? [about.intro.image_url]
+      : [];
 
   const services: string[] = about?.services ?? [];
 
   const fontClasses = `${fontDisplay.variable} ${fontBody.variable} ${fontMono.variable}`;
 
   return (
-    <div className={`overflow-hidden ${fontClasses}`} style={{ fontFamily: "var(--font-body)" }}>
+    <div
+      className={`overflow-hidden ${fontClasses}`}
+      style={{ fontFamily: "var(--font-body)" }}
+    >
       <HeroSlider
         images={heroImages}
         subtitle={about?.hero?.subtitle}
@@ -117,8 +125,15 @@ export default async function AboutPage() {
 
                 <div className="col-span-12 md:col-span-5 grid grid-rows-2 gap-4 md:gap-6 h-[200px] md:h-[260px]">
                   {introImages.slice(1, 3).map((img: string, i: number) => (
-                    <div key={i} className="relative rounded-2xl overflow-hidden shadow-md">
-                      <img src={img} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                    <div
+                      key={i}
+                      className="relative rounded-2xl overflow-hidden shadow-md"
+                    >
+                      <img
+                        src={img}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
                     </div>
                   ))}
                 </div>
@@ -129,7 +144,10 @@ export default async function AboutPage() {
       </section>
 
       {/* SERVICES */}
-      <section className="relative py-20 md:py-28" style={{ background: INK_GRADIENT }}>
+      <section
+        className="relative py-20 md:py-28"
+        style={{ background: INK_GRADIENT }}
+      >
         <div className="max-w-7xl mx-auto px-5 md:px-10">
           <div className="mb-12">
             <p className="text-[11px] tracking-[0.35em] uppercase text-[#B08D57]">
@@ -142,7 +160,10 @@ export default async function AboutPage() {
 
           <div className="grid md:grid-cols-3 gap-4">
             {services.map((item: string, i: number) => (
-              <div key={i} className="p-6 md:p-8 rounded-xl bg-[#0B1220] border border-white/10">
+              <div
+                key={i}
+                className="p-6 md:p-8 rounded-xl bg-[#0B1220] border border-white/10"
+              >
                 <p className="text-xs text-[#B08D57] mb-4">
                   {String(i + 1).padStart(2, "0")}
                 </p>
@@ -164,28 +185,25 @@ export default async function AboutPage() {
       <section className="py-20 md:py-28">
         <div className="max-w-5xl mx-auto px-5 md:px-10">
           <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-stretch">
-            <div className="rounded-2xl p-8 md:p-10 bg-[#0B1220] border border-white/10 text-white">
-              <p className="text-xs tracking-[0.3em] text-[#B08D57] mb-4">
-                Vision
+            <div className="rounded-2xl p-8 md:p-10 bg-[#FFFDF8] border border-[#E4DBC2]">
+              <p className="text-xl tracking-[0.3em] text-black mb-4">
+                About Us
               </p>
-              <h3 className="text-2xl md:text-3xl font-medium mb-4">
-                Where we’re headed
-              </h3>
-              <p className="text-slate-300 text-sm md:text-base leading-relaxed">
+              <p className="space-y-4 text-sm md:text-base leading-relaxed text-[#4A4436]">
                 {about?.vision}
               </p>
             </div>
 
             <div className="rounded-2xl p-8 md:p-10 bg-[#FFFDF8] border border-[#E4DBC2]">
-              <p className="text-xs tracking-[0.3em] text-[#8C6D3F] mb-4">
-                Mission
+              <p className="text-xl tracking-[0.3em] text-black mb-4">
+                About Our Drivers
               </p>
-              <h3 className="text-2xl md:text-3xl font-medium mb-4 text-[#0B1220]">
-                What drives us
-              </h3>
-              <p className="text-sm md:text-base leading-relaxed text-[#4A4436]">
-                {about?.mission}
-              </p>
+
+              <div className="space-y-4 text-sm md:text-base leading-relaxed text-[#4A4436]">
+                {formatMission(about?.mission || "").map((item, index) => (
+                  <p key={index}>{item.trim()}</p>
+                ))}
+              </div>
             </div>
           </div>
         </div>

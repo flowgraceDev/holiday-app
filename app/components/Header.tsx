@@ -12,12 +12,35 @@ const NAV_ITEMS = [
 ];
 
 const REGIONS = [
-  "north",
-  "south",
-  "east",
-  "west",
-  "central",
-  "india-nepal",
+  {
+    key: "west",
+    label: "Rajasthan Tours",
+  },
+  {
+    key: "north",
+    label: "Himachal Tours",
+  },
+  {
+    key: "north",
+    label: "Leh Ladakh Tours",
+  },
+  {
+    key: "south",
+    label: "Uttranchal India Tours",
+  },
+  {
+    key: "india-nepal",
+    label: "India Nepal Tours",
+  },
+  {
+    key: "east",
+    label: "East India Tours",
+  },
+
+  {
+    key: "central",
+    label: "Central India Tours",
+  },
 ] as const;
 
 const SERVICES = [
@@ -180,7 +203,7 @@ export default function Header() {
       }`}
     >
       {/* TOP BAR */}
-     {/* <div className="bg-white/5 backdrop-blur-xl border-b border-white/10 text-white text-xs shadow-lg">
+      {/* <div className="bg-white/5 backdrop-blur-xl border-b border-white/10 text-white text-xs shadow-lg">
         <div className="max-w-7xl mx-auto flex justify-end px-4 py-2">
           <div className="flex items-center gap-2">
             <a className="w-8 h-8 flex items-center justify-center rounded-full bg-emerald-500 hover:bg-emerald-600 transition-all duration-300 text-white">
@@ -245,6 +268,14 @@ export default function Header() {
                 </div>
               )}
             </div>
+            {/* Weekend Holidays */}
+            <Link
+              href="/weekend-holidays"
+              onClick={closeAll}
+              className="text-[17px] font-medium text-slate-200 hover:text-sky-400 transition-colors"
+            >
+              Weekend Holidays
+            </Link>
 
             {/* TOURS */}
             <div
@@ -267,18 +298,37 @@ export default function Header() {
                 >
                   {REGIONS.map((region) => (
                     <Link
-                      key={region}
-                      href={`/region/${region}`}
+                      key={region.key}
+                      href={`/region/${region.key}`}
                       onClick={closeAll}
-                      className="block px-5 py-3 capitalize text-sm text-slate-200 hover:bg-sky-500/10 hover:text-amber-300 transition-colors"
+                      className="block px-5 py-3 text-sm text-slate-200 hover:bg-sky-500/10 hover:text-amber-300 transition-colors"
                     >
-                      {region} India Tours
+                      {region.label}
                     </Link>
                   ))}
                 </div>
               )}
             </div>
 
+            {/* Hotels */}
+            <Link
+              href="/hotels"
+              onClick={closeAll}
+              className="text-[17px] font-medium text-slate-200 hover:text-sky-400 transition-colors"
+            >
+              Hotels
+            </Link>
+
+            {/* Airport Transfer */}
+            <Link
+              href="/airport-transfer"
+              onClick={closeAll}
+              className="text-[17px] font-medium text-slate-200 hover:text-sky-400 transition-colors"
+            >
+              Airport Transfer
+            </Link>
+
+            {/* Contact */}
             <Link
               href="/contact"
               onClick={closeAll}
@@ -367,14 +417,14 @@ export default function Header() {
 
                 {ui.mobileTours && (
                   <div className="mt-4 flex flex-col rounded-2xl border border-slate-170 overflow-hidden bg-slate-50">
-                    {REGIONS.map((r) => (
+                    {REGIONS.map((region) => (
                       <Link
-                        key={r}
-                        href={`/region/${r}`}
+                        key={region.key}
+                        href={`/region/${region.key}`}
                         onClick={closeAll}
-                        className="px-5 py-4 text-base capitalize text-slate-700 border-b border-slate-170 last:border-b-0"
+                        className="px-5 py-4 text-base text-slate-700 border-b border-slate-170 last:border-b-0"
                       >
-                        {r} India Tours
+                        {region.label}
                       </Link>
                     ))}
                   </div>

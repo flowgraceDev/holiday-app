@@ -111,14 +111,14 @@ export default async function AboutList() {
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-black to-[#0B1020] p-6 shadow-sm">
               <h3 className="mb-2 text-lg font-semibold text-white">
-                Vision
+                About Us
               </h3>
               <p className="text-sm text-white/80">{about.vision}</p>
             </div>
 
             <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-yellow-400 to-amber-500 p-6 shadow-sm">
               <h3 className="mb-2 text-lg font-semibold text-black">
-                Mission
+                About Our Drivers
               </h3>
               <p className="text-sm text-black/80">{about.mission}</p>
             </div>

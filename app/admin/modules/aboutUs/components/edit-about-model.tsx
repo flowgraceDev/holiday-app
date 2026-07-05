@@ -238,12 +238,12 @@ export default function UpdateAboutModal({ about }: { about: About }) {
 
               <div className="grid grid-cols-2 gap-5">
                 <div className="space-y-1">
-                  <Label>Vision</Label>
+                  <Label>About Us</Label>
                   <Textarea name="vision" defaultValue={about?.vision} />
                 </div>
 
                 <div className="space-y-1">
-                  <Label>Mission</Label>
+                  <Label>About Our Drivers</Label>
                   <Textarea name="mission" defaultValue={about?.mission} />
                 </div>
               </div>
