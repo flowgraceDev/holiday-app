@@ -27,7 +27,7 @@ export default function WebsiteLayout({
 
       <Header />
 
-      <main className="relative z-10 flex-1 w-full px-4 pt-[120px]">
+      <main className="relative z-10 flex-1 w-full px-4 pt-[80px]">
         {children}
       </main>
 
